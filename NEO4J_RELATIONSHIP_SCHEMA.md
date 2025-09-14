@@ -116,24 +116,39 @@ Below is a concise diagram of the primary node labels and relationship types obs
 
 ```mermaid
 graph LR
-    Patient -->|HAS_APPOINTMENT (37)| Appointment
-    Patient -->|HAS_ENCOUNTER (20)| Encounter
-    Patient -->|HAS_SYMPTOM (104)| Symptom
-    Patient -->|HAS_MEDICAL_HISTORY (64)| MedicalHistory
-    Patient -->|TAKES_MEDICATION (70)| Medication
-    Patient -->|HAS_LAB_STUDY (18)| LabStudy
-    Patient -->|HAS_LAB_RESULT (42)| LabResult
-    Patient -->|HAS_LAB_REPORT (28)| LabReport
-    LabStudy -->|CONTAINS_RESULT (42)| LabResult
-    LabReport -->|CONTAINS_FINDING (65)| LabFinding
-    Medication -->|TREATS_CONDITION (28)| MedicalHistory
-    Appointment -->|REPORTED_SYMPTOM (65)| Symptom
-    Encounter -->|DOCUMENTED_SYMPTOM (39)| Symptom
-    Symptom -->|MAY_INDICATE (4)| MedicalHistory
-    Symptom -->|INDICATES_CONDITION (6)| MedicalHistory
-    MedicalHistory -->|HAS_CONDITION (27)| Condition
-    Person -->|REPRESENTS| Patient
-    Observation -->|RELATES_TO| Symptom
+    %% explicit node declarations help Mermaid parsers and avoid ambiguous tokens
+    Patient[Patient]
+    Appointment[Appointment]
+    Encounter[Encounter]
+    Symptom[Symptom]
+    MedicalHistory[MedicalHistory]
+    Medication[Medication]
+    LabStudy[LabStudy]
+    LabResult[LabResult]
+    LabReport[LabReport]
+    LabFinding[LabFinding]
+    Condition[Condition]
+    Person[Person]
+    Observation[Observation]
+
+    Patient -->|"HAS_APPOINTMENT (37)"| Appointment
+    Patient -->|"HAS_ENCOUNTER (20)"| Encounter
+    Patient -->|"HAS_SYMPTOM (104)"| Symptom
+    Patient -->|"HAS_MEDICAL_HISTORY (64)"| MedicalHistory
+    Patient -->|"TAKES_MEDICATION (70)"| Medication
+    Patient -->|"HAS_LAB_STUDY (18)"| LabStudy
+    Patient -->|"HAS_LAB_RESULT (42)"| LabResult
+    Patient -->|"HAS_LAB_REPORT (28)"| LabReport
+    LabStudy -->|"CONTAINS_RESULT (42)"| LabResult
+    LabReport -->|"CONTAINS_FINDING (65)"| LabFinding
+    Medication -->|"TREATS_CONDITION (28)"| MedicalHistory
+    Appointment -->|"REPORTED_SYMPTOM (65)"| Symptom
+    Encounter -->|"DOCUMENTED_SYMPTOM (39)"| Symptom
+    Symptom -->|"MAY_INDICATE (4)"| MedicalHistory
+    Symptom -->|"INDICATES_CONDITION (6)"| MedicalHistory
+    MedicalHistory -->|"HAS_CONDITION (27)"| Condition
+    Person -->|"REPRESENTS"| Patient
+    Observation -->|"RELATES_TO"| Symptom
 ```
 
 Notes:
