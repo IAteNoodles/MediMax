@@ -1,2 +1,0 @@
-# Requirements for test scripts
-requests>=2.31.0
