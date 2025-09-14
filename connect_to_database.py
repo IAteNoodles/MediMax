@@ -14,11 +14,44 @@ DB_NAME = os.getenv('DB_NAME')
 DB_PORT = int(os.getenv('DB_PORT', 3305))
 
 
+AURA_USER = os.getenv('AURA_USER')
+AURA_PASSWORD = os.getenv('AURA_PASSWORD')
+
+from neo4j import GraphDatabase
+
+# URI examples: "neo4j://localhost", "neo4j+s://xxx.databases.neo4j.io"
+URI = "neo4j+s://98d1982d.databases.neo4j.io"
+AUTH = (AURA_USER, AURA_PASSWORD)
+
+with GraphDatabase.driver(URI, auth=AUTH) as driver:
+    driver.verify_connectivity()
+
 
 mcp = FastMCP("Database")
 
-@mcp.tool("ExecuteQuery")
-def execute_query(query: str) -> dict:
+
+@mcp.tool("ExcecuteQuery_Neo4j")
+def execute_query_neo4j(cypher_query: str) -> dict:
+    """
+    Execute a Cypher query on the Neo4j database.
+    
+    Args:
+        cypher_query (str): The Cypher query to execute.
+        
+    Returns:
+        dict: The result of the query or an error message.
+    """
+    try:
+        with GraphDatabase.driver(URI, auth=AUTH) as driver:
+            with driver.session() as session:
+                result = session.run(cypher_query)
+                records = [record.data() for record in result]
+                return {"results": records, "count": len(records)}
+    except Exception as e:
+        return {"error": f"Database error: {str(e)}"}
+
+@mcp.tool("ExecuteQuery_MariaDB")
+def execute_query_mariadb(query: str) -> dict:
     """
     Execute a SQL query on the MariaDB database.
     
