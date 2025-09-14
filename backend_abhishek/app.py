@@ -53,10 +53,7 @@ app = FastAPI(title="MediMax Backend API", description="Bridge between Frontend,
 # Allow requests from the Streamlit frontend
 from fastapi.middleware.cors import CORSMiddleware
 
-origins = [
-    FRONTEND_ADDRESS,
-    "http://localhost:8501",  # Also allow localhost for local testing
-]
+origins = ["*"]
 
 app.add_middleware(
     CORSMiddleware,
