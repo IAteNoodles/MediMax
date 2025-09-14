@@ -1,0 +1,52 @@
+[
+  {
+    "patient_text": "The patient is a 52-year-old male, height 175 cm, weight 95 kg. He presents for a routine check-up. He has a history of hypertension and his father had a heart attack at age 60. His systolic blood pressure is 145 (ap_hi: 145) and his diastolic blood pressure is 92 (ap_lo: 92). Recent lab work shows his cholesterol is above normal (cholesterol: 2) and his glucose is well above normal (gluc: 3). The patient reports that he smokes cigarettes daily (smoke: 1) and consumes alcohol a few times a week (alco: 1). He describes his lifestyle as mostly sedentary with little to no physical activity (active: 0).",
+    "query": "Cardiovascular risk assessment",
+    "additional_notes": "Requesting a full cardiovascular workup."
+  },
+  {
+    "patient_text": "A 60-year-old female with a history of hypertension and a family history of diabetes. She is 160 cm tall and weighs 85 kg, resulting in a BMI of 33.2. Her recent labs show an HbA1c level of 7.2% and a fasting blood glucose level of 140 mg/dL. She is a non-smoker and does not consume alcohol.",
+    "query": "Diabetes risk assessment",
+    "additional_notes": "Patient is concerned about her risk of developing diabetes."
+  },
+  {
+    "patient_text": "A healthy 30-year-old male, height 180 cm, weight 75 kg. He has no significant medical history. His blood pressure is 120/80 mmHg (ap_hi: 120, ap_lo: 80), cholesterol is normal (cholesterol: 1), and glucose is normal (gluc: 1). He is a non-smoker (smoke: 0), does not drink alcohol (alco: 0), and is physically active (active: 1).",
+    "query": "General health check-up",
+    "additional_notes": "Routine annual physical exam."
+  },
+  {
+    "patient_text": "This 58-year-old male patient is a long-time smoker (smoke: 1) and consumes alcohol regularly (alco: 1). He is overweight (height 170 cm, weight 90 kg). His blood pressure is elevated at 150/95 mmHg (ap_hi: 150, ap_lo: 95) and his cholesterol is high (cholesterol: 3).",
+    "query": "High-risk cardiovascular assessment",
+    "additional_notes": "Patient has been experiencing occasional chest tightness."
+  },
+  {
+    "patient_text": "A 45-year-old female who had gestational diabetes during her last pregnancy. Her current BMI is 28. Her fasting blood glucose is slightly elevated at 110 mg/dL and HbA1c is 5.9%. She has no other significant medical history. She does not smoke and is not hypertensive.",
+    "query": "Diabetes screening",
+    "additional_notes": "Follow-up after gestational diabetes."
+  },
+  {
+    "patient_text": "A 65-year-old male complaining of persistent fatigue and shortness of breath, especially on exertion. He has a 40-pack-year smoking history but quit 5 years ago. His vitals are stable. Height 178 cm, weight 82 kg.",
+    "query": "General health assessment, focus on respiratory and cardiovascular systems",
+    "additional_notes": "Evaluate potential causes for dyspnea and fatigue."
+  },
+  {
+    "patient_text": "This is a 68-year-old female with known coronary artery disease and a history of a transient ischemic attack (TIA) 2 years ago. She is a current smoker (smoke: 1). Her blood pressure is 160/100 mmHg (ap_hi: 160, ap_lo: 100) despite medication. Her cholesterol is high (cholesterol: 3).",
+    "query": "Secondary prevention cardiovascular risk assessment",
+    "additional_notes": "Assess effectiveness of current management and need for intervention."
+  },
+  {
+    "patient_text": "A 35-year-old male presents with a one-month history of increased thirst (polydipsia), frequent urination (polyuria), and unexplained weight loss. His random blood glucose level in the clinic is 350 mg/dL. His BMI is 26. No personal or family history of autoimmune diseases.",
+    "query": "New diagnosis of diabetes",
+    "additional_notes": "Patient is symptomatic and has very high blood glucose."
+  },
+  {
+    "patient_text": "A 25-year-old female university student here for a routine health check. She is physically active (active: 1), a non-smoker (smoke: 0), and drinks alcohol socially (alco: 0). No significant family history of major diseases. All vitals are normal. BP 110/70, cholesterol normal, glucose normal.",
+    "query": "Routine health screening",
+    "additional_notes": "No specific complaints."
+  },
+  {
+    "patient_text": "A 72-year-old male with a complex medical history including COPD, hypertension, and osteoarthritis. He takes multiple medications. He presents to the emergency department with new-onset, crushing chest pain that started 2 hours ago. BP is 170/90, height 165cm, weight 78kg. He is a former smoker.",
+    "query": "Urgent cardiovascular assessment for acute coronary syndrome",
+    "additional_notes": "High-risk patient with active chest pain."
+  }
+]
