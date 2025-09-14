@@ -1,0 +1,1615 @@
+{
+  "nodes": [
+    {
+      "id": "patient_1",
+      "name": "John Doe",
+      "category": "Patient",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {
+        "dob": "1985-03-15",
+        "sex": "Male",
+        "remarks": "Regular checkup patient"
+      }
+    },
+    {
+      "id": "symptom_allergy_penicillin",
+      "name": "Allergy to penicillin",
+      "category": "Symptom",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {
+        "type": "allergy"
+      }
+    },
+    {
+      "id": "medication_aspirin",
+      "name": "Aspirin",
+      "category": "Medication",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {
+        "historical": true
+      }
+    },
+    {
+      "id": "encounter_lab_2024_09_01",
+      "name": "Lab Session 2024-09-01",
+      "category": "Encounter",
+      "date": "2024-09-01",
+      "status": "",
+      "details": "",
+      "properties": {
+        "date": "2024-09-01",
+        "type": "laboratory"
+      }
+    },
+    {
+      "id": "labtest_blood_test",
+      "name": "Blood Test",
+      "category": "LabTest",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "id": "labtest_cholesterol",
+      "name": "Cholesterol",
+      "category": "LabTest",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "id": "labtest_glucose",
+      "name": "Glucose",
+      "category": "LabTest",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "id": "encounter_lab_2024_08_15",
+      "name": "Lab Session 2024-08-15",
+      "category": "Encounter",
+      "date": "2024-08-15",
+      "status": "",
+      "details": "",
+      "properties": {
+        "date": "2024-08-15",
+        "type": "laboratory"
+      }
+    },
+    {
+      "id": "labtest_liver_function",
+      "name": "Liver Function",
+      "category": "LabTest",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "id": "medication_Multivitamin",
+      "name": "Multivitamin",
+      "category": "Medication",
+      "date": "",
+      "status": "",
+      "details": "Multivitamin daily",
+      "properties": {
+        "prescription_date": "2024-08-15",
+        "details": "Multivitamin daily"
+      }
+    },
+    {
+      "id": "encounter_appointment_2024_09_15",
+      "name": "Appointment 2024-09-15",
+      "category": "Encounter",
+      "date": "2024-09-15",
+      "status": "Scheduled",
+      "details": "",
+      "properties": {
+        "date": "2024-09-15",
+        "status": "Scheduled",
+        "type": "appointment"
+      }
+    },
+    {
+      "id": "symptom_fatigue",
+      "name": "Fatigue",
+      "category": "Symptom",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "id": "symptom_mild_fatigue",
+      "name": "Mild Fatigue",
+      "category": "Symptom",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "id": "symptom_routine_checkup",
+      "name": "Routine Checkup",
+      "category": "Symptom",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "id": "encounter_appointment_2024_08_01",
+      "name": "Appointment 2024-08-01",
+      "category": "Encounter",
+      "date": "2024-08-01",
+      "status": "Completed",
+      "details": "",
+      "properties": {
+        "date": "2024-08-01",
+        "status": "Completed",
+        "type": "appointment"
+      }
+    },
+    {
+      "id": "patient_2",
+      "name": "Jane Smith",
+      "category": "Patient",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {
+        "dob": "1992-07-22",
+        "sex": "Female",
+        "remarks": "Has hypertension"
+      }
+    },
+    {
+      "id": "symptom_hypertension",
+      "name": "Hypertension",
+      "category": "Symptom",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {
+        "type": "condition"
+      }
+    },
+    {
+      "id": "medication_lisinopril",
+      "name": "Lisinopril",
+      "category": "Medication",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {
+        "historical": true
+      }
+    },
+    {
+      "id": "medication_metformin",
+      "name": "Metformin",
+      "category": "Medication",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {
+        "historical": true
+      }
+    },
+    {
+      "id": "labtest_general_2024_08_15",
+      "name": "Lab Test 2024-08-15",
+      "category": "LabTest",
+      "date": "",
+      "status": "",
+      "details": "Blood pressure monitoring: 140/90 mmHg, elevated",
+      "properties": {
+        "details": "Blood pressure monitoring: 140/90 mmHg, elevated"
+      }
+    },
+    {
+      "id": "encounter_lab_2024_08_10",
+      "name": "Lab Session 2024-08-10",
+      "category": "Encounter",
+      "date": "2024-08-10",
+      "status": "",
+      "details": "",
+      "properties": {
+        "date": "2024-08-10",
+        "type": "laboratory"
+      }
+    },
+    {
+      "id": "labtest_general_2024_08_10",
+      "name": "Lab Test 2024-08-10",
+      "category": "LabTest",
+      "date": "",
+      "status": "",
+      "details": "HbA1c test: 5.8% - prediabetic range",
+      "properties": {
+        "details": "HbA1c test: 5.8% - prediabetic range"
+      }
+    },
+    {
+      "id": "encounter_appointment_2024_09_20",
+      "name": "Appointment 2024-09-20",
+      "category": "Encounter",
+      "date": "2024-09-20",
+      "status": "Confirmed",
+      "details": "",
+      "properties": {
+        "date": "2024-09-20",
+        "status": "Confirmed",
+        "type": "appointment"
+      }
+    },
+    {
+      "id": "symptom_dizziness",
+      "name": "Dizziness",
+      "category": "Symptom",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "id": "symptom_high_blood_pressure",
+      "name": "High Blood Pressure",
+      "category": "Symptom",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "id": "encounter_appointment_2024_08_15",
+      "name": "Appointment 2024-08-15",
+      "category": "Encounter",
+      "date": "2024-08-15",
+      "status": "Completed",
+      "details": "",
+      "properties": {
+        "date": "2024-08-15",
+        "status": "Completed",
+        "type": "appointment"
+      }
+    },
+    {
+      "id": "patient_3",
+      "name": "Robert Johnson",
+      "category": "Patient",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {
+        "dob": "1978-11-08",
+        "sex": "Male",
+        "remarks": "Diabetic patient"
+      }
+    },
+    {
+      "id": "symptom_allergy_sulfa_drugs",
+      "name": "Allergy to sulfa drugs",
+      "category": "Symptom",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {
+        "type": "allergy"
+      }
+    },
+    {
+      "id": "symptom_diabetes_type_2",
+      "name": "Diabetes Type 2",
+      "category": "Symptom",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {
+        "type": "condition"
+      }
+    },
+    {
+      "id": "medication_insulin",
+      "name": "Insulin",
+      "category": "Medication",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {
+        "historical": true
+      }
+    },
+    {
+      "id": "encounter_lab_2024_08_20",
+      "name": "Lab Session 2024-08-20",
+      "category": "Encounter",
+      "date": "2024-08-20",
+      "status": "",
+      "details": "",
+      "properties": {
+        "date": "2024-08-20",
+        "type": "laboratory"
+      }
+    },
+    {
+      "id": "encounter_lab_2024_08_05",
+      "name": "Lab Session 2024-08-05",
+      "category": "Encounter",
+      "date": "2024-08-05",
+      "status": "",
+      "details": "",
+      "properties": {
+        "date": "2024-08-05",
+        "type": "laboratory"
+      }
+    },
+    {
+      "id": "labtest_kidney_function",
+      "name": "Kidney Function",
+      "category": "LabTest",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "id": "encounter_appointment_2024_09_25",
+      "name": "Appointment 2024-09-25",
+      "category": "Encounter",
+      "date": "2024-09-25",
+      "status": "Scheduled",
+      "details": "",
+      "properties": {
+        "date": "2024-09-25",
+        "status": "Scheduled",
+        "type": "appointment"
+      }
+    },
+    {
+      "id": "symptom_pain",
+      "name": "Pain",
+      "category": "Symptom",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "id": "symptom_diabetes",
+      "name": "Diabetes",
+      "category": "Symptom",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "id": "encounter_appointment_2024_08_20",
+      "name": "Appointment 2024-08-20",
+      "category": "Encounter",
+      "date": "2024-08-20",
+      "status": "Completed",
+      "details": "",
+      "properties": {
+        "date": "2024-08-20",
+        "status": "Completed",
+        "type": "appointment"
+      }
+    },
+    {
+      "id": "patient_4",
+      "name": "Emily Davis",
+      "category": "Patient",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {
+        "dob": "1995-01-30",
+        "sex": "Female",
+        "remarks": "Pregnancy monitoring"
+      }
+    },
+    {
+      "id": "symptom_pregnancy",
+      "name": "Pregnancy",
+      "category": "Symptom",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {
+        "type": "condition"
+      }
+    },
+    {
+      "id": "medication_prenatal_vitamins",
+      "name": "Prenatal Vitamins",
+      "category": "Medication",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {
+        "historical": true
+      }
+    },
+    {
+      "id": "encounter_lab_2024_08_25",
+      "name": "Lab Session 2024-08-25",
+      "category": "Encounter",
+      "date": "2024-08-25",
+      "status": "",
+      "details": "",
+      "properties": {
+        "date": "2024-08-25",
+        "type": "laboratory"
+      }
+    },
+    {
+      "id": "labtest_general_2024_08_25",
+      "name": "Lab Test 2024-08-25",
+      "category": "LabTest",
+      "date": "",
+      "status": "",
+      "details": "Prenatal blood work: Iron 85 ug/dL, Folate normal",
+      "properties": {
+        "details": "Prenatal blood work: Iron 85 ug/dL, Folate normal"
+      }
+    },
+    {
+      "id": "labtest_ultrasound",
+      "name": "Ultrasound",
+      "category": "LabTest",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "id": "medication_Prenatal",
+      "name": "Prenatal",
+      "category": "Medication",
+      "date": "",
+      "status": "",
+      "details": "Prenatal vitamins with folic acid daily",
+      "properties": {
+        "prescription_date": "2024-08-25",
+        "details": "Prenatal vitamins with folic acid daily"
+      }
+    },
+    {
+      "id": "medication_Iron",
+      "name": "Iron",
+      "category": "Medication",
+      "date": "",
+      "status": "",
+      "details": "Iron supplement 325mg daily",
+      "properties": {
+        "prescription_date": "2024-08-20",
+        "details": "Iron supplement 325mg daily"
+      }
+    },
+    {
+      "id": "encounter_appointment_2024_09_30",
+      "name": "Appointment 2024-09-30",
+      "category": "Encounter",
+      "date": "2024-09-30",
+      "status": "Scheduled",
+      "details": "",
+      "properties": {
+        "date": "2024-09-30",
+        "status": "Scheduled",
+        "type": "appointment"
+      }
+    },
+    {
+      "id": "symptom_nausea",
+      "name": "Nausea",
+      "category": "Symptom",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "id": "encounter_appointment_2024_08_25",
+      "name": "Appointment 2024-08-25",
+      "category": "Encounter",
+      "date": "2024-08-25",
+      "status": "Completed",
+      "details": "",
+      "properties": {
+        "date": "2024-08-25",
+        "status": "Completed",
+        "type": "appointment"
+      }
+    },
+    {
+      "id": "symptom_pregnancy_monitoring",
+      "name": "Pregnancy Monitoring",
+      "category": "Symptom",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "id": "patient_5",
+      "name": "Michael Wilson",
+      "category": "Patient",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {
+        "dob": "1980-05-12",
+        "sex": "Male",
+        "remarks": "Cardiac history"
+      }
+    },
+    {
+      "id": "symptom_allergy_aspirin",
+      "name": "Allergy to aspirin",
+      "category": "Symptom",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {
+        "type": "allergy"
+      }
+    },
+    {
+      "id": "symptom_coronary_artery_disease",
+      "name": "Coronary Artery Disease",
+      "category": "Symptom",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {
+        "type": "condition"
+      }
+    },
+    {
+      "id": "medication_beta_blockers",
+      "name": "Beta Blockers",
+      "category": "Medication",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {
+        "historical": true
+      }
+    },
+    {
+      "id": "medication_statins",
+      "name": "Statins",
+      "category": "Medication",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {
+        "historical": true
+      }
+    },
+    {
+      "id": "encounter_lab_2024_08_30",
+      "name": "Lab Session 2024-08-30",
+      "category": "Encounter",
+      "date": "2024-08-30",
+      "status": "",
+      "details": "",
+      "properties": {
+        "date": "2024-08-30",
+        "type": "laboratory"
+      }
+    },
+    {
+      "id": "labtest_enzyme_test_2024_08_30",
+      "name": "Enzyme Test",
+      "category": "LabTest",
+      "date": "",
+      "status": "",
+      "details": "Cardiac enzyme test: Troponin negative, CK-MB normal",
+      "properties": {
+        "details": "Cardiac enzyme test: Troponin negative, CK-MB normal"
+      }
+    },
+    {
+      "id": "medication_Metoprolol",
+      "name": "Metoprolol",
+      "category": "Medication",
+      "date": "",
+      "status": "",
+      "details": "Metoprolol 50mg twice daily",
+      "properties": {
+        "prescription_date": "2024-08-30",
+        "details": "Metoprolol 50mg twice daily"
+      }
+    },
+    {
+      "id": "medication_atorvastatin",
+      "name": "Atorvastatin",
+      "category": "Medication",
+      "date": "",
+      "status": "",
+      "details": "Atorvastatin 20mg at bedtime",
+      "properties": {
+        "prescription_date": "2024-08-20",
+        "details": "Atorvastatin 20mg at bedtime"
+      }
+    },
+    {
+      "id": "encounter_appointment_2024_10_01",
+      "name": "Appointment 2024-10-01",
+      "category": "Encounter",
+      "date": "2024-10-01",
+      "status": "Scheduled",
+      "details": "",
+      "properties": {
+        "date": "2024-10-01",
+        "status": "Scheduled",
+        "type": "appointment"
+      }
+    },
+    {
+      "id": "symptom_cardiac",
+      "name": "Cardiac",
+      "category": "Symptom",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "id": "symptom_chest_pain",
+      "name": "Chest Pain",
+      "category": "Symptom",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "id": "encounter_appointment_2024_08_30",
+      "name": "Appointment 2024-08-30",
+      "category": "Encounter",
+      "date": "2024-08-30",
+      "status": "Completed",
+      "details": "",
+      "properties": {
+        "date": "2024-08-30",
+        "status": "Completed",
+        "type": "appointment"
+      }
+    },
+    {
+      "id": "symptom_shortness_of_breath",
+      "name": "Shortness Of Breath",
+      "category": "Symptom",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    }
+  ],
+  "relationships": [
+    {
+      "source_id": "patient_1",
+      "target_id": "symptom_allergy_penicillin",
+      "relationship_type": "has_symptom",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_1",
+      "target_id": "medication_aspirin",
+      "relationship_type": "prescribed_medication",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_1",
+      "target_id": "encounter_lab_2024_09_01",
+      "relationship_type": "has_encounter",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "encounter_lab_2024_09_01",
+      "target_id": "labtest_blood_test",
+      "relationship_type": "contains_test",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_1",
+      "target_id": "labtest_blood_test",
+      "relationship_type": "has_lab_test",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "encounter_lab_2024_09_01",
+      "target_id": "labtest_cholesterol",
+      "relationship_type": "contains_test",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_1",
+      "target_id": "labtest_cholesterol",
+      "relationship_type": "has_lab_test",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "encounter_lab_2024_09_01",
+      "target_id": "labtest_glucose",
+      "relationship_type": "contains_test",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_1",
+      "target_id": "labtest_glucose",
+      "relationship_type": "has_lab_test",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "encounter_lab_2024_09_01",
+      "target_id": "labtest_blood_test",
+      "relationship_type": "contains_test",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_1",
+      "target_id": "labtest_blood_test",
+      "relationship_type": "has_lab_test",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_1",
+      "target_id": "encounter_lab_2024_08_15",
+      "relationship_type": "has_encounter",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "encounter_lab_2024_08_15",
+      "target_id": "labtest_liver_function",
+      "relationship_type": "contains_test",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_1",
+      "target_id": "labtest_liver_function",
+      "relationship_type": "has_lab_test",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_1",
+      "target_id": "medication_aspirin",
+      "relationship_type": "prescribed_medication",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_1",
+      "target_id": "medication_Multivitamin",
+      "relationship_type": "prescribed_medication",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_1",
+      "target_id": "encounter_appointment_2024_09_15",
+      "relationship_type": "has_encounter",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_1",
+      "target_id": "symptom_fatigue",
+      "relationship_type": "has_symptom",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "encounter_appointment_2024_09_15",
+      "target_id": "symptom_fatigue",
+      "relationship_type": "contains_symptom",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_1",
+      "target_id": "symptom_mild_fatigue",
+      "relationship_type": "has_symptom",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "encounter_appointment_2024_09_15",
+      "target_id": "symptom_mild_fatigue",
+      "relationship_type": "contains_symptom",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_1",
+      "target_id": "symptom_routine_checkup",
+      "relationship_type": "has_symptom",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "encounter_appointment_2024_09_15",
+      "target_id": "symptom_routine_checkup",
+      "relationship_type": "contains_symptom",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_1",
+      "target_id": "encounter_appointment_2024_08_01",
+      "relationship_type": "has_encounter",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_2",
+      "target_id": "symptom_hypertension",
+      "relationship_type": "has_symptom",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_2",
+      "target_id": "medication_lisinopril",
+      "relationship_type": "prescribed_medication",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_2",
+      "target_id": "medication_metformin",
+      "relationship_type": "prescribed_medication",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_2",
+      "target_id": "encounter_lab_2024_08_15",
+      "relationship_type": "has_encounter",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "encounter_lab_2024_08_15",
+      "target_id": "labtest_general_2024_08_15",
+      "relationship_type": "contains_test",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_2",
+      "target_id": "labtest_general_2024_08_15",
+      "relationship_type": "has_lab_test",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_2",
+      "target_id": "encounter_lab_2024_08_10",
+      "relationship_type": "has_encounter",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "encounter_lab_2024_08_10",
+      "target_id": "labtest_general_2024_08_10",
+      "relationship_type": "contains_test",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_2",
+      "target_id": "labtest_general_2024_08_10",
+      "relationship_type": "has_lab_test",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_2",
+      "target_id": "medication_lisinopril",
+      "relationship_type": "prescribed_medication",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_2",
+      "target_id": "medication_metformin",
+      "relationship_type": "prescribed_medication",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_2",
+      "target_id": "encounter_appointment_2024_09_20",
+      "relationship_type": "has_encounter",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_2",
+      "target_id": "symptom_dizziness",
+      "relationship_type": "has_symptom",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "encounter_appointment_2024_09_20",
+      "target_id": "symptom_dizziness",
+      "relationship_type": "contains_symptom",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_2",
+      "target_id": "symptom_high_blood_pressure",
+      "relationship_type": "has_symptom",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "encounter_appointment_2024_09_20",
+      "target_id": "symptom_high_blood_pressure",
+      "relationship_type": "contains_symptom",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_2",
+      "target_id": "encounter_appointment_2024_08_15",
+      "relationship_type": "has_encounter",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_2",
+      "target_id": "symptom_hypertension",
+      "relationship_type": "has_symptom",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "encounter_appointment_2024_08_15",
+      "target_id": "symptom_hypertension",
+      "relationship_type": "contains_symptom",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_3",
+      "target_id": "symptom_allergy_sulfa_drugs",
+      "relationship_type": "has_symptom",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_3",
+      "target_id": "symptom_diabetes_type_2",
+      "relationship_type": "has_symptom",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_3",
+      "target_id": "medication_metformin",
+      "relationship_type": "prescribed_medication",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_3",
+      "target_id": "medication_insulin",
+      "relationship_type": "prescribed_medication",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_3",
+      "target_id": "encounter_lab_2024_08_20",
+      "relationship_type": "has_encounter",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "encounter_lab_2024_08_20",
+      "target_id": "labtest_glucose",
+      "relationship_type": "contains_test",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_3",
+      "target_id": "labtest_glucose",
+      "relationship_type": "has_lab_test",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_3",
+      "target_id": "encounter_lab_2024_08_05",
+      "relationship_type": "has_encounter",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "encounter_lab_2024_08_05",
+      "target_id": "labtest_kidney_function",
+      "relationship_type": "contains_test",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_3",
+      "target_id": "labtest_kidney_function",
+      "relationship_type": "has_lab_test",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_3",
+      "target_id": "medication_metformin",
+      "relationship_type": "prescribed_medication",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_3",
+      "target_id": "medication_insulin",
+      "relationship_type": "prescribed_medication",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_3",
+      "target_id": "encounter_appointment_2024_09_25",
+      "relationship_type": "has_encounter",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_3",
+      "target_id": "symptom_pain",
+      "relationship_type": "has_symptom",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "encounter_appointment_2024_09_25",
+      "target_id": "symptom_pain",
+      "relationship_type": "contains_symptom",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_3",
+      "target_id": "symptom_diabetes",
+      "relationship_type": "has_symptom",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "encounter_appointment_2024_09_25",
+      "target_id": "symptom_diabetes",
+      "relationship_type": "contains_symptom",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_3",
+      "target_id": "encounter_appointment_2024_08_20",
+      "relationship_type": "has_encounter",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_4",
+      "target_id": "symptom_pregnancy",
+      "relationship_type": "has_symptom",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_4",
+      "target_id": "medication_prenatal_vitamins",
+      "relationship_type": "prescribed_medication",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_4",
+      "target_id": "encounter_lab_2024_08_25",
+      "relationship_type": "has_encounter",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "encounter_lab_2024_08_25",
+      "target_id": "labtest_general_2024_08_25",
+      "relationship_type": "contains_test",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_4",
+      "target_id": "labtest_general_2024_08_25",
+      "relationship_type": "has_lab_test",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_4",
+      "target_id": "encounter_lab_2024_08_15",
+      "relationship_type": "has_encounter",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "encounter_lab_2024_08_15",
+      "target_id": "labtest_ultrasound",
+      "relationship_type": "contains_test",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_4",
+      "target_id": "labtest_ultrasound",
+      "relationship_type": "has_lab_test",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_4",
+      "target_id": "medication_Prenatal",
+      "relationship_type": "prescribed_medication",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_4",
+      "target_id": "medication_Iron",
+      "relationship_type": "prescribed_medication",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_4",
+      "target_id": "encounter_appointment_2024_09_30",
+      "relationship_type": "has_encounter",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_4",
+      "target_id": "symptom_nausea",
+      "relationship_type": "has_symptom",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "encounter_appointment_2024_09_30",
+      "target_id": "symptom_nausea",
+      "relationship_type": "contains_symptom",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_4",
+      "target_id": "encounter_appointment_2024_08_25",
+      "relationship_type": "has_encounter",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_4",
+      "target_id": "symptom_pregnancy_monitoring",
+      "relationship_type": "has_symptom",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "encounter_appointment_2024_08_25",
+      "target_id": "symptom_pregnancy_monitoring",
+      "relationship_type": "contains_symptom",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_5",
+      "target_id": "symptom_allergy_aspirin",
+      "relationship_type": "has_symptom",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_5",
+      "target_id": "symptom_coronary_artery_disease",
+      "relationship_type": "has_symptom",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_5",
+      "target_id": "medication_beta_blockers",
+      "relationship_type": "prescribed_medication",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_5",
+      "target_id": "medication_statins",
+      "relationship_type": "prescribed_medication",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_5",
+      "target_id": "encounter_lab_2024_08_30",
+      "relationship_type": "has_encounter",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "encounter_lab_2024_08_30",
+      "target_id": "labtest_enzyme_test_2024_08_30",
+      "relationship_type": "contains_test",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_5",
+      "target_id": "labtest_enzyme_test_2024_08_30",
+      "relationship_type": "has_lab_test",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_5",
+      "target_id": "encounter_lab_2024_08_20",
+      "relationship_type": "has_encounter",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "encounter_lab_2024_08_20",
+      "target_id": "labtest_cholesterol",
+      "relationship_type": "contains_test",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_5",
+      "target_id": "labtest_cholesterol",
+      "relationship_type": "has_lab_test",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_5",
+      "target_id": "medication_Metoprolol",
+      "relationship_type": "prescribed_medication",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_5",
+      "target_id": "medication_atorvastatin",
+      "relationship_type": "prescribed_medication",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_5",
+      "target_id": "encounter_appointment_2024_10_01",
+      "relationship_type": "has_encounter",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_5",
+      "target_id": "symptom_pain",
+      "relationship_type": "has_symptom",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "encounter_appointment_2024_10_01",
+      "target_id": "symptom_pain",
+      "relationship_type": "contains_symptom",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_5",
+      "target_id": "symptom_cardiac",
+      "relationship_type": "has_symptom",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "encounter_appointment_2024_10_01",
+      "target_id": "symptom_cardiac",
+      "relationship_type": "contains_symptom",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_5",
+      "target_id": "symptom_chest_pain",
+      "relationship_type": "has_symptom",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "encounter_appointment_2024_10_01",
+      "target_id": "symptom_chest_pain",
+      "relationship_type": "contains_symptom",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_5",
+      "target_id": "encounter_appointment_2024_08_30",
+      "relationship_type": "has_encounter",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "patient_5",
+      "target_id": "symptom_shortness_of_breath",
+      "relationship_type": "has_symptom",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    },
+    {
+      "source_id": "encounter_appointment_2024_08_30",
+      "target_id": "symptom_shortness_of_breath",
+      "relationship_type": "contains_symptom",
+      "date": "",
+      "status": "",
+      "details": "",
+      "properties": {}
+    }
+  ],
+  "metadata": {
+    "total_nodes": 63,
+    "total_relationships": 99,
+    "categories": [
+      "LabTest",
+      "Patient",
+      "Medication",
+      "Encounter",
+      "Symptom"
+    ],
+    "relationship_types": [
+      "prescribed_medication",
+      "has_symptom",
+      "contains_symptom",
+      "has_encounter",
+      "has_lab_test",
+      "contains_test"
+    ]
+  }
+}

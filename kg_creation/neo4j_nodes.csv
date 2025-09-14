@@ -1,0 +1,64 @@
+nodeId:ID,name,label:LABEL,dob,sex,remarks,type,date,status,details,historical:boolean
+patient_1,John Doe,Patient,1985-03-15,Male,Regular checkup patient,,,,,false
+symptom_allergy_penicillin,Allergy to penicillin,Symptom,,,,allergy,,,,false
+medication_aspirin,Aspirin,Medication,,,,,,,,true
+encounter_lab_2024_09_01,Lab Session 2024-09-01,Encounter,,,,laboratory,2024-09-01,,,false
+labtest_blood_test,Blood Test,LabTest,,,,,,,,false
+labtest_cholesterol,Cholesterol,LabTest,,,,,,,,false
+labtest_glucose,Glucose,LabTest,,,,,,,,false
+encounter_lab_2024_08_15,Lab Session 2024-08-15,Encounter,,,,laboratory,2024-08-15,,,false
+labtest_liver_function,Liver Function,LabTest,,,,,,,,false
+medication_Multivitamin,Multivitamin,Medication,,,,,,,Multivitamin daily,false
+encounter_appointment_2024_09_15,Appointment 2024-09-15,Encounter,,,,appointment,2024-09-15,Scheduled,,false
+symptom_fatigue,Fatigue,Symptom,,,,,,,,false
+symptom_mild_fatigue,Mild Fatigue,Symptom,,,,,,,,false
+symptom_routine_checkup,Routine Checkup,Symptom,,,,,,,,false
+encounter_appointment_2024_08_01,Appointment 2024-08-01,Encounter,,,,appointment,2024-08-01,Completed,,false
+patient_2,Jane Smith,Patient,1992-07-22,Female,Has hypertension,,,,,false
+symptom_hypertension,Hypertension,Symptom,,,,condition,,,,false
+medication_lisinopril,Lisinopril,Medication,,,,,,,,true
+medication_metformin,Metformin,Medication,,,,,,,,true
+labtest_general_2024_08_15,Lab Test 2024-08-15,LabTest,,,,,,,"Blood pressure monitoring: 140/90 mmHg, elevated",false
+encounter_lab_2024_08_10,Lab Session 2024-08-10,Encounter,,,,laboratory,2024-08-10,,,false
+labtest_general_2024_08_10,Lab Test 2024-08-10,LabTest,,,,,,,HbA1c test: 5.8% - prediabetic range,false
+encounter_appointment_2024_09_20,Appointment 2024-09-20,Encounter,,,,appointment,2024-09-20,Confirmed,,false
+symptom_dizziness,Dizziness,Symptom,,,,,,,,false
+symptom_high_blood_pressure,High Blood Pressure,Symptom,,,,,,,,false
+encounter_appointment_2024_08_15,Appointment 2024-08-15,Encounter,,,,appointment,2024-08-15,Completed,,false
+patient_3,Robert Johnson,Patient,1978-11-08,Male,Diabetic patient,,,,,false
+symptom_allergy_sulfa_drugs,Allergy to sulfa drugs,Symptom,,,,allergy,,,,false
+symptom_diabetes_type_2,Diabetes Type 2,Symptom,,,,condition,,,,false
+medication_insulin,Insulin,Medication,,,,,,,,true
+encounter_lab_2024_08_20,Lab Session 2024-08-20,Encounter,,,,laboratory,2024-08-20,,,false
+encounter_lab_2024_08_05,Lab Session 2024-08-05,Encounter,,,,laboratory,2024-08-05,,,false
+labtest_kidney_function,Kidney Function,LabTest,,,,,,,,false
+encounter_appointment_2024_09_25,Appointment 2024-09-25,Encounter,,,,appointment,2024-09-25,Scheduled,,false
+symptom_pain,Pain,Symptom,,,,,,,,false
+symptom_diabetes,Diabetes,Symptom,,,,,,,,false
+encounter_appointment_2024_08_20,Appointment 2024-08-20,Encounter,,,,appointment,2024-08-20,Completed,,false
+patient_4,Emily Davis,Patient,1995-01-30,Female,Pregnancy monitoring,,,,,false
+symptom_pregnancy,Pregnancy,Symptom,,,,condition,,,,false
+medication_prenatal_vitamins,Prenatal Vitamins,Medication,,,,,,,,true
+encounter_lab_2024_08_25,Lab Session 2024-08-25,Encounter,,,,laboratory,2024-08-25,,,false
+labtest_general_2024_08_25,Lab Test 2024-08-25,LabTest,,,,,,,"Prenatal blood work: Iron 85 ug/dL, Folate normal",false
+labtest_ultrasound,Ultrasound,LabTest,,,,,,,,false
+medication_Prenatal,Prenatal,Medication,,,,,,,Prenatal vitamins with folic acid daily,false
+medication_Iron,Iron,Medication,,,,,,,Iron supplement 325mg daily,false
+encounter_appointment_2024_09_30,Appointment 2024-09-30,Encounter,,,,appointment,2024-09-30,Scheduled,,false
+symptom_nausea,Nausea,Symptom,,,,,,,,false
+encounter_appointment_2024_08_25,Appointment 2024-08-25,Encounter,,,,appointment,2024-08-25,Completed,,false
+symptom_pregnancy_monitoring,Pregnancy Monitoring,Symptom,,,,,,,,false
+patient_5,Michael Wilson,Patient,1980-05-12,Male,Cardiac history,,,,,false
+symptom_allergy_aspirin,Allergy to aspirin,Symptom,,,,allergy,,,,false
+symptom_coronary_artery_disease,Coronary Artery Disease,Symptom,,,,condition,,,,false
+medication_beta_blockers,Beta Blockers,Medication,,,,,,,,true
+medication_statins,Statins,Medication,,,,,,,,true
+encounter_lab_2024_08_30,Lab Session 2024-08-30,Encounter,,,,laboratory,2024-08-30,,,false
+labtest_enzyme_test_2024_08_30,Enzyme Test,LabTest,,,,,,,"Cardiac enzyme test: Troponin negative, CK-MB normal",false
+medication_Metoprolol,Metoprolol,Medication,,,,,,,Metoprolol 50mg twice daily,false
+medication_atorvastatin,Atorvastatin,Medication,,,,,,,Atorvastatin 20mg at bedtime,false
+encounter_appointment_2024_10_01,Appointment 2024-10-01,Encounter,,,,appointment,2024-10-01,Scheduled,,false
+symptom_cardiac,Cardiac,Symptom,,,,,,,,false
+symptom_chest_pain,Chest Pain,Symptom,,,,,,,,false
+encounter_appointment_2024_08_30,Appointment 2024-08-30,Encounter,,,,appointment,2024-08-30,Completed,,false
+symptom_shortness_of_breath,Shortness Of Breath,Symptom,,,,,,,,false
