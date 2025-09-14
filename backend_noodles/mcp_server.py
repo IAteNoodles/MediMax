@@ -802,8 +802,9 @@ def hello(name: str) -> str:
     """
     return f"Hello, Bro {name}!"
 
-@mcp.tool("Predict_Cardiovascular_Risk_With_Explanation")
+
 @handle_exceptions
+@mcp.tool("Predict_Cardiovascular_Risk_With_Explanation")
 def predict_cardiovascular_risk_with_explanation(
     age: float,
     gender: int,
@@ -891,8 +892,8 @@ def predict_cardiovascular_risk_with_explanation(
     except requests.RequestException as e:
         return {"error": "request_failed", "details": str(e)}
 
-@mcp.tool("Predict_Diabetes_Risk_With_Explanation")
 @handle_exceptions
+@mcp.tool("Predict_Diabetes_Risk_With_Explanation")
 def predict_diabetes_risk_with_explanation(
         age: float,
         gender: str,
