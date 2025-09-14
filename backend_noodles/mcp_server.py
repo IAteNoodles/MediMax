@@ -638,6 +638,38 @@ class KnowledgeGraphManager:
 # Initialize knowledge graph manager
 kg_manager = KnowledgeGraphManager()
 
+@mcp.tool("Run_Cypher_Query")
+def run_cypher_query(cypher: str) -> dict:
+    """
+    Execute an arbitrary Cypher query against the Neo4j database.
+    
+    Args:
+        cypher (str): The Cypher query to execute
+        
+    Returns:
+        dict: Query results or error message
+    """
+    try:
+        if not kg_manager.connect_neo4j():
+            return {"error": "Failed to connect to Neo4j"}
+        
+        with kg_manager.neo4j_driver.session() as session:
+            result = session.run(cypher)
+            records = [record.data() for record in result]
+            serialized_records = serialize_neo4j_result(records)
+            return {
+                "success": True,
+                "query": cypher,
+                "results": serialized_records,
+                "result_count": len(serialized_records)
+            }
+            
+    except Exception as e:
+        logger.error(f"Error running Cypher query: {e}")
+        return {"error": f"Failed to run Cypher query: {str(e)}"}
+    finally:
+        kg_manager.close_neo4j()
+        
 @mcp.tool("Validate_Graph_Connectivity")
 def validate_graph_connectivity() -> dict:
     """
