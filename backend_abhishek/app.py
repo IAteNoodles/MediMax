@@ -60,6 +60,70 @@ DB_PASSWORD = os.getenv("DB_PASSWORD", "")
 AGENTIC_ADDRESS = "http://10.26.5.99:8000"
 FRONTEND_ADDRESS = "http://10.26.5.99:8501" # Default for Streamlit
 
+
+from fastmcp import FastMCP
+import mariadb
+import os
+from dotenv import load_dotenv
+from neo4j import GraphDatabase
+from neo4j.time import Date, DateTime, Time, Duration
+from datetime import datetime, date, time
+import json
+
+AURA_USER = os.getenv('AURA_USER')
+AURA_PASSWORD = os.getenv('AURA_PASSWORD')
+
+# Custom JSON encoder for Neo4j types
+class Neo4jJSONEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if obj is None:
+            return None
+        elif isinstance(obj, (Date, DateTime)):
+            return obj.isoformat()
+        elif isinstance(obj, Time):
+            return obj.isoformat()
+        elif isinstance(obj, Duration):
+            return str(obj)
+        elif isinstance(obj, (date, datetime, time)):
+            return obj.isoformat()
+        elif hasattr(obj, 'isoformat'):
+            return obj.isoformat()
+        elif hasattr(obj, '__str__'):
+            return str(obj)
+        return super().default(obj)
+
+def serialize_neo4j_result(result):
+    """Convert Neo4j result to JSON-serializable format"""
+    def convert_value(value):
+        if value is None:
+            return None
+        elif isinstance(value, (Date, DateTime, Time, Duration, date, datetime, time)):
+            return str(value)
+        elif hasattr(value, 'isoformat'):
+            return value.isoformat()
+        elif isinstance(value, dict):
+            return {k: convert_value(v) for k, v in value.items()}
+        elif isinstance(value, list):
+            return [convert_value(v) for v in value]
+        elif hasattr(value, '__str__'):
+            return str(value)
+        return value
+    
+    if isinstance(result, dict):
+        return {k: convert_value(v) for k, v in result.items()}
+    elif isinstance(result, list):
+        return [convert_value(item) for item in result]
+    return convert_value(result)
+
+# URI examples: "neo4j://localhost", "neo4j+s://xxx.databases.neo4j.io"
+URI = "neo4j+s://98d1982d.databases.neo4j.io"
+AUTH = (AURA_USER, AURA_PASSWORD)
+
+with GraphDatabase.driver(URI, auth=AUTH) as driver:
+    driver.verify_connectivity()
+
+
+
 app = FastAPI(title="MediMax Backend API", description="Bridge between Frontend, Database, and Agentic system.")
 
 # --- CORS Configuration ---
@@ -129,6 +193,28 @@ async def health_check(db=Depends(get_db_connection)):
         "agentic_system": agentic_status
     }
 
+@app.get("/run_cypher_query")
+async def run_cypher_query(cypher_query: str):
+    """
+    Execute a Cypher query on the Neo4j database.
+    
+    Args:
+        cypher_query (str): The Cypher query to execute.
+        
+    Returns:
+        dict: The result of the query or an error message.
+    """
+    try:
+        with GraphDatabase.driver(URI, auth=AUTH) as driver:
+            with driver.session() as session:
+                result = session.run(cypher_query)
+                records = [record.data() for record in result]
+                # Apply serialization to handle Neo4j temporal types
+                serialized_records = serialize_neo4j_result(records)
+                return {"results": serialized_records, "count": len(serialized_records)}
+    except Exception as e:
+        return {"error": f"Database error: {str(e)}"}
+    
 # --- Database Functions ---
 class NewPatientRequest(BaseModel):
     name: str
@@ -2301,6 +2387,7 @@ def get_n_lab_reports(patient_id: int, n: int = None, db=Depends(get_db_connecti
     finally:
         if db:
             db.close()
+
 
 
 if __name__ == "__main__":
