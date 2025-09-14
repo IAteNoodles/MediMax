@@ -14,22 +14,41 @@ patient_text = st.text_area("Patient Text", "The patient is a 52-year-old male, 
 query = st.text_input("Query", "Cardiovascular risk assessment")
 additional_notes = st.text_area("Additional Notes", "Patient has a family history of heart disease.")
 
-if st.button("Assess Patient"):
-    if patient_text and query:
-        # Prepare the data for the POST request
-        assessment_data = {
-            "patient_text": patient_text,
-            "query": query,
-            "additional_notes": additional_notes
-        }
-        
-        st.write("Sending request to:", f"{BASE_URL}/assess")
-        st.json(assessment_data)
+col1, col2 = st.columns(2)
 
+with col1:
+    if st.button("Assess Patient"):
+        if patient_text and query:
+            # Prepare the data for the POST request
+            assessment_data = {
+                "patient_text": patient_text,
+                "query": query,
+                "additional_notes": additional_notes
+            }
+            
+            st.write("Sending request to:", f"{BASE_URL}/assess")
+            st.json(assessment_data)
+
+            try:
+                # Send the request to the agentic server
+                headers = {"Content-Type": "application/json"}
+                response = requests.post(f"{BASE_URL}/assess", data=json.dumps(assessment_data), headers=headers)
+                response.raise_for_status()  # Raise an exception for bad status codes
+                
+                st.header("Server Response")
+                st.json(response.json())
+
+            except requests.exceptions.RequestException as e:
+                st.error(f"An error occurred: {e}")
+        else:
+            st.warning("Please fill in the 'Patient Text' and 'Query' fields.")
+
+with col2:
+    if st.button("Assess with Mock Data"):
+        st.write("Sending request to:", f"{BASE_URL}/assess_mock?patient_index=0")
         try:
             # Send the request to the agentic server
-            headers = {"Content-Type": "application/json"}
-            response = requests.post(f"{BASE_URL}/assess", data=json.dumps(assessment_data), headers=headers)
+            response = requests.post(f"{BASE_URL}/assess_mock?patient_index=0")
             response.raise_for_status()  # Raise an exception for bad status codes
             
             st.header("Server Response")
@@ -37,8 +56,6 @@ if st.button("Assess Patient"):
 
         except requests.exceptions.RequestException as e:
             st.error(f"An error occurred: {e}")
-    else:
-        st.warning("Please fill in the 'Patient Text' and 'Query' fields.")
 
 st.header("Server Health Check")
 if st.button("Check Health"):
