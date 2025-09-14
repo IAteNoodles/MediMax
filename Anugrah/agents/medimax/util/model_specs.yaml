@@ -1,0 +1,26 @@
+models:
+  - name: cardiovascular_risk
+    tool: Predict_Cardiovascular_Risk_With_Explanation
+    parameters:
+      - age
+      - gender
+      - height
+      - weight
+      - ap_hi
+      - ap_lo
+      - cholesterol
+      - gluc
+      - smoke
+      - alco
+      - active
+  - name: diabetes_risk
+    tool: Predict_Diabetes_Risk_With_Explanation
+    parameters:
+      - age
+      - gender
+      - hypertension
+      - heart_disease
+      - smoking_history
+      - bmi
+      - HbA1c_level
+      - blood_glucose_level

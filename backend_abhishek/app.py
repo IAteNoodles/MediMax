@@ -1,4 +1,3 @@
-
 # --- Database Configuration & Connection Dependency ---
 import pymysql
 from fastapi import status, Depends
@@ -31,6 +30,7 @@ import os
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
+import httpx
 
 # Load .env from parent directory
 load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', '.env'))
@@ -42,21 +42,49 @@ DB_DATABASE = os.getenv("DB_DATABASE", "")
 DB_USER = os.getenv("DB_USER", "")
 DB_PASSWORD = os.getenv("DB_PASSWORD", "")
 
-# Agentic and frontend config (placeholders for now)
-AGENTIC_ADDRESS = os.getenv("AGENTIC_ADDRESS", "<AGENTIC_ADDRESS_PLACEHOLDER>")
+# Agentic and frontend config
+AGENTIC_ADDRESS = "http://10.26.5.99:8000"
 FRONTEND_ADDRESS = os.getenv("FRONTEND_ADDRESS", "<FRONTEND_ADDRESS_PLACEHOLDER>")
 
 app = FastAPI(title="MediMax Backend API", description="Bridge between Frontend, Database, and Agentic system.")
 
 # --- Health Check ---
 @app.get("/health")
-def health_check():
+async def health_check(db=Depends(get_db_connection)):
     """Backend health and connectivity check."""
-    # TODO: Add real DB and agentic connectivity checks
+    # --- Agentic System Check ---
+    agentic_status = "not checked"
+    try:
+        async with httpx.AsyncClient() as client:
+            response = await client.get(f"{AGENTIC_ADDRESS}/health")
+            if response.status_code == 200:
+                agentic_status = "ok"
+            else:
+                agentic_status = f"error: status code {response.status_code}"
+    except Exception as e:
+        agentic_status = f"error: {str(e)}"
+
+    # --- Database Check ---
+    db_status = "not checked"
+    try:
+        if db.is_connected():
+            cursor = db.cursor()
+            cursor.execute("SELECT 1")
+            cursor.fetchone()
+            cursor.close()
+            db_status = "ok"
+        else:
+            db_status = "error: not connected"
+    except Exception as e:
+        db_status = f"error: {str(e)}"
+    finally:
+        if db and db.is_connected():
+            db.close()
+
     return {
         "status": "ok",
-        "database": "not checked",
-        "agentic_system": "not checked"
+        "database": db_status,
+        "agentic_system": agentic_status
     }
 
 # --- Database Functions ---
@@ -71,6 +99,34 @@ def new_patient(req: NewPatientRequest):
     """Add a new patient (placeholder)."""
     # TODO: Connect to DB and insert patient
     return {"message": "New patient endpoint (placeholder)", "data": req.dict()}
+
+
+# --- Agentic System Functions ---
+class AssessmentRequest(BaseModel):
+    patient_text: str
+    query: str
+    additional_notes: str | None = None
+
+@app.post("/agentic/assess")
+async def assess_patient(request: AssessmentRequest):
+    """
+    Forwards a patient assessment request to the agentic server.
+    """
+    try:
+        async with httpx.AsyncClient(timeout=60.0) as client:
+            response = await client.post(
+                f"{AGENTIC_ADDRESS}/assess",
+                json=request.dict()
+            )
+            response.raise_for_status()  # Raise an exception for bad status codes
+            return response.json()
+    except httpx.RequestError as e:
+        raise HTTPException(status_code=503, detail=f"Error connecting to agentic server: {e}")
+    except httpx.HTTPStatusError as e:
+        raise HTTPException(status_code=e.response.status_code, detail=f"Error from agentic server: {e.response.text}")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"An unexpected error occurred: {str(e)}")
+
 
 # --- Patient Details Function ---
 @app.get("/db/get_patient_details")
@@ -157,88 +213,7 @@ def get_query():
         "query": "Placeholder query from frontend. Replace with real integration."
     }
 
-"""
-MediMax Backend API (Single File)
----------------------------------
-- All endpoints in this file (FastAPI)
-- Loads config from parent .env file
-- Placeholder logic only; no real connections yet
-- Ready for extension and containerization
-"""
 
-# --- Configuration ---
-import os
-from dotenv import load_dotenv
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
-
-# Load .env from parent directory
-load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', '.env'))
-
-# Database config
-DB_HOST = os.getenv("DB_HOST", "")
-DB_PORT = os.getenv("DB_PORT", "")
-DB_DATABASE = os.getenv("DB_DATABASE", "")
-DB_USER = os.getenv("DB_USER", "")
-DB_PASSWORD = os.getenv("DB_PASSWORD", "")
-
-# Agentic and frontend config (placeholders for now)
-AGENTIC_ADDRESS = os.getenv("AGENTIC_ADDRESS", "<AGENTIC_ADDRESS_PLACEHOLDER>")
-FRONTEND_ADDRESS = os.getenv("FRONTEND_ADDRESS", "<FRONTEND_ADDRESS_PLACEHOLDER>")
-
-app = FastAPI(title="MediMax Backend API", description="Bridge between Frontend, Database, and Agentic system.")
-
-# --- Health Check ---
-@app.get("/health")
-def health_check():
-    """Backend health and connectivity check."""
-    # TODO: Add real DB and agentic connectivity checks
-    return {
-        "status": "ok",
-        "database": "not checked",
-        "agentic_system": "not checked"
-    }
-
-
-# --- Database Functions ---
-
-class NewPatientRequest(BaseModel):
-    # TODO: Define patient fields
-    name: str
-    age: int
-    # ... add more fields as needed
-
-@app.post("/db/new_patient")
-def new_patient(req: NewPatientRequest):
-    """Add a new patient (placeholder)."""
-    # TODO: Connect to DB and insert patient
-    return {"message": "New patient endpoint (placeholder)", "data": req.dict()}
-
-
-# --- Patient Details Function ---
-@app.get("/db/get_patient_details")
-def get_patient_details(patient_id: str, db=Depends(get_db_connection)):
-    try:
-        with db:
-            with db.cursor() as cursor:
-                sql = (
-                    "SELECT NAME, DOB, SEX, REMARKS "
-                    "FROM Patient "
-                    "WHERE Patient_ID = %s"
-                )
-                cursor.execute(sql, (patient_id,))
-                result = cursor.fetchone()
-                if not result:
-                    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Patient not found.")
-                return {
-                    "patient_id": patient_id,
-                    "name": result.get("NAME"),
-                    "dob": result.get("DOB"),
-                    "sex": result.get("SEX"),
-                    "remarks": result.get("REMARKS")
-                }
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":
     import uvicorn
