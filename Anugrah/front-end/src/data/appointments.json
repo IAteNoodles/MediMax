@@ -1,0 +1,1566 @@
+{
+  "count": 59,
+  "appointments": [
+    {
+      "appointment_id": 15,
+      "patient_name": "Dr. Sarah Mitchell",
+      "patient_id": 6,
+      "appointment_date": "2024-10-15",
+      "appointment_time": "14:00:00",
+      "status": "scheduled",
+      "appointment_type": "follow_up",
+      "notes": null,
+      "symptoms": []
+    },
+    {
+      "appointment_id": 51,
+      "patient_name": "Michael Brown",
+      "patient_id": 22,
+      "appointment_date": "2024-10-15",
+      "appointment_time": "11:30:00",
+      "status": "confirmed",
+      "appointment_type": "routine_checkup",
+      "notes": "Eczema treatment review",
+      "symptoms": [
+        {
+          "symptom_id": 163,
+          "symptom_name": "Itchy skin",
+          "symptom_description": "Dry, itchy patches on skin",
+          "severity": "moderate",
+          "duration": "2 weeks",
+          "onset_type": "gradual"
+        }
+      ]
+    },
+    {
+      "appointment_id": 47,
+      "patient_name": "Sarah Williams",
+      "patient_id": 21,
+      "appointment_date": "2024-10-08",
+      "appointment_time": "10:00:00",
+      "status": "confirmed",
+      "appointment_type": "routine_checkup",
+      "notes": "IBS symptom management",
+      "symptoms": [
+        {
+          "symptom_id": 156,
+          "symptom_name": "Bloating",
+          "symptom_description": "Abdominal distension and discomfort",
+          "severity": "moderate",
+          "duration": "2 weeks",
+          "onset_type": "gradual"
+        }
+      ]
+    },
+    {
+      "appointment_id": 35,
+      "patient_name": "Robert Johnson",
+      "patient_id": 18,
+      "appointment_date": "2024-10-03",
+      "appointment_time": "8:30:00",
+      "status": "confirmed",
+      "appointment_type": "routine_checkup",
+      "notes": "Quarterly diabetes check",
+      "symptoms": [
+        {
+          "symptom_id": 135,
+          "symptom_name": "Blurry vision",
+          "symptom_description": "Difficulty seeing clearly",
+          "severity": "mild",
+          "duration": "1 week",
+          "onset_type": "gradual"
+        }
+      ]
+    },
+    {
+      "appointment_id": 59,
+      "patient_name": "David Wilson",
+      "patient_id": 24,
+      "appointment_date": "2024-10-01",
+      "appointment_time": "9:00:00",
+      "status": "confirmed",
+      "appointment_type": "routine_checkup",
+      "notes": "Smoking cessation support",
+      "symptoms": [
+        {
+          "symptom_id": 177,
+          "symptom_name": "Cravings",
+          "symptom_description": "Strong urge to smoke",
+          "severity": "severe",
+          "duration": "2 weeks",
+          "onset_type": "gradual"
+        }
+      ]
+    },
+    {
+      "appointment_id": 9,
+      "patient_name": "Michael Wilson",
+      "patient_id": 5,
+      "appointment_date": "2024-10-01",
+      "appointment_time": "8:30:00",
+      "status": "confirmed",
+      "appointment_type": "follow_up",
+      "notes": null,
+      "symptoms": [
+        {
+          "symptom_id": 10,
+          "symptom_name": "Chest Pain",
+          "symptom_description": "Mild chest discomfort",
+          "severity": "moderate",
+          "duration": "1 day",
+          "onset_type": "gradual"
+        },
+        {
+          "symptom_id": 11,
+          "symptom_name": "Cardiac",
+          "symptom_description": "Cardiac evaluation",
+          "severity": "moderate",
+          "duration": "Ongoing",
+          "onset_type": "gradual"
+        }
+      ]
+    },
+    {
+      "appointment_id": 7,
+      "patient_name": "Emily Davis",
+      "patient_id": 4,
+      "appointment_date": "2024-09-30",
+      "appointment_time": "13:00:00",
+      "status": "scheduled",
+      "appointment_type": "routine_checkup",
+      "notes": null,
+      "symptoms": [
+        {
+          "symptom_id": 8,
+          "symptom_name": "Nausea",
+          "symptom_description": "Morning sickness symptoms",
+          "severity": "mild",
+          "duration": "2 weeks",
+          "onset_type": "gradual"
+        }
+      ]
+    },
+    {
+      "appointment_id": 5,
+      "patient_name": "Robert Johnson",
+      "patient_id": 3,
+      "appointment_date": "2024-09-25",
+      "appointment_time": "15:30:00",
+      "status": "confirmed",
+      "appointment_type": "follow_up",
+      "notes": null,
+      "symptoms": [
+        {
+          "symptom_id": 6,
+          "symptom_name": "Pain",
+          "symptom_description": "General discomfort",
+          "severity": "moderate",
+          "duration": "2 days",
+          "onset_type": "gradual"
+        },
+        {
+          "symptom_id": 7,
+          "symptom_name": "Diabetes",
+          "symptom_description": "Blood sugar management",
+          "severity": "moderate",
+          "duration": "Ongoing",
+          "onset_type": "gradual"
+        }
+      ]
+    },
+    {
+      "appointment_id": 27,
+      "patient_name": "John Martinez",
+      "patient_id": 16,
+      "appointment_date": "2024-09-22",
+      "appointment_time": "9:15:00",
+      "status": "confirmed",
+      "appointment_type": "routine_checkup",
+      "notes": "Blood pressure monitoring",
+      "symptoms": [
+        {
+          "symptom_id": 121,
+          "symptom_name": "Fatigue",
+          "symptom_description": "Tiredness and lack of energy",
+          "severity": "mild",
+          "duration": "1 week",
+          "onset_type": "gradual"
+        }
+      ]
+    },
+    {
+      "appointment_id": 3,
+      "patient_name": "Jane Smith",
+      "patient_id": 2,
+      "appointment_date": "2024-09-20",
+      "appointment_time": "9:15:00",
+      "status": "scheduled",
+      "appointment_type": "follow_up",
+      "notes": null,
+      "symptoms": [
+        {
+          "symptom_id": 3,
+          "symptom_name": "Dizziness",
+          "symptom_description": "Occasional dizziness episodes",
+          "severity": "moderate",
+          "duration": "3 days",
+          "onset_type": "gradual"
+        },
+        {
+          "symptom_id": 4,
+          "symptom_name": "High Blood Pressure",
+          "symptom_description": "Elevated BP readings at home",
+          "severity": "moderate",
+          "duration": "1 week",
+          "onset_type": "gradual"
+        }
+      ]
+    },
+    {
+      "appointment_id": 55,
+      "patient_name": "Emily Davis",
+      "patient_id": 23,
+      "appointment_date": "2024-09-19",
+      "appointment_time": "8:45:00",
+      "status": "confirmed",
+      "appointment_type": "routine_checkup",
+      "notes": "PCOS hormone monitoring",
+      "symptoms": [
+        {
+          "symptom_id": 170,
+          "symptom_name": "Irregular periods",
+          "symptom_description": "Unpredictable menstrual cycle",
+          "severity": "moderate",
+          "duration": "6 months",
+          "onset_type": "gradual"
+        }
+      ]
+    },
+    {
+      "appointment_id": 1,
+      "patient_name": "John Doe",
+      "patient_id": 1,
+      "appointment_date": "2024-09-15",
+      "appointment_time": "10:00:00",
+      "status": "completed",
+      "appointment_type": "routine_checkup",
+      "notes": null,
+      "symptoms": [
+        {
+          "symptom_id": 1,
+          "symptom_name": "Fatigue",
+          "symptom_description": "Mild fatigue, general tiredness",
+          "severity": "mild",
+          "duration": "1 week",
+          "onset_type": "gradual"
+        },
+        {
+          "symptom_id": 2,
+          "symptom_name": "Routine Checkup",
+          "symptom_description": "Annual physical examination",
+          "severity": "mild",
+          "duration": "N/A",
+          "onset_type": "gradual"
+        }
+      ]
+    },
+    {
+      "appointment_id": 39,
+      "patient_name": "Maria Rodriguez",
+      "patient_id": 19,
+      "appointment_date": "2024-09-11",
+      "appointment_time": "10:30:00",
+      "status": "confirmed",
+      "appointment_type": "routine_checkup",
+      "notes": "Thyroid medication adjustment",
+      "symptoms": [
+        {
+          "symptom_id": 142,
+          "symptom_name": "Hair thinning",
+          "symptom_description": "Noticeable hair loss",
+          "severity": "mild",
+          "duration": "1 month",
+          "onset_type": "gradual"
+        }
+      ]
+    },
+    {
+      "appointment_id": 11,
+      "patient_name": "Dr. Sarah Mitchell",
+      "patient_id": 6,
+      "appointment_date": "2024-09-10",
+      "appointment_time": "14:30:00",
+      "status": "completed",
+      "appointment_type": "follow_up",
+      "notes": null,
+      "symptoms": [
+        {
+          "symptom_id": 13,
+          "symptom_name": "Polyuria",
+          "symptom_description": "Increased urination, especially at night",
+          "severity": "moderate",
+          "duration": "2 weeks",
+          "onset_type": "gradual"
+        },
+        {
+          "symptom_id": 14,
+          "symptom_name": "Polydipsia",
+          "symptom_description": "Excessive thirst",
+          "severity": "moderate",
+          "duration": "2 weeks",
+          "onset_type": "gradual"
+        },
+        {
+          "symptom_id": 15,
+          "symptom_name": "Fatigue",
+          "symptom_description": "Persistent tiredness despite adequate sleep",
+          "severity": "moderate",
+          "duration": "3 weeks",
+          "onset_type": "gradual"
+        }
+      ]
+    },
+    {
+      "appointment_id": 43,
+      "patient_name": "James Chen",
+      "patient_id": 20,
+      "appointment_date": "2024-08-30",
+      "appointment_time": "14:20:00",
+      "status": "confirmed",
+      "appointment_type": "routine_checkup",
+      "notes": "Seasonal allergy review",
+      "symptoms": [
+        {
+          "symptom_id": 149,
+          "symptom_name": "Itchy eyes",
+          "symptom_description": "Red, itchy, watery eyes",
+          "severity": "mild",
+          "duration": "1 week",
+          "onset_type": "gradual"
+        }
+      ]
+    },
+    {
+      "appointment_id": 10,
+      "patient_name": "Michael Wilson",
+      "patient_id": 5,
+      "appointment_date": "2024-08-30",
+      "appointment_time": "12:00:00",
+      "status": "completed",
+      "appointment_type": "consultation",
+      "notes": null,
+      "symptoms": [
+        {
+          "symptom_id": 12,
+          "symptom_name": "Shortness of Breath",
+          "symptom_description": "Mild dyspnea on exertion",
+          "severity": "mild",
+          "duration": "3 days",
+          "onset_type": "gradual"
+        }
+      ]
+    },
+    {
+      "appointment_id": 8,
+      "patient_name": "Emily Davis",
+      "patient_id": 4,
+      "appointment_date": "2024-08-25",
+      "appointment_time": "16:15:00",
+      "status": "completed",
+      "appointment_type": "consultation",
+      "notes": null,
+      "symptoms": [
+        {
+          "symptom_id": 9,
+          "symptom_name": "Pregnancy Monitoring",
+          "symptom_description": "Routine prenatal checkup",
+          "severity": "mild",
+          "duration": "N/A",
+          "onset_type": "gradual"
+        }
+      ]
+    },
+    {
+      "appointment_id": 23,
+      "patient_name": "Lisa Anderson",
+      "patient_id": 15,
+      "appointment_date": "2024-08-25",
+      "appointment_time": "10:45:00",
+      "status": "confirmed",
+      "appointment_type": "routine_checkup",
+      "notes": "Routine check-up",
+      "symptoms": [
+        {
+          "symptom_id": 114,
+          "symptom_name": "Cough",
+          "symptom_description": "Persistent dry cough",
+          "severity": "mild",
+          "duration": "5 days",
+          "onset_type": "gradual"
+        }
+      ]
+    },
+    {
+      "appointment_id": 6,
+      "patient_name": "Robert Johnson",
+      "patient_id": 3,
+      "appointment_date": "2024-08-20",
+      "appointment_time": "10:45:00",
+      "status": "completed",
+      "appointment_type": "consultation",
+      "notes": null,
+      "symptoms": []
+    },
+    {
+      "appointment_id": 4,
+      "patient_name": "Jane Smith",
+      "patient_id": 2,
+      "appointment_date": "2024-08-15",
+      "appointment_time": "11:00:00",
+      "status": "completed",
+      "appointment_type": "consultation",
+      "notes": null,
+      "symptoms": [
+        {
+          "symptom_id": 5,
+          "symptom_name": "Hypertension",
+          "symptom_description": "Blood pressure monitoring",
+          "severity": "moderate",
+          "duration": "Ongoing",
+          "onset_type": "gradual"
+        }
+      ]
+    },
+    {
+      "appointment_id": 12,
+      "patient_name": "Dr. Sarah Mitchell",
+      "patient_id": 6,
+      "appointment_date": "2024-08-15",
+      "appointment_time": "10:00:00",
+      "status": "completed",
+      "appointment_type": "consultation",
+      "notes": null,
+      "symptoms": [
+        {
+          "symptom_id": 16,
+          "symptom_name": "Ankle Swelling",
+          "symptom_description": "Bilateral pedal edema, worse at end of day",
+          "severity": "mild",
+          "duration": "1 month",
+          "onset_type": "gradual"
+        },
+        {
+          "symptom_id": 17,
+          "symptom_name": "Proteinuria",
+          "symptom_description": "Foamy urine noticed by patient",
+          "severity": "moderate",
+          "duration": "2 months",
+          "onset_type": "gradual"
+        }
+      ]
+    },
+    {
+      "appointment_id": 31,
+      "patient_name": "Jennifer Taylor",
+      "patient_id": 17,
+      "appointment_date": "2024-08-14",
+      "appointment_time": "11:15:00",
+      "status": "confirmed",
+      "appointment_type": "routine_checkup",
+      "notes": "Routine gynecological exam",
+      "symptoms": [
+        {
+          "symptom_id": 128,
+          "symptom_name": "Mood swings",
+          "symptom_description": "Rapid changes in emotional state",
+          "severity": "moderate",
+          "duration": "1 week",
+          "onset_type": "gradual"
+        }
+      ]
+    },
+    {
+      "appointment_id": 50,
+      "patient_name": "Michael Brown",
+      "patient_id": 22,
+      "appointment_date": "2024-08-05",
+      "appointment_time": "9:30:00",
+      "status": "scheduled",
+      "appointment_type": "consultation",
+      "notes": "Mental health evaluation",
+      "symptoms": [
+        {
+          "symptom_id": 161,
+          "symptom_name": "Irritability",
+          "symptom_description": "Easily frustrated and irritable",
+          "severity": "moderate",
+          "duration": "2 weeks",
+          "onset_type": "gradual"
+        },
+        {
+          "symptom_id": 162,
+          "symptom_name": "Social withdrawal",
+          "symptom_description": "Avoiding social interactions",
+          "severity": "mild",
+          "duration": "1 week",
+          "onset_type": "gradual"
+        }
+      ]
+    },
+    {
+      "appointment_id": 2,
+      "patient_name": "John Doe",
+      "patient_id": 1,
+      "appointment_date": "2024-08-01",
+      "appointment_time": "14:30:00",
+      "status": "completed",
+      "appointment_type": "consultation",
+      "notes": null,
+      "symptoms": []
+    },
+    {
+      "appointment_id": 46,
+      "patient_name": "Sarah Williams",
+      "patient_id": 21,
+      "appointment_date": "2024-07-30",
+      "appointment_time": "13:30:00",
+      "status": "scheduled",
+      "appointment_type": "consultation",
+      "notes": "Ovarian cancer screening",
+      "symptoms": [
+        {
+          "symptom_id": 154,
+          "symptom_name": "Pelvic pain",
+          "symptom_description": "Chronic pelvic discomfort",
+          "severity": "moderate",
+          "duration": "3 months",
+          "onset_type": "gradual"
+        },
+        {
+          "symptom_id": 155,
+          "symptom_name": "Heavy periods",
+          "symptom_description": "Excessive menstrual bleeding",
+          "severity": "moderate",
+          "duration": "2 months",
+          "onset_type": "gradual"
+        }
+      ]
+    },
+    {
+      "appointment_id": 34,
+      "patient_name": "Robert Johnson",
+      "patient_id": 18,
+      "appointment_date": "2024-07-25",
+      "appointment_time": "9:45:00",
+      "status": "scheduled",
+      "appointment_type": "consultation",
+      "notes": "Colon cancer screening",
+      "symptoms": [
+        {
+          "symptom_id": 133,
+          "symptom_name": "Abdominal pain",
+          "symptom_description": "Pain in lower abdomen",
+          "severity": "mild",
+          "duration": "3 days",
+          "onset_type": "gradual"
+        },
+        {
+          "symptom_id": 134,
+          "symptom_name": "Changes in bowel habits",
+          "symptom_description": "Alternating constipation and diarrhea",
+          "severity": "moderate",
+          "duration": "1 week",
+          "onset_type": "gradual"
+        }
+      ]
+    },
+    {
+      "appointment_id": 58,
+      "patient_name": "David Wilson",
+      "patient_id": 24,
+      "appointment_date": "2024-07-22",
+      "appointment_time": "15:15:00",
+      "status": "scheduled",
+      "appointment_type": "consultation",
+      "notes": "Lung cancer screening",
+      "symptoms": [
+        {
+          "symptom_id": 175,
+          "symptom_name": "Chest pain",
+          "symptom_description": "Pain in chest area",
+          "severity": "mild",
+          "duration": "1 week",
+          "onset_type": "gradual"
+        },
+        {
+          "symptom_id": 176,
+          "symptom_name": "Wheezing",
+          "symptom_description": "Whistling sound when breathing",
+          "severity": "moderate",
+          "duration": "2 weeks",
+          "onset_type": "gradual"
+        }
+      ]
+    },
+    {
+      "appointment_id": 13,
+      "patient_name": "Dr. Sarah Mitchell",
+      "patient_id": 6,
+      "appointment_date": "2024-07-22",
+      "appointment_time": "9:15:00",
+      "status": "completed",
+      "appointment_type": "routine_checkup",
+      "notes": null,
+      "symptoms": [
+        {
+          "symptom_id": 18,
+          "symptom_name": "Chest Tightness",
+          "symptom_description": "Occasional chest tightness with exertion",
+          "severity": "mild",
+          "duration": "6 weeks",
+          "onset_type": "gradual"
+        },
+        {
+          "symptom_id": 19,
+          "symptom_name": "Dyspnea on Exertion",
+          "symptom_description": "Shortness of breath climbing 2 flights stairs",
+          "severity": "mild",
+          "duration": "2 months",
+          "onset_type": "gradual"
+        }
+      ]
+    },
+    {
+      "appointment_id": 26,
+      "patient_name": "John Martinez",
+      "patient_id": 16,
+      "appointment_date": "2024-07-18",
+      "appointment_time": "13:20:00",
+      "status": "scheduled",
+      "appointment_type": "consultation",
+      "notes": "GERD symptoms evaluation",
+      "symptoms": [
+        {
+          "symptom_id": 119,
+          "symptom_name": "Heartburn",
+          "symptom_description": "Burning sensation in chest after eating",
+          "severity": "moderate",
+          "duration": "2 weeks",
+          "onset_type": "gradual"
+        },
+        {
+          "symptom_id": 120,
+          "symptom_name": "Regurgitation",
+          "symptom_description": "Sour taste in mouth",
+          "severity": "mild",
+          "duration": "1 week",
+          "onset_type": "gradual"
+        }
+      ]
+    },
+    {
+      "appointment_id": 38,
+      "patient_name": "Maria Rodriguez",
+      "patient_id": 19,
+      "appointment_date": "2024-07-09",
+      "appointment_time": "15:00:00",
+      "status": "scheduled",
+      "appointment_type": "consultation",
+      "notes": "Alzheimer's family history discussion",
+      "symptoms": [
+        {
+          "symptom_id": 140,
+          "symptom_name": "Memory lapses",
+          "symptom_description": "Forgetting recent events",
+          "severity": "mild",
+          "duration": "1 week",
+          "onset_type": "gradual"
+        },
+        {
+          "symptom_id": 141,
+          "symptom_name": "Confusion",
+          "symptom_description": "Feeling confused at times",
+          "severity": "mild",
+          "duration": "2 days",
+          "onset_type": "gradual"
+        }
+      ]
+    },
+    {
+      "appointment_id": 54,
+      "patient_name": "Emily Davis",
+      "patient_id": 23,
+      "appointment_date": "2024-07-08",
+      "appointment_time": "16:00:00",
+      "status": "scheduled",
+      "appointment_type": "consultation",
+      "notes": "Autoimmune disorder evaluation",
+      "symptoms": [
+        {
+          "symptom_id": 168,
+          "symptom_name": "Joint pain",
+          "symptom_description": "Pain in multiple joints",
+          "severity": "moderate",
+          "duration": "4 months",
+          "onset_type": "gradual"
+        },
+        {
+          "symptom_id": 169,
+          "symptom_name": "Fatigue",
+          "symptom_description": "Chronic tiredness",
+          "severity": "severe",
+          "duration": "3 months",
+          "onset_type": "gradual"
+        }
+      ]
+    },
+    {
+      "appointment_id": 14,
+      "patient_name": "Dr. Sarah Mitchell",
+      "patient_id": 6,
+      "appointment_date": "2024-06-28",
+      "appointment_time": "16:00:00",
+      "status": "completed",
+      "appointment_type": "follow_up",
+      "notes": null,
+      "symptoms": [
+        {
+          "symptom_id": 20,
+          "symptom_name": "Anxiety",
+          "symptom_description": "Work-related stress and sleep disturbances",
+          "severity": "moderate",
+          "duration": "1 month",
+          "onset_type": "gradual"
+        },
+        {
+          "symptom_id": 21,
+          "symptom_name": "Insomnia",
+          "symptom_description": "Difficulty falling asleep, early awakening",
+          "severity": "moderate",
+          "duration": "3 weeks",
+          "onset_type": "gradual"
+        }
+      ]
+    },
+    {
+      "appointment_id": 30,
+      "patient_name": "Jennifer Taylor",
+      "patient_id": 17,
+      "appointment_date": "2024-06-22",
+      "appointment_time": "12:30:00",
+      "status": "scheduled",
+      "appointment_type": "consultation",
+      "notes": "Breast cancer screening",
+      "symptoms": [
+        {
+          "symptom_id": 126,
+          "symptom_name": "Breast tenderness",
+          "symptom_description": "Pain and sensitivity in breast tissue",
+          "severity": "mild",
+          "duration": "3 days",
+          "onset_type": "gradual"
+        },
+        {
+          "symptom_id": 127,
+          "symptom_name": "Irregular periods",
+          "symptom_description": "Unpredictable menstrual cycle",
+          "severity": "moderate",
+          "duration": "2 months",
+          "onset_type": "gradual"
+        }
+      ]
+    },
+    {
+      "appointment_id": 42,
+      "patient_name": "James Chen",
+      "patient_id": 20,
+      "appointment_date": "2024-06-15",
+      "appointment_time": "8:45:00",
+      "status": "scheduled",
+      "appointment_type": "consultation",
+      "notes": "Prostate cancer screening",
+      "symptoms": [
+        {
+          "symptom_id": 147,
+          "symptom_name": "Sneezing",
+          "symptom_description": "Frequent sneezing fits",
+          "severity": "moderate",
+          "duration": "2 weeks",
+          "onset_type": "gradual"
+        },
+        {
+          "symptom_id": 148,
+          "symptom_name": "Runny nose",
+          "symptom_description": "Excessive nasal discharge",
+          "severity": "moderate",
+          "duration": "2 weeks",
+          "onset_type": "gradual"
+        }
+      ]
+    },
+    {
+      "appointment_id": 22,
+      "patient_name": "Lisa Anderson",
+      "patient_id": 15,
+      "appointment_date": "2024-06-10",
+      "appointment_time": "11:00:00",
+      "status": "scheduled",
+      "appointment_type": "consultation",
+      "notes": "Allergy testing consultation",
+      "symptoms": [
+        {
+          "symptom_id": 112,
+          "symptom_name": "Skin rash",
+          "symptom_description": "Red, itchy patches on arms and neck",
+          "severity": "moderate",
+          "duration": "1 week",
+          "onset_type": "gradual"
+        },
+        {
+          "symptom_id": 113,
+          "symptom_name": "Swelling",
+          "symptom_description": "Facial swelling and difficulty swallowing",
+          "severity": "severe",
+          "duration": "4 hours",
+          "onset_type": "sudden"
+        }
+      ]
+    },
+    {
+      "appointment_id": 49,
+      "patient_name": "Michael Brown",
+      "patient_id": 22,
+      "appointment_date": "2024-05-20",
+      "appointment_time": "12:15:00",
+      "status": "completed",
+      "appointment_type": "follow_up",
+      "notes": "Tonsillectomy recovery check",
+      "symptoms": [
+        {
+          "symptom_id": 159,
+          "symptom_name": "Sore throat",
+          "symptom_description": "Pain and irritation in throat",
+          "severity": "moderate",
+          "duration": "1 week",
+          "onset_type": "gradual"
+        },
+        {
+          "symptom_id": 160,
+          "symptom_name": "Fever",
+          "symptom_description": "Low-grade fever",
+          "severity": "mild",
+          "duration": "3 days",
+          "onset_type": "gradual"
+        }
+      ]
+    },
+    {
+      "appointment_id": 33,
+      "patient_name": "Robert Johnson",
+      "patient_id": 18,
+      "appointment_date": "2024-05-08",
+      "appointment_time": "14:00:00",
+      "status": "completed",
+      "appointment_type": "follow_up",
+      "notes": "Sleep study follow-up",
+      "symptoms": [
+        {
+          "symptom_id": 131,
+          "symptom_name": "Daytime sleepiness",
+          "symptom_description": "Excessive sleepiness during the day",
+          "severity": "severe",
+          "duration": "1 month",
+          "onset_type": "gradual"
+        },
+        {
+          "symptom_id": 132,
+          "symptom_name": "Snoring",
+          "symptom_description": "Loud snoring at night",
+          "severity": "moderate",
+          "duration": "6 months",
+          "onset_type": "gradual"
+        }
+      ]
+    },
+    {
+      "appointment_id": 45,
+      "patient_name": "Sarah Williams",
+      "patient_id": 21,
+      "appointment_date": "2024-05-02",
+      "appointment_time": "11:45:00",
+      "status": "completed",
+      "appointment_type": "follow_up",
+      "notes": "Gallbladder surgery follow-up",
+      "symptoms": [
+        {
+          "symptom_id": 152,
+          "symptom_name": "Abdominal pain",
+          "symptom_description": "Right upper quadrant pain",
+          "severity": "severe",
+          "duration": "1 week",
+          "onset_type": "sudden"
+        },
+        {
+          "symptom_id": 153,
+          "symptom_name": "Nausea",
+          "symptom_description": "Feeling sick to stomach",
+          "severity": "moderate",
+          "duration": "3 days",
+          "onset_type": "sudden"
+        }
+      ]
+    },
+    {
+      "appointment_id": 57,
+      "patient_name": "David Wilson",
+      "patient_id": 24,
+      "appointment_date": "2024-04-30",
+      "appointment_time": "11:00:00",
+      "status": "completed",
+      "appointment_type": "follow_up",
+      "notes": "Shoulder surgery rehabilitation",
+      "symptoms": [
+        {
+          "symptom_id": 173,
+          "symptom_name": "Shoulder pain",
+          "symptom_description": "Pain in right shoulder",
+          "severity": "moderate",
+          "duration": "2 months",
+          "onset_type": "gradual"
+        },
+        {
+          "symptom_id": 174,
+          "symptom_name": "Limited range of motion",
+          "symptom_description": "Difficulty moving shoulder",
+          "severity": "moderate",
+          "duration": "2 months",
+          "onset_type": "gradual"
+        }
+      ]
+    },
+    {
+      "appointment_id": 53,
+      "patient_name": "Emily Davis",
+      "patient_id": 23,
+      "appointment_date": "2024-04-22",
+      "appointment_time": "10:15:00",
+      "status": "completed",
+      "appointment_type": "follow_up",
+      "notes": "Dental implant follow-up",
+      "symptoms": [
+        {
+          "symptom_id": 166,
+          "symptom_name": "Dental pain",
+          "symptom_description": "Pain from dental work site",
+          "severity": "moderate",
+          "duration": "3 days",
+          "onset_type": "sudden"
+        },
+        {
+          "symptom_id": 167,
+          "symptom_name": "Swelling",
+          "symptom_description": "Facial swelling around mouth",
+          "severity": "mild",
+          "duration": "2 days",
+          "onset_type": "sudden"
+        }
+      ]
+    },
+    {
+      "appointment_id": 37,
+      "patient_name": "Maria Rodriguez",
+      "patient_id": 19,
+      "appointment_date": "2024-04-18",
+      "appointment_time": "13:15:00",
+      "status": "completed",
+      "appointment_type": "follow_up",
+      "notes": "Postpartum depression follow-up",
+      "symptoms": [
+        {
+          "symptom_id": 138,
+          "symptom_name": "Mood changes",
+          "symptom_description": "Feeling down and irritable",
+          "severity": "moderate",
+          "duration": "2 weeks",
+          "onset_type": "gradual"
+        },
+        {
+          "symptom_id": 139,
+          "symptom_name": "Loss of interest",
+          "symptom_description": "Lack of interest in usual activities",
+          "severity": "severe",
+          "duration": "3 weeks",
+          "onset_type": "gradual"
+        }
+      ]
+    },
+    {
+      "appointment_id": 25,
+      "patient_name": "John Martinez",
+      "patient_id": 16,
+      "appointment_date": "2024-04-12",
+      "appointment_time": "15:30:00",
+      "status": "completed",
+      "appointment_type": "follow_up",
+      "notes": "Knee surgery follow-up",
+      "symptoms": [
+        {
+          "symptom_id": 117,
+          "symptom_name": "Joint pain",
+          "symptom_description": "Pain in right knee joint",
+          "severity": "moderate",
+          "duration": "2 weeks",
+          "onset_type": "gradual"
+        },
+        {
+          "symptom_id": 118,
+          "symptom_name": "Swelling",
+          "symptom_description": "Swelling around the knee",
+          "severity": "mild",
+          "duration": "1 week",
+          "onset_type": "gradual"
+        }
+      ]
+    },
+    {
+      "appointment_id": 29,
+      "patient_name": "Jennifer Taylor",
+      "patient_id": 17,
+      "appointment_date": "2024-04-05",
+      "appointment_time": "16:45:00",
+      "status": "completed",
+      "appointment_type": "follow_up",
+      "notes": "Mental health therapy session",
+      "symptoms": [
+        {
+          "symptom_id": 124,
+          "symptom_name": "Anxiety",
+          "symptom_description": "Increased worry and nervousness",
+          "severity": "moderate",
+          "duration": "2 weeks",
+          "onset_type": "gradual"
+        },
+        {
+          "symptom_id": 125,
+          "symptom_name": "Insomnia",
+          "symptom_description": "Difficulty falling asleep",
+          "severity": "mild",
+          "duration": "1 week",
+          "onset_type": "gradual"
+        }
+      ]
+    },
+    {
+      "appointment_id": 41,
+      "patient_name": "James Chen",
+      "patient_id": 20,
+      "appointment_date": "2024-03-28",
+      "appointment_time": "16:30:00",
+      "status": "completed",
+      "appointment_type": "follow_up",
+      "notes": "ACL reconstruction rehabilitation",
+      "symptoms": [
+        {
+          "symptom_id": 145,
+          "symptom_name": "Limited mobility",
+          "symptom_description": "Difficulty bending and lifting",
+          "severity": "moderate",
+          "duration": "3 months",
+          "onset_type": "gradual"
+        },
+        {
+          "symptom_id": 146,
+          "symptom_name": "Muscle spasms",
+          "symptom_description": "Sudden muscle contractions in back",
+          "severity": "severe",
+          "duration": "2 weeks",
+          "onset_type": "sudden"
+        }
+      ]
+    },
+    {
+      "appointment_id": 21,
+      "patient_name": "Lisa Anderson",
+      "patient_id": 15,
+      "appointment_date": "2024-03-20",
+      "appointment_time": "14:15:00",
+      "status": "completed",
+      "appointment_type": "follow_up",
+      "notes": "Asthma follow-up and medication review",
+      "symptoms": [
+        {
+          "symptom_id": 110,
+          "symptom_name": "Wheezing",
+          "symptom_description": "High-pitched whistling sound when breathing",
+          "severity": "moderate",
+          "duration": "3 days",
+          "onset_type": "sudden"
+        },
+        {
+          "symptom_id": 111,
+          "symptom_name": "Chest tightness",
+          "symptom_description": "Feeling of pressure in the chest",
+          "severity": "severe",
+          "duration": "2 days",
+          "onset_type": "sudden"
+        }
+      ]
+    },
+    {
+      "appointment_id": 48,
+      "patient_name": "Michael Brown",
+      "patient_id": 22,
+      "appointment_date": "2024-03-15",
+      "appointment_time": "15:45:00",
+      "status": "completed",
+      "appointment_type": "routine_checkup",
+      "notes": "ADHD medication review",
+      "symptoms": [
+        {
+          "symptom_id": 157,
+          "symptom_name": "Inattention",
+          "symptom_description": "Difficulty focusing and staying on task",
+          "severity": "moderate",
+          "duration": "Years",
+          "onset_type": "gradual"
+        },
+        {
+          "symptom_id": 158,
+          "symptom_name": "Hyperactivity",
+          "symptom_description": "Restlessness and fidgeting",
+          "severity": "mild",
+          "duration": "Years",
+          "onset_type": "gradual"
+        }
+      ]
+    },
+    {
+      "appointment_id": 32,
+      "patient_name": "Robert Johnson",
+      "patient_id": 18,
+      "appointment_date": "2024-03-01",
+      "appointment_time": "7:30:00",
+      "status": "completed",
+      "appointment_type": "routine_checkup",
+      "notes": "Diabetes management",
+      "symptoms": [
+        {
+          "symptom_id": 129,
+          "symptom_name": "Increased thirst",
+          "symptom_description": "Constant feeling of thirst",
+          "severity": "moderate",
+          "duration": "2 weeks",
+          "onset_type": "gradual"
+        },
+        {
+          "symptom_id": 130,
+          "symptom_name": "Frequent urination",
+          "symptom_description": "Needing to urinate more often",
+          "severity": "moderate",
+          "duration": "2 weeks",
+          "onset_type": "gradual"
+        }
+      ]
+    },
+    {
+      "appointment_id": 44,
+      "patient_name": "Sarah Williams",
+      "patient_id": 21,
+      "appointment_date": "2024-02-28",
+      "appointment_time": "9:00:00",
+      "status": "completed",
+      "appointment_type": "routine_checkup",
+      "notes": "Fibromyalgia management",
+      "symptoms": [
+        {
+          "symptom_id": 150,
+          "symptom_name": "Widespread pain",
+          "symptom_description": "Pain throughout the body",
+          "severity": "severe",
+          "duration": "1 year",
+          "onset_type": "gradual"
+        },
+        {
+          "symptom_id": 151,
+          "symptom_name": "Fatigue",
+          "symptom_description": "Extreme tiredness and exhaustion",
+          "severity": "severe",
+          "duration": "6 months",
+          "onset_type": "gradual"
+        }
+      ]
+    },
+    {
+      "appointment_id": 36,
+      "patient_name": "Maria Rodriguez",
+      "patient_id": 19,
+      "appointment_date": "2024-02-14",
+      "appointment_time": "11:30:00",
+      "status": "completed",
+      "appointment_type": "routine_checkup",
+      "notes": "Thyroid function monitoring",
+      "symptoms": [
+        {
+          "symptom_id": 136,
+          "symptom_name": "Weight gain",
+          "symptom_description": "Unexplained weight increase",
+          "severity": "moderate",
+          "duration": "3 months",
+          "onset_type": "gradual"
+        },
+        {
+          "symptom_id": 137,
+          "symptom_name": "Cold intolerance",
+          "symptom_description": "Feeling cold when others are comfortable",
+          "severity": "mild",
+          "duration": "2 months",
+          "onset_type": "gradual"
+        }
+      ]
+    },
+    {
+      "appointment_id": 56,
+      "patient_name": "David Wilson",
+      "patient_id": 24,
+      "appointment_date": "2024-02-08",
+      "appointment_time": "13:45:00",
+      "status": "completed",
+      "appointment_type": "routine_checkup",
+      "notes": "COPD management",
+      "symptoms": [
+        {
+          "symptom_id": 171,
+          "symptom_name": "Shortness of breath",
+          "symptom_description": "Difficulty breathing with exertion",
+          "severity": "severe",
+          "duration": "1 year",
+          "onset_type": "gradual"
+        },
+        {
+          "symptom_id": 172,
+          "symptom_name": "Chronic cough",
+          "symptom_description": "Persistent cough with sputum",
+          "severity": "moderate",
+          "duration": "8 months",
+          "onset_type": "gradual"
+        }
+      ]
+    },
+    {
+      "appointment_id": 24,
+      "patient_name": "John Martinez",
+      "patient_id": 16,
+      "appointment_date": "2024-02-05",
+      "appointment_time": "8:00:00",
+      "status": "completed",
+      "appointment_type": "routine_checkup",
+      "notes": "Hypertension management",
+      "symptoms": [
+        {
+          "symptom_id": 115,
+          "symptom_name": "Headache",
+          "symptom_description": "Persistent dull headache",
+          "severity": "moderate",
+          "duration": "3 days",
+          "onset_type": "gradual"
+        },
+        {
+          "symptom_id": 116,
+          "symptom_name": "Dizziness",
+          "symptom_description": "Lightheadedness when standing up",
+          "severity": "mild",
+          "duration": "1 week",
+          "onset_type": "gradual"
+        }
+      ]
+    },
+    {
+      "appointment_id": 28,
+      "patient_name": "Jennifer Taylor",
+      "patient_id": 17,
+      "appointment_date": "2024-01-28",
+      "appointment_time": "10:00:00",
+      "status": "completed",
+      "appointment_type": "routine_checkup",
+      "notes": "Migraine management",
+      "symptoms": [
+        {
+          "symptom_id": 122,
+          "symptom_name": "Migraine",
+          "symptom_description": "Severe headache with nausea and light sensitivity",
+          "severity": "severe",
+          "duration": "1 day",
+          "onset_type": "sudden"
+        },
+        {
+          "symptom_id": 123,
+          "symptom_name": "Nausea",
+          "symptom_description": "Feeling of sickness with migraine",
+          "severity": "moderate",
+          "duration": "8 hours",
+          "onset_type": "sudden"
+        }
+      ]
+    },
+    {
+      "appointment_id": 40,
+      "patient_name": "James Chen",
+      "patient_id": 20,
+      "appointment_date": "2024-01-22",
+      "appointment_time": "12:00:00",
+      "status": "completed",
+      "appointment_type": "routine_checkup",
+      "notes": "Back pain management",
+      "symptoms": [
+        {
+          "symptom_id": 143,
+          "symptom_name": "Back pain",
+          "symptom_description": "Chronic lower back pain",
+          "severity": "severe",
+          "duration": "6 months",
+          "onset_type": "gradual"
+        },
+        {
+          "symptom_id": 144,
+          "symptom_name": "Stiffness",
+          "symptom_description": "Morning stiffness in back",
+          "severity": "moderate",
+          "duration": "6 months",
+          "onset_type": "gradual"
+        }
+      ]
+    },
+    {
+      "appointment_id": 20,
+      "patient_name": "Lisa Anderson",
+      "patient_id": 15,
+      "appointment_date": "2024-01-15",
+      "appointment_time": "9:30:00",
+      "status": "completed",
+      "appointment_type": "routine_checkup",
+      "notes": "Annual physical examination",
+      "symptoms": [
+        {
+          "symptom_id": 108,
+          "symptom_name": "Fatigue",
+          "symptom_description": "General tiredness and low energy levels",
+          "severity": "mild",
+          "duration": "2 weeks",
+          "onset_type": "gradual"
+        },
+        {
+          "symptom_id": 109,
+          "symptom_name": "Shortness of breath",
+          "symptom_description": "Difficulty breathing during physical activity",
+          "severity": "moderate",
+          "duration": "1 week",
+          "onset_type": "gradual"
+        }
+      ]
+    },
+    {
+      "appointment_id": 52,
+      "patient_name": "Emily Davis",
+      "patient_id": 23,
+      "appointment_date": "2024-01-10",
+      "appointment_time": "14:30:00",
+      "status": "completed",
+      "appointment_type": "routine_checkup",
+      "notes": "Endometriosis management",
+      "symptoms": [
+        {
+          "symptom_id": 164,
+          "symptom_name": "Pelvic pain",
+          "symptom_description": "Severe pelvic and lower abdominal pain",
+          "severity": "severe",
+          "duration": "6 months",
+          "onset_type": "gradual"
+        },
+        {
+          "symptom_id": 165,
+          "symptom_name": "Heavy bleeding",
+          "symptom_description": "Excessive menstrual bleeding",
+          "severity": "severe",
+          "duration": "3 months",
+          "onset_type": "gradual"
+        }
+      ]
+    },
+    {
+      "appointment_id": 19,
+      "patient_name": "Maria Elena Gonzalez",
+      "patient_id": 7,
+      "appointment_date": "2023-09-15",
+      "appointment_time": "15:45:00",
+      "status": "completed",
+      "appointment_type": "consultation",
+      "notes": null,
+      "symptoms": [
+        {
+          "symptom_id": 34,
+          "symptom_name": "Depressed Mood",
+          "symptom_description": "Persistent sadness, hopelessness for 6+ months",
+          "severity": "severe",
+          "duration": null,
+          "onset_type": "gradual"
+        },
+        {
+          "symptom_id": 35,
+          "symptom_name": "Anhedonia",
+          "symptom_description": "Loss of interest in previously enjoyed activities",
+          "severity": "moderate",
+          "duration": null,
+          "onset_type": "gradual"
+        },
+        {
+          "symptom_id": 36,
+          "symptom_name": "Sleep Disturbance",
+          "symptom_description": "Early morning awakening, difficulty falling asleep",
+          "severity": "moderate",
+          "duration": null,
+          "onset_type": "gradual"
+        },
+        {
+          "symptom_id": 37,
+          "symptom_name": "Appetite Changes",
+          "symptom_description": "Decreased appetite, 10 lb weight loss",
+          "severity": "moderate",
+          "duration": null,
+          "onset_type": "gradual"
+        }
+      ]
+    },
+    {
+      "appointment_id": 18,
+      "patient_name": "Maria Elena Gonzalez",
+      "patient_id": 7,
+      "appointment_date": "2023-07-25",
+      "appointment_time": "10:00:00",
+      "status": "completed",
+      "appointment_type": "emergency",
+      "notes": null,
+      "symptoms": [
+        {
+          "symptom_id": 30,
+          "symptom_name": "Severe Chest Pain",
+          "symptom_description": "Crushing chest pain, 9/10 severity, radiating to left arm",
+          "severity": "severe",
+          "duration": null,
+          "onset_type": "gradual"
+        },
+        {
+          "symptom_id": 31,
+          "symptom_name": "Diaphoresis",
+          "symptom_description": "Profuse sweating, cold and clammy",
+          "severity": "severe",
+          "duration": null,
+          "onset_type": "gradual"
+        },
+        {
+          "symptom_id": 32,
+          "symptom_name": "Nausea",
+          "symptom_description": "Severe nausea with vomiting",
+          "severity": "moderate",
+          "duration": null,
+          "onset_type": "gradual"
+        },
+        {
+          "symptom_id": 33,
+          "symptom_name": "Dyspnea",
+          "symptom_description": "Severe shortness of breath at rest",
+          "severity": "severe",
+          "duration": null,
+          "onset_type": "gradual"
+        }
+      ]
+    },
+    {
+      "appointment_id": 17,
+      "patient_name": "Maria Elena Gonzalez",
+      "patient_id": 7,
+      "appointment_date": "2023-03-20",
+      "appointment_time": "14:30:00",
+      "status": "completed",
+      "appointment_type": "routine_checkup",
+      "notes": null,
+      "symptoms": [
+        {
+          "symptom_id": 26,
+          "symptom_name": "Polyuria",
+          "symptom_description": "Increased urination, especially at night",
+          "severity": "moderate",
+          "duration": null,
+          "onset_type": "gradual"
+        },
+        {
+          "symptom_id": 27,
+          "symptom_name": "Polydipsia",
+          "symptom_description": "Excessive thirst, drinking 4-5 liters per day",
+          "severity": "moderate",
+          "duration": null,
+          "onset_type": "gradual"
+        },
+        {
+          "symptom_id": 28,
+          "symptom_name": "Blurred Vision",
+          "symptom_description": "Intermittent blurred vision, worse in mornings",
+          "severity": "mild",
+          "duration": null,
+          "onset_type": "gradual"
+        },
+        {
+          "symptom_id": 29,
+          "symptom_name": "Numbness",
+          "symptom_description": "Tingling in feet, stocking distribution",
+          "severity": "moderate",
+          "duration": null,
+          "onset_type": "gradual"
+        }
+      ]
+    },
+    {
+      "appointment_id": 16,
+      "patient_name": "Maria Elena Gonzalez",
+      "patient_id": 7,
+      "appointment_date": "2023-01-15",
+      "appointment_time": "9:00:00",
+      "status": "completed",
+      "appointment_type": "follow_up",
+      "notes": null,
+      "symptoms": [
+        {
+          "symptom_id": 22,
+          "symptom_name": "Chest Pain",
+          "symptom_description": "Substernal chest pressure, 6/10 severity, worse with exertion",
+          "severity": "moderate",
+          "duration": null,
+          "onset_type": "gradual"
+        },
+        {
+          "symptom_id": 23,
+          "symptom_name": "Shortness of Breath",
+          "symptom_description": "DOE after climbing one flight of stairs, orthopnea",
+          "severity": "moderate",
+          "duration": null,
+          "onset_type": "gradual"
+        },
+        {
+          "symptom_id": 24,
+          "symptom_name": "Leg Swelling",
+          "symptom_description": "Bilateral lower extremity edema, worse in evening",
+          "severity": "mild",
+          "duration": null,
+          "onset_type": "gradual"
+        },
+        {
+          "symptom_id": 25,
+          "symptom_name": "Fatigue",
+          "symptom_description": "Chronic fatigue, limits daily activities",
+          "severity": "moderate",
+          "duration": null,
+          "onset_type": "gradual"
+        }
+      ]
+    }
+  ]
+}
