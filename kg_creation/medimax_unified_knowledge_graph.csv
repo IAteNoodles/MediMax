@@ -1,0 +1,170 @@
+id,name,type,category,source_id,target_id,relationship_type,date,status,details,properties
+patient_1,John Doe,NODE,Patient,,,,,,,"{""dob"": ""1985-03-15"", ""sex"": ""Male"", ""remarks"": ""Regular checkup patient""}"
+symptom_allergy_penicillin,Allergy to penicillin,NODE,Symptom,,,,,,,"{""type"": ""allergy""}"
+medication_aspirin,Aspirin,NODE,Medication,,,,,,,"{""historical"": true}"
+encounter_lab_2024_09_01,Lab Session 2024-09-01,NODE,Encounter,,,,2024-09-01,,,"{""date"": ""2024-09-01"", ""type"": ""laboratory""}"
+labtest_blood_test,Blood Test,NODE,LabTest,,,,,,,
+labtest_cholesterol,Cholesterol,NODE,LabTest,,,,,,,
+labtest_glucose,Glucose,NODE,LabTest,,,,,,,
+encounter_lab_2024_08_15,Lab Session 2024-08-15,NODE,Encounter,,,,2024-08-15,,,"{""date"": ""2024-08-15"", ""type"": ""laboratory""}"
+labtest_liver_function,Liver Function,NODE,LabTest,,,,,,,
+medication_Multivitamin,Multivitamin,NODE,Medication,,,,,,Multivitamin daily,"{""prescription_date"": ""2024-08-15"", ""details"": ""Multivitamin daily""}"
+encounter_appointment_2024_09_15,Appointment 2024-09-15,NODE,Encounter,,,,2024-09-15,Scheduled,,"{""date"": ""2024-09-15"", ""status"": ""Scheduled"", ""type"": ""appointment""}"
+symptom_fatigue,Fatigue,NODE,Symptom,,,,,,,
+symptom_mild_fatigue,Mild Fatigue,NODE,Symptom,,,,,,,
+symptom_routine_checkup,Routine Checkup,NODE,Symptom,,,,,,,
+encounter_appointment_2024_08_01,Appointment 2024-08-01,NODE,Encounter,,,,2024-08-01,Completed,,"{""date"": ""2024-08-01"", ""status"": ""Completed"", ""type"": ""appointment""}"
+patient_2,Jane Smith,NODE,Patient,,,,,,,"{""dob"": ""1992-07-22"", ""sex"": ""Female"", ""remarks"": ""Has hypertension""}"
+symptom_hypertension,Hypertension,NODE,Symptom,,,,,,,"{""type"": ""condition""}"
+medication_lisinopril,Lisinopril,NODE,Medication,,,,,,,"{""historical"": true}"
+medication_metformin,Metformin,NODE,Medication,,,,,,,"{""historical"": true}"
+encounter_lab_2024_08_15,Lab Session 2024-08-15,NODE,Encounter,,,,2024-08-15,,,"{""date"": ""2024-08-15"", ""type"": ""laboratory""}"
+labtest_general_2024_08_15,Lab Test 2024-08-15,NODE,LabTest,,,,,,"Blood pressure monitoring: 140/90 mmHg, elevated","{""details"": ""Blood pressure monitoring: 140/90 mmHg, elevated""}"
+encounter_lab_2024_08_10,Lab Session 2024-08-10,NODE,Encounter,,,,2024-08-10,,,"{""date"": ""2024-08-10"", ""type"": ""laboratory""}"
+labtest_general_2024_08_10,Lab Test 2024-08-10,NODE,LabTest,,,,,,HbA1c test: 5.8% - prediabetic range,"{""details"": ""HbA1c test: 5.8% - prediabetic range""}"
+encounter_appointment_2024_09_20,Appointment 2024-09-20,NODE,Encounter,,,,2024-09-20,Confirmed,,"{""date"": ""2024-09-20"", ""status"": ""Confirmed"", ""type"": ""appointment""}"
+symptom_dizziness,Dizziness,NODE,Symptom,,,,,,,
+symptom_high_blood_pressure,High Blood Pressure,NODE,Symptom,,,,,,,
+encounter_appointment_2024_08_15,Appointment 2024-08-15,NODE,Encounter,,,,2024-08-15,Completed,,"{""date"": ""2024-08-15"", ""status"": ""Completed"", ""type"": ""appointment""}"
+patient_3,Robert Johnson,NODE,Patient,,,,,,,"{""dob"": ""1978-11-08"", ""sex"": ""Male"", ""remarks"": ""Diabetic patient""}"
+symptom_allergy_sulfa_drugs,Allergy to sulfa drugs,NODE,Symptom,,,,,,,"{""type"": ""allergy""}"
+symptom_diabetes_type_2,Diabetes Type 2,NODE,Symptom,,,,,,,"{""type"": ""condition""}"
+medication_metformin,Metformin,NODE,Medication,,,,,,,"{""historical"": true}"
+medication_insulin,Insulin,NODE,Medication,,,,,,,"{""historical"": true}"
+encounter_lab_2024_08_20,Lab Session 2024-08-20,NODE,Encounter,,,,2024-08-20,,,"{""date"": ""2024-08-20"", ""type"": ""laboratory""}"
+labtest_glucose,Glucose,NODE,LabTest,,,,,,,
+encounter_lab_2024_08_05,Lab Session 2024-08-05,NODE,Encounter,,,,2024-08-05,,,"{""date"": ""2024-08-05"", ""type"": ""laboratory""}"
+labtest_kidney_function,Kidney Function,NODE,LabTest,,,,,,,
+encounter_appointment_2024_09_25,Appointment 2024-09-25,NODE,Encounter,,,,2024-09-25,Scheduled,,"{""date"": ""2024-09-25"", ""status"": ""Scheduled"", ""type"": ""appointment""}"
+symptom_pain,Pain,NODE,Symptom,,,,,,,
+symptom_diabetes,Diabetes,NODE,Symptom,,,,,,,
+encounter_appointment_2024_08_20,Appointment 2024-08-20,NODE,Encounter,,,,2024-08-20,Completed,,"{""date"": ""2024-08-20"", ""status"": ""Completed"", ""type"": ""appointment""}"
+patient_4,Emily Davis,NODE,Patient,,,,,,,"{""dob"": ""1995-01-30"", ""sex"": ""Female"", ""remarks"": ""Pregnancy monitoring""}"
+symptom_pregnancy,Pregnancy,NODE,Symptom,,,,,,,"{""type"": ""condition""}"
+medication_prenatal_vitamins,Prenatal Vitamins,NODE,Medication,,,,,,,"{""historical"": true}"
+encounter_lab_2024_08_25,Lab Session 2024-08-25,NODE,Encounter,,,,2024-08-25,,,"{""date"": ""2024-08-25"", ""type"": ""laboratory""}"
+labtest_general_2024_08_25,Lab Test 2024-08-25,NODE,LabTest,,,,,,"Prenatal blood work: Iron 85 ug/dL, Folate normal","{""details"": ""Prenatal blood work: Iron 85 ug/dL, Folate normal""}"
+encounter_lab_2024_08_15,Lab Session 2024-08-15,NODE,Encounter,,,,2024-08-15,,,"{""date"": ""2024-08-15"", ""type"": ""laboratory""}"
+labtest_ultrasound,Ultrasound,NODE,LabTest,,,,,,,
+medication_Prenatal,Prenatal,NODE,Medication,,,,,,Prenatal vitamins with folic acid daily,"{""prescription_date"": ""2024-08-25"", ""details"": ""Prenatal vitamins with folic acid daily""}"
+medication_Iron,Iron,NODE,Medication,,,,,,Iron supplement 325mg daily,"{""prescription_date"": ""2024-08-20"", ""details"": ""Iron supplement 325mg daily""}"
+encounter_appointment_2024_09_30,Appointment 2024-09-30,NODE,Encounter,,,,2024-09-30,Scheduled,,"{""date"": ""2024-09-30"", ""status"": ""Scheduled"", ""type"": ""appointment""}"
+symptom_nausea,Nausea,NODE,Symptom,,,,,,,
+encounter_appointment_2024_08_25,Appointment 2024-08-25,NODE,Encounter,,,,2024-08-25,Completed,,"{""date"": ""2024-08-25"", ""status"": ""Completed"", ""type"": ""appointment""}"
+symptom_pregnancy_monitoring,Pregnancy Monitoring,NODE,Symptom,,,,,,,
+patient_5,Michael Wilson,NODE,Patient,,,,,,,"{""dob"": ""1980-05-12"", ""sex"": ""Male"", ""remarks"": ""Cardiac history""}"
+symptom_allergy_aspirin,Allergy to aspirin,NODE,Symptom,,,,,,,"{""type"": ""allergy""}"
+symptom_coronary_artery_disease,Coronary Artery Disease,NODE,Symptom,,,,,,,"{""type"": ""condition""}"
+medication_beta_blockers,Beta Blockers,NODE,Medication,,,,,,,"{""historical"": true}"
+medication_statins,Statins,NODE,Medication,,,,,,,"{""historical"": true}"
+encounter_lab_2024_08_30,Lab Session 2024-08-30,NODE,Encounter,,,,2024-08-30,,,"{""date"": ""2024-08-30"", ""type"": ""laboratory""}"
+labtest_enzyme_test_2024_08_30,Enzyme Test,NODE,LabTest,,,,,,"Cardiac enzyme test: Troponin negative, CK-MB normal","{""details"": ""Cardiac enzyme test: Troponin negative, CK-MB normal""}"
+encounter_lab_2024_08_20,Lab Session 2024-08-20,NODE,Encounter,,,,2024-08-20,,,"{""date"": ""2024-08-20"", ""type"": ""laboratory""}"
+labtest_cholesterol,Cholesterol,NODE,LabTest,,,,,,,
+medication_Metoprolol,Metoprolol,NODE,Medication,,,,,,Metoprolol 50mg twice daily,"{""prescription_date"": ""2024-08-30"", ""details"": ""Metoprolol 50mg twice daily""}"
+medication_atorvastatin,Atorvastatin,NODE,Medication,,,,,,Atorvastatin 20mg at bedtime,"{""prescription_date"": ""2024-08-20"", ""details"": ""Atorvastatin 20mg at bedtime""}"
+encounter_appointment_2024_10_01,Appointment 2024-10-01,NODE,Encounter,,,,2024-10-01,Scheduled,,"{""date"": ""2024-10-01"", ""status"": ""Scheduled"", ""type"": ""appointment""}"
+symptom_pain,Pain,NODE,Symptom,,,,,,,
+symptom_cardiac,Cardiac,NODE,Symptom,,,,,,,
+symptom_chest_pain,Chest Pain,NODE,Symptom,,,,,,,
+encounter_appointment_2024_08_30,Appointment 2024-08-30,NODE,Encounter,,,,2024-08-30,Completed,,"{""date"": ""2024-08-30"", ""status"": ""Completed"", ""type"": ""appointment""}"
+symptom_shortness_of_breath,Shortness Of Breath,NODE,Symptom,,,,,,,
+patient_1_has_symptom_symptom_allergy_penicillin,has_symptom relationship,RELATIONSHIP,has_symptom,patient_1,symptom_allergy_penicillin,has_symptom,,,,
+patient_1_prescribed_medication_medication_aspirin,prescribed_medication relationship,RELATIONSHIP,prescribed_medication,patient_1,medication_aspirin,prescribed_medication,,,,
+patient_1_has_encounter_encounter_lab_2024_09_01,has_encounter relationship,RELATIONSHIP,has_encounter,patient_1,encounter_lab_2024_09_01,has_encounter,,,,
+encounter_lab_2024_09_01_contains_test_labtest_blood_test,contains_test relationship,RELATIONSHIP,contains_test,encounter_lab_2024_09_01,labtest_blood_test,contains_test,,,,
+patient_1_has_lab_test_labtest_blood_test,has_lab_test relationship,RELATIONSHIP,has_lab_test,patient_1,labtest_blood_test,has_lab_test,,,,
+encounter_lab_2024_09_01_contains_test_labtest_cholesterol,contains_test relationship,RELATIONSHIP,contains_test,encounter_lab_2024_09_01,labtest_cholesterol,contains_test,,,,
+patient_1_has_lab_test_labtest_cholesterol,has_lab_test relationship,RELATIONSHIP,has_lab_test,patient_1,labtest_cholesterol,has_lab_test,,,,
+encounter_lab_2024_09_01_contains_test_labtest_glucose,contains_test relationship,RELATIONSHIP,contains_test,encounter_lab_2024_09_01,labtest_glucose,contains_test,,,,
+patient_1_has_lab_test_labtest_glucose,has_lab_test relationship,RELATIONSHIP,has_lab_test,patient_1,labtest_glucose,has_lab_test,,,,
+encounter_lab_2024_09_01_contains_test_labtest_blood_test,contains_test relationship,RELATIONSHIP,contains_test,encounter_lab_2024_09_01,labtest_blood_test,contains_test,,,,
+patient_1_has_lab_test_labtest_blood_test,has_lab_test relationship,RELATIONSHIP,has_lab_test,patient_1,labtest_blood_test,has_lab_test,,,,
+patient_1_has_encounter_encounter_lab_2024_08_15,has_encounter relationship,RELATIONSHIP,has_encounter,patient_1,encounter_lab_2024_08_15,has_encounter,,,,
+encounter_lab_2024_08_15_contains_test_labtest_liver_function,contains_test relationship,RELATIONSHIP,contains_test,encounter_lab_2024_08_15,labtest_liver_function,contains_test,,,,
+patient_1_has_lab_test_labtest_liver_function,has_lab_test relationship,RELATIONSHIP,has_lab_test,patient_1,labtest_liver_function,has_lab_test,,,,
+patient_1_prescribed_medication_medication_aspirin,prescribed_medication relationship,RELATIONSHIP,prescribed_medication,patient_1,medication_aspirin,prescribed_medication,,,,
+patient_1_prescribed_medication_medication_Multivitamin,prescribed_medication relationship,RELATIONSHIP,prescribed_medication,patient_1,medication_Multivitamin,prescribed_medication,,,,
+patient_1_has_encounter_encounter_appointment_2024_09_15,has_encounter relationship,RELATIONSHIP,has_encounter,patient_1,encounter_appointment_2024_09_15,has_encounter,,,,
+patient_1_has_symptom_symptom_fatigue,has_symptom relationship,RELATIONSHIP,has_symptom,patient_1,symptom_fatigue,has_symptom,,,,
+encounter_appointment_2024_09_15_contains_symptom_symptom_fatigue,contains_symptom relationship,RELATIONSHIP,contains_symptom,encounter_appointment_2024_09_15,symptom_fatigue,contains_symptom,,,,
+patient_1_has_symptom_symptom_mild_fatigue,has_symptom relationship,RELATIONSHIP,has_symptom,patient_1,symptom_mild_fatigue,has_symptom,,,,
+encounter_appointment_2024_09_15_contains_symptom_symptom_mild_fatigue,contains_symptom relationship,RELATIONSHIP,contains_symptom,encounter_appointment_2024_09_15,symptom_mild_fatigue,contains_symptom,,,,
+patient_1_has_symptom_symptom_routine_checkup,has_symptom relationship,RELATIONSHIP,has_symptom,patient_1,symptom_routine_checkup,has_symptom,,,,
+encounter_appointment_2024_09_15_contains_symptom_symptom_routine_checkup,contains_symptom relationship,RELATIONSHIP,contains_symptom,encounter_appointment_2024_09_15,symptom_routine_checkup,contains_symptom,,,,
+patient_1_has_encounter_encounter_appointment_2024_08_01,has_encounter relationship,RELATIONSHIP,has_encounter,patient_1,encounter_appointment_2024_08_01,has_encounter,,,,
+patient_2_has_symptom_symptom_hypertension,has_symptom relationship,RELATIONSHIP,has_symptom,patient_2,symptom_hypertension,has_symptom,,,,
+patient_2_prescribed_medication_medication_lisinopril,prescribed_medication relationship,RELATIONSHIP,prescribed_medication,patient_2,medication_lisinopril,prescribed_medication,,,,
+patient_2_prescribed_medication_medication_metformin,prescribed_medication relationship,RELATIONSHIP,prescribed_medication,patient_2,medication_metformin,prescribed_medication,,,,
+patient_2_has_encounter_encounter_lab_2024_08_15,has_encounter relationship,RELATIONSHIP,has_encounter,patient_2,encounter_lab_2024_08_15,has_encounter,,,,
+encounter_lab_2024_08_15_contains_test_labtest_general_2024_08_15,contains_test relationship,RELATIONSHIP,contains_test,encounter_lab_2024_08_15,labtest_general_2024_08_15,contains_test,,,,
+patient_2_has_lab_test_labtest_general_2024_08_15,has_lab_test relationship,RELATIONSHIP,has_lab_test,patient_2,labtest_general_2024_08_15,has_lab_test,,,,
+patient_2_has_encounter_encounter_lab_2024_08_10,has_encounter relationship,RELATIONSHIP,has_encounter,patient_2,encounter_lab_2024_08_10,has_encounter,,,,
+encounter_lab_2024_08_10_contains_test_labtest_general_2024_08_10,contains_test relationship,RELATIONSHIP,contains_test,encounter_lab_2024_08_10,labtest_general_2024_08_10,contains_test,,,,
+patient_2_has_lab_test_labtest_general_2024_08_10,has_lab_test relationship,RELATIONSHIP,has_lab_test,patient_2,labtest_general_2024_08_10,has_lab_test,,,,
+patient_2_prescribed_medication_medication_lisinopril,prescribed_medication relationship,RELATIONSHIP,prescribed_medication,patient_2,medication_lisinopril,prescribed_medication,,,,
+patient_2_prescribed_medication_medication_metformin,prescribed_medication relationship,RELATIONSHIP,prescribed_medication,patient_2,medication_metformin,prescribed_medication,,,,
+patient_2_has_encounter_encounter_appointment_2024_09_20,has_encounter relationship,RELATIONSHIP,has_encounter,patient_2,encounter_appointment_2024_09_20,has_encounter,,,,
+patient_2_has_symptom_symptom_dizziness,has_symptom relationship,RELATIONSHIP,has_symptom,patient_2,symptom_dizziness,has_symptom,,,,
+encounter_appointment_2024_09_20_contains_symptom_symptom_dizziness,contains_symptom relationship,RELATIONSHIP,contains_symptom,encounter_appointment_2024_09_20,symptom_dizziness,contains_symptom,,,,
+patient_2_has_symptom_symptom_high_blood_pressure,has_symptom relationship,RELATIONSHIP,has_symptom,patient_2,symptom_high_blood_pressure,has_symptom,,,,
+encounter_appointment_2024_09_20_contains_symptom_symptom_high_blood_pressure,contains_symptom relationship,RELATIONSHIP,contains_symptom,encounter_appointment_2024_09_20,symptom_high_blood_pressure,contains_symptom,,,,
+patient_2_has_encounter_encounter_appointment_2024_08_15,has_encounter relationship,RELATIONSHIP,has_encounter,patient_2,encounter_appointment_2024_08_15,has_encounter,,,,
+patient_2_has_symptom_symptom_hypertension,has_symptom relationship,RELATIONSHIP,has_symptom,patient_2,symptom_hypertension,has_symptom,,,,
+encounter_appointment_2024_08_15_contains_symptom_symptom_hypertension,contains_symptom relationship,RELATIONSHIP,contains_symptom,encounter_appointment_2024_08_15,symptom_hypertension,contains_symptom,,,,
+patient_3_has_symptom_symptom_allergy_sulfa_drugs,has_symptom relationship,RELATIONSHIP,has_symptom,patient_3,symptom_allergy_sulfa_drugs,has_symptom,,,,
+patient_3_has_symptom_symptom_diabetes_type_2,has_symptom relationship,RELATIONSHIP,has_symptom,patient_3,symptom_diabetes_type_2,has_symptom,,,,
+patient_3_prescribed_medication_medication_metformin,prescribed_medication relationship,RELATIONSHIP,prescribed_medication,patient_3,medication_metformin,prescribed_medication,,,,
+patient_3_prescribed_medication_medication_insulin,prescribed_medication relationship,RELATIONSHIP,prescribed_medication,patient_3,medication_insulin,prescribed_medication,,,,
+patient_3_has_encounter_encounter_lab_2024_08_20,has_encounter relationship,RELATIONSHIP,has_encounter,patient_3,encounter_lab_2024_08_20,has_encounter,,,,
+encounter_lab_2024_08_20_contains_test_labtest_glucose,contains_test relationship,RELATIONSHIP,contains_test,encounter_lab_2024_08_20,labtest_glucose,contains_test,,,,
+patient_3_has_lab_test_labtest_glucose,has_lab_test relationship,RELATIONSHIP,has_lab_test,patient_3,labtest_glucose,has_lab_test,,,,
+patient_3_has_encounter_encounter_lab_2024_08_05,has_encounter relationship,RELATIONSHIP,has_encounter,patient_3,encounter_lab_2024_08_05,has_encounter,,,,
+encounter_lab_2024_08_05_contains_test_labtest_kidney_function,contains_test relationship,RELATIONSHIP,contains_test,encounter_lab_2024_08_05,labtest_kidney_function,contains_test,,,,
+patient_3_has_lab_test_labtest_kidney_function,has_lab_test relationship,RELATIONSHIP,has_lab_test,patient_3,labtest_kidney_function,has_lab_test,,,,
+patient_3_prescribed_medication_medication_metformin,prescribed_medication relationship,RELATIONSHIP,prescribed_medication,patient_3,medication_metformin,prescribed_medication,,,,
+patient_3_prescribed_medication_medication_insulin,prescribed_medication relationship,RELATIONSHIP,prescribed_medication,patient_3,medication_insulin,prescribed_medication,,,,
+patient_3_has_encounter_encounter_appointment_2024_09_25,has_encounter relationship,RELATIONSHIP,has_encounter,patient_3,encounter_appointment_2024_09_25,has_encounter,,,,
+patient_3_has_symptom_symptom_pain,has_symptom relationship,RELATIONSHIP,has_symptom,patient_3,symptom_pain,has_symptom,,,,
+encounter_appointment_2024_09_25_contains_symptom_symptom_pain,contains_symptom relationship,RELATIONSHIP,contains_symptom,encounter_appointment_2024_09_25,symptom_pain,contains_symptom,,,,
+patient_3_has_symptom_symptom_diabetes,has_symptom relationship,RELATIONSHIP,has_symptom,patient_3,symptom_diabetes,has_symptom,,,,
+encounter_appointment_2024_09_25_contains_symptom_symptom_diabetes,contains_symptom relationship,RELATIONSHIP,contains_symptom,encounter_appointment_2024_09_25,symptom_diabetes,contains_symptom,,,,
+patient_3_has_encounter_encounter_appointment_2024_08_20,has_encounter relationship,RELATIONSHIP,has_encounter,patient_3,encounter_appointment_2024_08_20,has_encounter,,,,
+patient_4_has_symptom_symptom_pregnancy,has_symptom relationship,RELATIONSHIP,has_symptom,patient_4,symptom_pregnancy,has_symptom,,,,
+patient_4_prescribed_medication_medication_prenatal_vitamins,prescribed_medication relationship,RELATIONSHIP,prescribed_medication,patient_4,medication_prenatal_vitamins,prescribed_medication,,,,
+patient_4_has_encounter_encounter_lab_2024_08_25,has_encounter relationship,RELATIONSHIP,has_encounter,patient_4,encounter_lab_2024_08_25,has_encounter,,,,
+encounter_lab_2024_08_25_contains_test_labtest_general_2024_08_25,contains_test relationship,RELATIONSHIP,contains_test,encounter_lab_2024_08_25,labtest_general_2024_08_25,contains_test,,,,
+patient_4_has_lab_test_labtest_general_2024_08_25,has_lab_test relationship,RELATIONSHIP,has_lab_test,patient_4,labtest_general_2024_08_25,has_lab_test,,,,
+patient_4_has_encounter_encounter_lab_2024_08_15,has_encounter relationship,RELATIONSHIP,has_encounter,patient_4,encounter_lab_2024_08_15,has_encounter,,,,
+encounter_lab_2024_08_15_contains_test_labtest_ultrasound,contains_test relationship,RELATIONSHIP,contains_test,encounter_lab_2024_08_15,labtest_ultrasound,contains_test,,,,
+patient_4_has_lab_test_labtest_ultrasound,has_lab_test relationship,RELATIONSHIP,has_lab_test,patient_4,labtest_ultrasound,has_lab_test,,,,
+patient_4_prescribed_medication_medication_Prenatal,prescribed_medication relationship,RELATIONSHIP,prescribed_medication,patient_4,medication_Prenatal,prescribed_medication,,,,
+patient_4_prescribed_medication_medication_Iron,prescribed_medication relationship,RELATIONSHIP,prescribed_medication,patient_4,medication_Iron,prescribed_medication,,,,
+patient_4_has_encounter_encounter_appointment_2024_09_30,has_encounter relationship,RELATIONSHIP,has_encounter,patient_4,encounter_appointment_2024_09_30,has_encounter,,,,
+patient_4_has_symptom_symptom_nausea,has_symptom relationship,RELATIONSHIP,has_symptom,patient_4,symptom_nausea,has_symptom,,,,
+encounter_appointment_2024_09_30_contains_symptom_symptom_nausea,contains_symptom relationship,RELATIONSHIP,contains_symptom,encounter_appointment_2024_09_30,symptom_nausea,contains_symptom,,,,
+patient_4_has_encounter_encounter_appointment_2024_08_25,has_encounter relationship,RELATIONSHIP,has_encounter,patient_4,encounter_appointment_2024_08_25,has_encounter,,,,
+patient_4_has_symptom_symptom_pregnancy_monitoring,has_symptom relationship,RELATIONSHIP,has_symptom,patient_4,symptom_pregnancy_monitoring,has_symptom,,,,
+encounter_appointment_2024_08_25_contains_symptom_symptom_pregnancy_monitoring,contains_symptom relationship,RELATIONSHIP,contains_symptom,encounter_appointment_2024_08_25,symptom_pregnancy_monitoring,contains_symptom,,,,
+patient_5_has_symptom_symptom_allergy_aspirin,has_symptom relationship,RELATIONSHIP,has_symptom,patient_5,symptom_allergy_aspirin,has_symptom,,,,
+patient_5_has_symptom_symptom_coronary_artery_disease,has_symptom relationship,RELATIONSHIP,has_symptom,patient_5,symptom_coronary_artery_disease,has_symptom,,,,
+patient_5_prescribed_medication_medication_beta_blockers,prescribed_medication relationship,RELATIONSHIP,prescribed_medication,patient_5,medication_beta_blockers,prescribed_medication,,,,
+patient_5_prescribed_medication_medication_statins,prescribed_medication relationship,RELATIONSHIP,prescribed_medication,patient_5,medication_statins,prescribed_medication,,,,
+patient_5_has_encounter_encounter_lab_2024_08_30,has_encounter relationship,RELATIONSHIP,has_encounter,patient_5,encounter_lab_2024_08_30,has_encounter,,,,
+encounter_lab_2024_08_30_contains_test_labtest_enzyme_test_2024_08_30,contains_test relationship,RELATIONSHIP,contains_test,encounter_lab_2024_08_30,labtest_enzyme_test_2024_08_30,contains_test,,,,
+patient_5_has_lab_test_labtest_enzyme_test_2024_08_30,has_lab_test relationship,RELATIONSHIP,has_lab_test,patient_5,labtest_enzyme_test_2024_08_30,has_lab_test,,,,
+patient_5_has_encounter_encounter_lab_2024_08_20,has_encounter relationship,RELATIONSHIP,has_encounter,patient_5,encounter_lab_2024_08_20,has_encounter,,,,
+encounter_lab_2024_08_20_contains_test_labtest_cholesterol,contains_test relationship,RELATIONSHIP,contains_test,encounter_lab_2024_08_20,labtest_cholesterol,contains_test,,,,
+patient_5_has_lab_test_labtest_cholesterol,has_lab_test relationship,RELATIONSHIP,has_lab_test,patient_5,labtest_cholesterol,has_lab_test,,,,
+patient_5_prescribed_medication_medication_Metoprolol,prescribed_medication relationship,RELATIONSHIP,prescribed_medication,patient_5,medication_Metoprolol,prescribed_medication,,,,
+patient_5_prescribed_medication_medication_atorvastatin,prescribed_medication relationship,RELATIONSHIP,prescribed_medication,patient_5,medication_atorvastatin,prescribed_medication,,,,
+patient_5_has_encounter_encounter_appointment_2024_10_01,has_encounter relationship,RELATIONSHIP,has_encounter,patient_5,encounter_appointment_2024_10_01,has_encounter,,,,
+patient_5_has_symptom_symptom_pain,has_symptom relationship,RELATIONSHIP,has_symptom,patient_5,symptom_pain,has_symptom,,,,
+encounter_appointment_2024_10_01_contains_symptom_symptom_pain,contains_symptom relationship,RELATIONSHIP,contains_symptom,encounter_appointment_2024_10_01,symptom_pain,contains_symptom,,,,
+patient_5_has_symptom_symptom_cardiac,has_symptom relationship,RELATIONSHIP,has_symptom,patient_5,symptom_cardiac,has_symptom,,,,
+encounter_appointment_2024_10_01_contains_symptom_symptom_cardiac,contains_symptom relationship,RELATIONSHIP,contains_symptom,encounter_appointment_2024_10_01,symptom_cardiac,contains_symptom,,,,
+patient_5_has_symptom_symptom_chest_pain,has_symptom relationship,RELATIONSHIP,has_symptom,patient_5,symptom_chest_pain,has_symptom,,,,
+encounter_appointment_2024_10_01_contains_symptom_symptom_chest_pain,contains_symptom relationship,RELATIONSHIP,contains_symptom,encounter_appointment_2024_10_01,symptom_chest_pain,contains_symptom,,,,
+patient_5_has_encounter_encounter_appointment_2024_08_30,has_encounter relationship,RELATIONSHIP,has_encounter,patient_5,encounter_appointment_2024_08_30,has_encounter,,,,
+patient_5_has_symptom_symptom_shortness_of_breath,has_symptom relationship,RELATIONSHIP,has_symptom,patient_5,symptom_shortness_of_breath,has_symptom,,,,
+encounter_appointment_2024_08_30_contains_symptom_symptom_shortness_of_breath,contains_symptom relationship,RELATIONSHIP,contains_symptom,encounter_appointment_2024_08_30,symptom_shortness_of_breath,contains_symptom,,,,

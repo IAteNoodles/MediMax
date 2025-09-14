@@ -1,0 +1,677 @@
+2025-09-14 06:29:28,430 - INFO -    - Total Nodes: 10
+2025-09-14 06:29:28,430 - INFO -    - Total Relationships: 17
+2025-09-14 06:29:28,430 - INFO -    - Patient nodes: 1
+2025-09-14 06:29:28,430 - INFO -    - Symptom nodes: 4
+2025-09-14 06:29:28,431 - INFO -    - Medication nodes: 1
+2025-09-14 06:29:28,431 - INFO -    - Encounter nodes: 2
+2025-09-14 06:29:28,431 - INFO -    - LabTest nodes: 2
+2025-09-14 06:29:28,431 - INFO -    - Relationship types:
+2025-09-14 06:29:28,431 - INFO -      � has_symptom: 4
+2025-09-14 06:29:28,431 - INFO -      � prescribed_medication: 2
+2025-09-14 06:29:28,431 - INFO -      � has_encounter: 2
+2025-09-14 06:29:28,432 - INFO -      � contains_test: 3
+2025-09-14 06:29:28,432 - INFO -      � has_lab_test: 3
+2025-09-14 06:29:28,432 - INFO -      � contains_symptom: 3
+2025-09-14 06:29:28,436 - INFO -    1. Patient: John Doe (ID: patient_1)
+2025-09-14 06:29:28,436 - INFO -    2. Symptom: Allergy to penicillin (ID: symptom_allergy_penicillin)
+2025-09-14 06:29:28,436 - INFO -    3. Medication: Aspirin (ID: medication_aspirin)
+2025-09-14 06:29:28,436 - INFO -    4. Encounter: Lab Session 2024-09-01 (ID: encounter_lab_2024_09_01)
+2025-09-14 06:29:28,436 - INFO -    5. LabTest: Blood Test (ID: labtest_blood_test)
+2025-09-14 06:29:28,436 - INFO -    1. patient_1 --[has_symptom]--> symptom_allergy_penicillin
+2025-09-14 06:29:28,436 - INFO -    2. patient_1 --[prescribed_medication]--> medication_aspirin
+2025-09-14 06:29:28,436 - INFO -    3. patient_1 --[has_encounter]--> encounter_lab_2024_09_01
+2025-09-14 06:29:28,436 - INFO -    4. encounter_lab_2024_09_01 --[contains_test]--> labtest_blood_test
+2025-09-14 06:29:28,436 - INFO -    5. patient_1 --[has_lab_test]--> labtest_blood_test
+2025-09-14 06:31:28,362 - INFO - Creating knowledge graph for Patient ID: 2
+2025-09-14 06:31:28,362 - INFO - Checking if we need to add sample data...
+2025-09-14 06:31:28,362 - INFO - Sample data check complete
+2025-09-14 06:31:28,362 - INFO - Starting knowledge graph creation for patient 2
+2025-09-14 06:31:28,362 - INFO - Initialized MCPDatabaseKnowledgeGraphBuilder
+2025-09-14 06:31:28,362 - INFO - Building knowledge graph for Patient ID: 2 using sample data
+2025-09-14 06:31:28,364 - INFO - Processing medical history
+2025-09-14 06:31:28,364 - INFO - Processing lab report from 2024-08-15
+2025-09-14 06:31:28,364 - INFO - Processing lab report from 2024-08-10
+2025-09-14 06:31:28,364 - INFO - Processing prescription from 2024-08-15
+2025-09-14 06:31:28,364 - INFO - Processing prescription from 2024-08-10
+2025-09-14 06:31:28,364 - INFO - Processing appointment on 2024-09-20
+2025-09-14 06:31:28,364 - INFO - Processing appointment on 2024-08-15
+2025-09-14 06:31:28,364 - INFO - Successfully built KG with 12 nodes and 19 relationships
+2025-09-14 06:31:28,364 - INFO - Saving knowledge graph to CSV files
+2025-09-14 06:31:28,364 - INFO - nodes.csv created successfully
+2025-09-14 06:31:28,364 - INFO - relationships.csv created successfully
+2025-09-14 06:31:28,364 - INFO - Knowledge Graph Summary:
+2025-09-14 06:31:28,364 - INFO -    - Total Nodes: 12
+2025-09-14 06:31:28,364 - INFO -    - Total Relationships: 19
+2025-09-14 06:31:28,364 - INFO -    - Patient nodes: 1
+2025-09-14 06:31:28,364 - INFO -    - Symptom nodes: 3
+2025-09-14 06:31:28,364 - INFO -    - Medication nodes: 2
+2025-09-14 06:31:28,364 - INFO -    - Encounter nodes: 4
+2025-09-14 06:31:28,364 - INFO -    - LabTest nodes: 2
+2025-09-14 06:31:28,364 - INFO -    - Relationship types:
+2025-09-14 06:31:28,364 - INFO -      * has_symptom: 4
+2025-09-14 06:31:28,364 - INFO -      * prescribed_medication: 4
+2025-09-14 06:31:28,364 - INFO -      * has_encounter: 4
+2025-09-14 06:31:28,364 - INFO -      * contains_test: 2
+2025-09-14 06:31:28,364 - INFO -      * has_lab_test: 2
+2025-09-14 06:31:28,364 - INFO -      * contains_symptom: 3
+2025-09-14 06:31:28,364 - INFO - Knowledge graph creation completed successfully!
+2025-09-14 06:31:28,364 - INFO - Files generated: nodes.csv, relationships.csv
+2025-09-14 06:31:28,364 - INFO - Check knowledge_graph.log for detailed logs
+2025-09-14 06:31:28,364 - INFO - 
+Sample Nodes:
+2025-09-14 06:31:28,370 - INFO -    1. Patient: Jane Smith (ID: patient_2)
+2025-09-14 06:31:28,370 - INFO -    2. Symptom: Hypertension (ID: symptom_hypertension)
+2025-09-14 06:31:28,370 - INFO -    3. Medication: Lisinopril (ID: medication_lisinopril)
+2025-09-14 06:31:28,370 - INFO -    4. Medication: Metformin (ID: medication_metformin)
+2025-09-14 06:31:28,370 - INFO -    5. Encounter: Lab Session 2024-08-15 (ID: encounter_lab_2024_08_15)
+2025-09-14 06:31:28,370 - INFO - 
+Sample Relationships:
+2025-09-14 06:31:28,370 - INFO -    1. patient_2 --[has_symptom]--> symptom_hypertension
+2025-09-14 06:31:28,370 - INFO -    2. patient_2 --[prescribed_medication]--> medication_lisinopril
+2025-09-14 06:31:28,370 - INFO -    3. patient_2 --[prescribed_medication]--> medication_metformin
+2025-09-14 06:31:28,370 - INFO -    4. patient_2 --[has_encounter]--> encounter_lab_2024_08_15
+2025-09-14 06:31:28,370 - INFO -    5. encounter_lab_2024_08_15 --[contains_test]--> labtest_general_2024_08_15
+2025-09-14 06:31:34,651 - INFO - Creating knowledge graph for Patient ID: 3
+2025-09-14 06:31:34,651 - INFO - Checking if we need to add sample data...
+2025-09-14 06:31:34,652 - INFO - Sample data check complete
+2025-09-14 06:31:34,652 - INFO - Starting knowledge graph creation for patient 3
+2025-09-14 06:31:34,652 - INFO - Initialized MCPDatabaseKnowledgeGraphBuilder
+2025-09-14 06:31:34,652 - INFO - Building knowledge graph for Patient ID: 3 using sample data
+2025-09-14 06:31:34,652 - INFO - Processing medical history
+2025-09-14 06:31:34,653 - INFO - Processing lab report from 2024-08-20
+2025-09-14 06:31:34,653 - INFO - Processing lab report from 2024-08-05
+2025-09-14 06:31:34,653 - INFO - Processing prescription from 2024-08-20
+2025-09-14 06:31:34,654 - INFO - Processing prescription from 2024-08-20
+2025-09-14 06:31:34,654 - INFO - Processing appointment on 2024-09-25
+2025-09-14 06:31:34,655 - INFO - Processing appointment on 2024-08-20
+2025-09-14 06:31:34,656 - INFO - Successfully built KG with 13 nodes and 18 relationships
+2025-09-14 06:31:34,659 - INFO - Saving knowledge graph to CSV files
+2025-09-14 06:31:34,665 - INFO - nodes.csv created successfully
+2025-09-14 06:31:34,674 - INFO - relationships.csv created successfully
+2025-09-14 06:31:34,677 - INFO - Knowledge Graph Summary:
+2025-09-14 06:31:34,677 - INFO -    - Total Nodes: 13
+2025-09-14 06:31:34,677 - INFO -    - Total Relationships: 18
+2025-09-14 06:31:34,677 - INFO -    - Patient nodes: 1
+2025-09-14 06:31:34,678 - INFO -    - Symptom nodes: 4
+2025-09-14 06:31:34,678 - INFO -    - Medication nodes: 2
+2025-09-14 06:31:34,678 - INFO -    - Encounter nodes: 4
+2025-09-14 06:31:34,679 - INFO -    - LabTest nodes: 2
+2025-09-14 06:31:34,679 - INFO -    - Relationship types:
+2025-09-14 06:31:34,679 - INFO -      * has_symptom: 4
+2025-09-14 06:31:34,679 - INFO -      * prescribed_medication: 4
+2025-09-14 06:31:34,679 - INFO -      * has_encounter: 4
+2025-09-14 06:31:34,679 - INFO -      * contains_test: 2
+2025-09-14 06:31:34,679 - INFO -      * has_lab_test: 2
+2025-09-14 06:31:34,680 - INFO -      * contains_symptom: 2
+2025-09-14 06:31:34,680 - INFO - Knowledge graph creation completed successfully!
+2025-09-14 06:31:34,681 - INFO - Files generated: nodes.csv, relationships.csv
+2025-09-14 06:31:34,681 - INFO - Check knowledge_graph.log for detailed logs
+2025-09-14 06:31:34,683 - INFO - 
+Sample Nodes:
+2025-09-14 06:31:34,684 - INFO -    1. Patient: Robert Johnson (ID: patient_3)
+2025-09-14 06:31:34,684 - INFO -    2. Symptom: Allergy to sulfa drugs (ID: symptom_allergy_sulfa_drugs)
+2025-09-14 06:31:34,684 - INFO -    3. Symptom: Diabetes Type 2 (ID: symptom_diabetes_type_2)
+2025-09-14 06:31:34,684 - INFO -    4. Medication: Metformin (ID: medication_metformin)
+2025-09-14 06:31:34,684 - INFO -    5. Medication: Insulin (ID: medication_insulin)
+2025-09-14 06:31:34,684 - INFO - 
+Sample Relationships:
+2025-09-14 06:31:34,684 - INFO -    1. patient_3 --[has_symptom]--> symptom_allergy_sulfa_drugs
+2025-09-14 06:31:34,685 - INFO -    2. patient_3 --[has_symptom]--> symptom_diabetes_type_2
+2025-09-14 06:31:34,685 - INFO -    3. patient_3 --[prescribed_medication]--> medication_metformin
+2025-09-14 06:31:34,685 - INFO -    4. patient_3 --[prescribed_medication]--> medication_insulin
+2025-09-14 06:31:34,685 - INFO -    5. patient_3 --[has_encounter]--> encounter_lab_2024_08_20
+2025-09-14 06:48:03,755 - INFO - 🎯 Creating knowledge graph for Patient ID: 1
+2025-09-14 06:48:03,755 - INFO - 🚀 Starting knowledge graph creation for patient 1
+2025-09-14 06:48:03,755 - INFO - � Initialized DatabaseKnowledgeGraphBuilder
+2025-09-14 06:48:03,755 - INFO - 🔍 Building knowledge graph for Patient ID: 1
+2025-09-14 06:48:03,755 - INFO - � Processing medical history
+2025-09-14 06:48:03,755 - INFO - 🧪 Processing lab report from 2024-09-01
+2025-09-14 06:48:03,755 - INFO - 💊 Processing prescription from 2024-09-01
+2025-09-14 06:48:03,755 - INFO - 📅 Processing appointment on 2024-09-15
+2025-09-14 06:48:03,759 - INFO - ✅ Successfully built KG with 10 nodes and 15 relationships
+2025-09-14 06:48:03,759 - INFO - � Saving knowledge graph to CSV files
+2025-09-14 06:48:03,759 - ERROR - ❌ Error saving CSV files: dict contains fields not in fieldnames: 'type'
+2025-09-14 06:48:03,759 - INFO - 📊 Knowledge Graph Summary:
+2025-09-14 06:48:03,759 - INFO -    - Total Nodes: 10
+2025-09-14 06:48:03,759 - INFO -    - Total Relationships: 15
+2025-09-14 06:48:03,759 - INFO -    - Patient nodes: 1
+2025-09-14 06:48:03,759 - INFO -    - Symptom nodes: 4
+2025-09-14 06:48:03,759 - INFO -    - Medication nodes: 1
+2025-09-14 06:48:03,759 - INFO -    - Encounter nodes: 2
+2025-09-14 06:48:03,759 - INFO -    - LabTest nodes: 2
+2025-09-14 06:48:03,759 - INFO - 🎉 Knowledge graph creation completed successfully!
+2025-09-14 06:48:03,759 - INFO - 📁 Files generated: nodes.csv, relationships.csv
+2025-09-14 06:48:03,759 - INFO - 📄 Check knowledge_graph.log for detailed logs
+2025-09-14 06:48:13,997 - INFO - Creating knowledge graph for Patient ID: 5
+2025-09-14 06:48:13,997 - INFO - Checking if we need to add sample data...
+2025-09-14 06:48:13,997 - INFO - Sample data check complete
+2025-09-14 06:48:13,997 - INFO - Starting knowledge graph creation for patient 5
+2025-09-14 06:48:13,997 - INFO - Initialized MCPDatabaseKnowledgeGraphBuilder
+2025-09-14 06:48:13,997 - INFO - Building knowledge graph for Patient ID: 5 using sample data
+2025-09-14 06:48:13,997 - INFO - Processing medical history
+2025-09-14 06:48:13,997 - INFO - Processing lab report from 2024-08-30
+2025-09-14 06:48:13,999 - INFO - Processing lab report from 2024-08-20
+2025-09-14 06:48:13,999 - INFO - Processing prescription from 2024-08-30
+2025-09-14 06:48:13,999 - INFO - Processing prescription from 2024-08-20
+2025-09-14 06:48:13,999 - INFO - Processing appointment on 2024-10-01
+2025-09-14 06:48:13,999 - INFO - Processing appointment on 2024-08-30
+2025-09-14 06:48:13,999 - INFO - Successfully built KG with 17 nodes and 22 relationships
+2025-09-14 06:48:13,999 - INFO - Saving knowledge graph to CSV files
+2025-09-14 06:48:13,999 - INFO - nodes.csv created successfully
+2025-09-14 06:48:13,999 - INFO - relationships.csv created successfully
+2025-09-14 06:48:13,999 - INFO - Knowledge Graph Summary:
+2025-09-14 06:48:13,999 - INFO -    - Total Nodes: 17
+2025-09-14 06:48:13,999 - INFO -    - Total Relationships: 22
+2025-09-14 06:48:13,999 - INFO -    - Patient nodes: 1
+2025-09-14 06:48:13,999 - INFO -    - Symptom nodes: 6
+2025-09-14 06:48:13,999 - INFO -    - Medication nodes: 4
+2025-09-14 06:48:13,999 - INFO -    - Encounter nodes: 4
+2025-09-14 06:48:13,999 - INFO -    - LabTest nodes: 2
+2025-09-14 06:48:13,999 - INFO -    - Relationship types:
+2025-09-14 06:48:13,999 - INFO -      * has_symptom: 6
+2025-09-14 06:48:13,999 - INFO -      * prescribed_medication: 4
+2025-09-14 06:48:13,999 - INFO -      * has_encounter: 4
+2025-09-14 06:48:13,999 - INFO -      * contains_test: 2
+2025-09-14 06:48:13,999 - INFO -      * has_lab_test: 2
+2025-09-14 06:48:13,999 - INFO -      * contains_symptom: 4
+2025-09-14 06:48:13,999 - INFO - Knowledge graph creation completed successfully!
+2025-09-14 06:48:13,999 - INFO - Files generated: nodes.csv, relationships.csv
+2025-09-14 06:48:13,999 - INFO - Check knowledge_graph.log for detailed logs
+2025-09-14 06:48:13,999 - INFO - 
+Sample Nodes:
+2025-09-14 06:48:13,999 - INFO -    1. Patient: Michael Wilson (ID: patient_5)
+2025-09-14 06:48:13,999 - INFO -    2. Symptom: Allergy to aspirin (ID: symptom_allergy_aspirin)
+2025-09-14 06:48:13,999 - INFO -    3. Symptom: Coronary Artery Disease (ID: symptom_coronary_artery_disease)
+2025-09-14 06:48:13,999 - INFO -    4. Medication: Beta Blockers (ID: medication_beta_blockers)
+2025-09-14 06:48:13,999 - INFO -    5. Medication: Statins (ID: medication_statins)
+2025-09-14 06:48:13,999 - INFO - 
+Sample Relationships:
+2025-09-14 06:48:13,999 - INFO -    1. patient_5 --[has_symptom]--> symptom_allergy_aspirin
+2025-09-14 06:48:13,999 - INFO -    2. patient_5 --[has_symptom]--> symptom_coronary_artery_disease
+2025-09-14 06:48:13,999 - INFO -    3. patient_5 --[prescribed_medication]--> medication_beta_blockers
+2025-09-14 06:48:13,999 - INFO -    4. patient_5 --[prescribed_medication]--> medication_statins
+2025-09-14 06:48:13,999 - INFO -    5. patient_5 --[has_encounter]--> encounter_lab_2024_08_30
+2025-09-14 06:49:36,770 - INFO - Generating combined knowledge graph for all patients
+2025-09-14 06:49:36,770 - INFO - Adding Patient 1 to combined graph
+2025-09-14 06:49:36,770 - INFO - Starting knowledge graph creation for patient 1
+2025-09-14 06:49:36,770 - INFO - Initialized MCPDatabaseKnowledgeGraphBuilder
+2025-09-14 06:49:36,770 - INFO - Building knowledge graph for Patient ID: 1 using sample data
+2025-09-14 06:49:36,770 - INFO - Processing medical history
+2025-09-14 06:49:36,770 - INFO - Processing lab report from 2024-09-01
+2025-09-14 06:49:36,774 - INFO - Processing lab report from 2024-08-15
+2025-09-14 06:49:36,774 - INFO - Processing prescription from 2024-09-01
+2025-09-14 06:49:36,774 - INFO - Processing prescription from 2024-08-15
+2025-09-14 06:49:36,775 - INFO - Processing appointment on 2024-09-15
+2025-09-14 06:49:36,775 - INFO - Processing appointment on 2024-08-01
+2025-09-14 06:49:36,775 - INFO - Successfully built KG with 15 nodes and 24 relationships
+2025-09-14 06:49:36,775 - INFO - Saving knowledge graph to CSV files
+2025-09-14 06:49:36,776 - INFO - nodes.csv created successfully
+2025-09-14 06:49:36,777 - INFO - relationships.csv created successfully
+2025-09-14 06:49:36,777 - INFO - Knowledge Graph Summary:
+2025-09-14 06:49:36,777 - INFO -    - Total Nodes: 15
+2025-09-14 06:49:36,777 - INFO -    - Total Relationships: 24
+2025-09-14 06:49:36,777 - INFO -    - Patient nodes: 1
+2025-09-14 06:49:36,777 - INFO -    - Symptom nodes: 4
+2025-09-14 06:49:36,777 - INFO -    - Medication nodes: 2
+2025-09-14 06:49:36,777 - INFO -    - Encounter nodes: 4
+2025-09-14 06:49:36,777 - INFO -    - LabTest nodes: 4
+2025-09-14 06:49:36,777 - INFO -    - Relationship types:
+2025-09-14 06:49:36,778 - INFO -      * has_symptom: 4
+2025-09-14 06:49:36,778 - INFO -      * prescribed_medication: 3
+2025-09-14 06:49:36,778 - INFO -      * has_encounter: 4
+2025-09-14 06:49:36,778 - INFO -      * contains_test: 5
+2025-09-14 06:49:36,778 - INFO -      * has_lab_test: 5
+2025-09-14 06:49:36,778 - INFO -      * contains_symptom: 3
+2025-09-14 06:49:36,778 - INFO - Adding Patient 2 to combined graph
+2025-09-14 06:49:36,778 - INFO - Starting knowledge graph creation for patient 2
+2025-09-14 06:49:36,778 - INFO - Initialized MCPDatabaseKnowledgeGraphBuilder
+2025-09-14 06:49:36,778 - INFO - Building knowledge graph for Patient ID: 2 using sample data
+2025-09-14 06:49:36,778 - INFO - Processing medical history
+2025-09-14 06:49:36,779 - INFO - Processing lab report from 2024-08-15
+2025-09-14 06:49:36,779 - INFO - Processing lab report from 2024-08-10
+2025-09-14 06:49:36,779 - INFO - Processing prescription from 2024-08-15
+2025-09-14 06:49:36,779 - INFO - Processing prescription from 2024-08-10
+2025-09-14 06:49:36,780 - INFO - Processing appointment on 2024-09-20
+2025-09-14 06:49:36,780 - INFO - Processing appointment on 2024-08-15
+2025-09-14 06:49:36,780 - INFO - Successfully built KG with 12 nodes and 19 relationships
+2025-09-14 06:49:36,780 - INFO - Saving knowledge graph to CSV files
+2025-09-14 06:49:36,781 - INFO - nodes.csv created successfully
+2025-09-14 06:49:36,781 - INFO - relationships.csv created successfully
+2025-09-14 06:49:36,781 - INFO - Knowledge Graph Summary:
+2025-09-14 06:49:36,781 - INFO -    - Total Nodes: 12
+2025-09-14 06:49:36,781 - INFO -    - Total Relationships: 19
+2025-09-14 06:49:36,781 - INFO -    - Patient nodes: 1
+2025-09-14 06:49:36,782 - INFO -    - Symptom nodes: 3
+2025-09-14 06:49:36,782 - INFO -    - Medication nodes: 2
+2025-09-14 06:49:36,782 - INFO -    - Encounter nodes: 4
+2025-09-14 06:49:36,782 - INFO -    - LabTest nodes: 2
+2025-09-14 06:49:36,782 - INFO -    - Relationship types:
+2025-09-14 06:49:36,782 - INFO -      * has_symptom: 4
+2025-09-14 06:49:36,782 - INFO -      * prescribed_medication: 4
+2025-09-14 06:49:36,782 - INFO -      * has_encounter: 4
+2025-09-14 06:49:36,782 - INFO -      * contains_test: 2
+2025-09-14 06:49:36,782 - INFO -      * has_lab_test: 2
+2025-09-14 06:49:36,782 - INFO -      * contains_symptom: 3
+2025-09-14 06:49:36,783 - INFO - Adding Patient 3 to combined graph
+2025-09-14 06:49:36,783 - INFO - Starting knowledge graph creation for patient 3
+2025-09-14 06:49:36,783 - INFO - Initialized MCPDatabaseKnowledgeGraphBuilder
+2025-09-14 06:49:36,783 - INFO - Building knowledge graph for Patient ID: 3 using sample data
+2025-09-14 06:49:36,783 - INFO - Processing medical history
+2025-09-14 06:49:36,783 - INFO - Processing lab report from 2024-08-20
+2025-09-14 06:49:36,783 - INFO - Processing lab report from 2024-08-05
+2025-09-14 06:49:36,783 - INFO - Processing prescription from 2024-08-20
+2025-09-14 06:49:36,783 - INFO - Processing prescription from 2024-08-20
+2025-09-14 06:49:36,783 - INFO - Processing appointment on 2024-09-25
+2025-09-14 06:49:36,783 - INFO - Processing appointment on 2024-08-20
+2025-09-14 06:49:36,783 - INFO - Successfully built KG with 13 nodes and 18 relationships
+2025-09-14 06:49:36,783 - INFO - Saving knowledge graph to CSV files
+2025-09-14 06:49:36,783 - INFO - nodes.csv created successfully
+2025-09-14 06:49:36,783 - INFO - relationships.csv created successfully
+2025-09-14 06:49:36,783 - INFO - Knowledge Graph Summary:
+2025-09-14 06:49:36,783 - INFO -    - Total Nodes: 13
+2025-09-14 06:49:36,783 - INFO -    - Total Relationships: 18
+2025-09-14 06:49:36,783 - INFO -    - Patient nodes: 1
+2025-09-14 06:49:36,783 - INFO -    - Symptom nodes: 4
+2025-09-14 06:49:36,783 - INFO -    - Medication nodes: 2
+2025-09-14 06:49:36,783 - INFO -    - Encounter nodes: 4
+2025-09-14 06:49:36,783 - INFO -    - LabTest nodes: 2
+2025-09-14 06:49:36,783 - INFO -    - Relationship types:
+2025-09-14 06:49:36,783 - INFO -      * has_symptom: 4
+2025-09-14 06:49:36,783 - INFO -      * prescribed_medication: 4
+2025-09-14 06:49:36,783 - INFO -      * has_encounter: 4
+2025-09-14 06:49:36,783 - INFO -      * contains_test: 2
+2025-09-14 06:49:36,783 - INFO -      * has_lab_test: 2
+2025-09-14 06:49:36,783 - INFO -      * contains_symptom: 2
+2025-09-14 06:49:36,783 - INFO - Adding Patient 4 to combined graph
+2025-09-14 06:49:36,783 - INFO - Starting knowledge graph creation for patient 4
+2025-09-14 06:49:36,783 - INFO - Initialized MCPDatabaseKnowledgeGraphBuilder
+2025-09-14 06:49:36,783 - INFO - Building knowledge graph for Patient ID: 4 using sample data
+2025-09-14 06:49:36,783 - INFO - Processing medical history
+2025-09-14 06:49:36,783 - INFO - Processing lab report from 2024-08-25
+2025-09-14 06:49:36,783 - INFO - Processing lab report from 2024-08-15
+2025-09-14 06:49:36,783 - INFO - Processing prescription from 2024-08-25
+2025-09-14 06:49:36,783 - INFO - Processing prescription from 2024-08-20
+2025-09-14 06:49:36,788 - INFO - Processing appointment on 2024-09-30
+2025-09-14 06:49:36,788 - INFO - Processing appointment on 2024-08-25
+2025-09-14 06:49:36,788 - INFO - Successfully built KG with 13 nodes and 16 relationships
+2025-09-14 06:49:36,788 - INFO - Saving knowledge graph to CSV files
+2025-09-14 06:49:36,788 - INFO - nodes.csv created successfully
+2025-09-14 06:49:36,789 - INFO - relationships.csv created successfully
+2025-09-14 06:49:36,789 - INFO - Knowledge Graph Summary:
+2025-09-14 06:49:36,789 - INFO -    - Total Nodes: 13
+2025-09-14 06:49:36,789 - INFO -    - Total Relationships: 16
+2025-09-14 06:49:36,789 - INFO -    - Patient nodes: 1
+2025-09-14 06:49:36,789 - INFO -    - Symptom nodes: 3
+2025-09-14 06:49:36,789 - INFO -    - Medication nodes: 3
+2025-09-14 06:49:36,789 - INFO -    - Encounter nodes: 4
+2025-09-14 06:49:36,790 - INFO -    - LabTest nodes: 2
+2025-09-14 06:49:36,790 - INFO -    - Relationship types:
+2025-09-14 06:49:36,790 - INFO -      * has_symptom: 3
+2025-09-14 06:49:36,790 - INFO -      * prescribed_medication: 3
+2025-09-14 06:49:36,790 - INFO -      * has_encounter: 4
+2025-09-14 06:49:36,791 - INFO -      * contains_test: 2
+2025-09-14 06:49:36,791 - INFO -      * has_lab_test: 2
+2025-09-14 06:49:36,791 - INFO -      * contains_symptom: 2
+2025-09-14 06:49:36,791 - INFO - Adding Patient 5 to combined graph
+2025-09-14 06:49:36,791 - INFO - Starting knowledge graph creation for patient 5
+2025-09-14 06:49:36,791 - INFO - Initialized MCPDatabaseKnowledgeGraphBuilder
+2025-09-14 06:49:36,791 - INFO - Building knowledge graph for Patient ID: 5 using sample data
+2025-09-14 06:49:36,791 - INFO - Processing medical history
+2025-09-14 06:49:36,791 - INFO - Processing lab report from 2024-08-30
+2025-09-14 06:49:36,791 - INFO - Processing lab report from 2024-08-20
+2025-09-14 06:49:36,791 - INFO - Processing prescription from 2024-08-30
+2025-09-14 06:49:36,791 - INFO - Processing prescription from 2024-08-20
+2025-09-14 06:49:36,791 - INFO - Processing appointment on 2024-10-01
+2025-09-14 06:49:36,792 - INFO - Processing appointment on 2024-08-30
+2025-09-14 06:49:36,792 - INFO - Successfully built KG with 17 nodes and 22 relationships
+2025-09-14 06:49:36,792 - INFO - Saving knowledge graph to CSV files
+2025-09-14 06:49:36,792 - INFO - nodes.csv created successfully
+2025-09-14 06:49:36,794 - INFO - relationships.csv created successfully
+2025-09-14 06:49:36,794 - INFO - Knowledge Graph Summary:
+2025-09-14 06:49:36,794 - INFO -    - Total Nodes: 17
+2025-09-14 06:49:36,794 - INFO -    - Total Relationships: 22
+2025-09-14 06:49:36,794 - INFO -    - Patient nodes: 1
+2025-09-14 06:49:36,795 - INFO -    - Symptom nodes: 6
+2025-09-14 06:49:36,795 - INFO -    - Medication nodes: 4
+2025-09-14 06:49:36,795 - INFO -    - Encounter nodes: 4
+2025-09-14 06:49:36,795 - INFO -    - LabTest nodes: 2
+2025-09-14 06:49:36,795 - INFO -    - Relationship types:
+2025-09-14 06:49:36,795 - INFO -      * has_symptom: 6
+2025-09-14 06:49:36,795 - INFO -      * prescribed_medication: 4
+2025-09-14 06:49:36,795 - INFO -      * has_encounter: 4
+2025-09-14 06:49:36,795 - INFO -      * contains_test: 2
+2025-09-14 06:49:36,795 - INFO -      * has_lab_test: 2
+2025-09-14 06:49:36,795 - INFO -      * contains_symptom: 4
+2025-09-14 06:49:36,796 - INFO - Saving knowledge graph to CSV files
+2025-09-14 06:49:36,797 - INFO - nodes.csv created successfully
+2025-09-14 06:49:36,798 - INFO - relationships.csv created successfully
+2025-09-14 06:49:36,798 - INFO - Combined knowledge graph saved with 70 nodes and 99 relationships
+2025-09-14 06:56:28,472 - INFO - Starting comprehensive knowledge graph export
+2025-09-14 06:56:28,472 - INFO - Creating unified CSV for all patients
+2025-09-14 06:56:28,472 - INFO - Processing Patient 1
+2025-09-14 06:56:28,472 - INFO - Starting knowledge graph creation for patient 1
+2025-09-14 06:56:28,472 - INFO - Initialized MCPDatabaseKnowledgeGraphBuilder
+2025-09-14 06:56:28,472 - INFO - Building knowledge graph for Patient ID: 1 using sample data
+2025-09-14 06:56:28,472 - INFO - Processing medical history
+2025-09-14 06:56:28,472 - INFO - Processing lab report from 2024-09-01
+2025-09-14 06:56:28,472 - INFO - Processing lab report from 2024-08-15
+2025-09-14 06:56:28,472 - INFO - Processing prescription from 2024-09-01
+2025-09-14 06:56:28,472 - INFO - Processing prescription from 2024-08-15
+2025-09-14 06:56:28,472 - INFO - Processing appointment on 2024-09-15
+2025-09-14 06:56:28,472 - INFO - Processing appointment on 2024-08-01
+2025-09-14 06:56:28,472 - INFO - Successfully built KG with 15 nodes and 24 relationships
+2025-09-14 06:56:28,472 - INFO - Saving knowledge graph to CSV files
+2025-09-14 06:56:28,472 - INFO - nodes.csv created successfully
+2025-09-14 06:56:28,472 - INFO - relationships.csv created successfully
+2025-09-14 06:56:28,472 - INFO - Knowledge Graph Summary:
+2025-09-14 06:56:28,472 - INFO -    - Total Nodes: 15
+2025-09-14 06:56:28,472 - INFO -    - Total Relationships: 24
+2025-09-14 06:56:28,472 - INFO -    - Patient nodes: 1
+2025-09-14 06:56:28,472 - INFO -    - Symptom nodes: 4
+2025-09-14 06:56:28,472 - INFO -    - Medication nodes: 2
+2025-09-14 06:56:28,472 - INFO -    - Encounter nodes: 4
+2025-09-14 06:56:28,472 - INFO -    - LabTest nodes: 4
+2025-09-14 06:56:28,472 - INFO -    - Relationship types:
+2025-09-14 06:56:28,472 - INFO -      * has_symptom: 4
+2025-09-14 06:56:28,472 - INFO -      * prescribed_medication: 3
+2025-09-14 06:56:28,472 - INFO -      * has_encounter: 4
+2025-09-14 06:56:28,472 - INFO -      * contains_test: 5
+2025-09-14 06:56:28,472 - INFO -      * has_lab_test: 5
+2025-09-14 06:56:28,472 - INFO -      * contains_symptom: 3
+2025-09-14 06:56:28,472 - INFO - Processing Patient 2
+2025-09-14 06:56:28,472 - INFO - Starting knowledge graph creation for patient 2
+2025-09-14 06:56:28,472 - INFO - Initialized MCPDatabaseKnowledgeGraphBuilder
+2025-09-14 06:56:28,472 - INFO - Building knowledge graph for Patient ID: 2 using sample data
+2025-09-14 06:56:28,472 - INFO - Processing medical history
+2025-09-14 06:56:28,472 - INFO - Processing lab report from 2024-08-15
+2025-09-14 06:56:28,472 - INFO - Processing lab report from 2024-08-10
+2025-09-14 06:56:28,472 - INFO - Processing prescription from 2024-08-15
+2025-09-14 06:56:28,472 - INFO - Processing prescription from 2024-08-10
+2025-09-14 06:56:28,472 - INFO - Processing appointment on 2024-09-20
+2025-09-14 06:56:28,472 - INFO - Processing appointment on 2024-08-15
+2025-09-14 06:56:28,472 - INFO - Successfully built KG with 12 nodes and 19 relationships
+2025-09-14 06:56:28,472 - INFO - Saving knowledge graph to CSV files
+2025-09-14 06:56:28,472 - INFO - nodes.csv created successfully
+2025-09-14 06:56:28,472 - INFO - relationships.csv created successfully
+2025-09-14 06:56:28,472 - INFO - Knowledge Graph Summary:
+2025-09-14 06:56:28,472 - INFO -    - Total Nodes: 12
+2025-09-14 06:56:28,472 - INFO -    - Total Relationships: 19
+2025-09-14 06:56:28,482 - INFO -    - Patient nodes: 1
+2025-09-14 06:56:28,482 - INFO -    - Symptom nodes: 3
+2025-09-14 06:56:28,482 - INFO -    - Medication nodes: 2
+2025-09-14 06:56:28,482 - INFO -    - Encounter nodes: 4
+2025-09-14 06:56:28,482 - INFO -    - LabTest nodes: 2
+2025-09-14 06:56:28,482 - INFO -    - Relationship types:
+2025-09-14 06:56:28,482 - INFO -      * has_symptom: 4
+2025-09-14 06:56:28,483 - INFO -      * prescribed_medication: 4
+2025-09-14 06:56:28,483 - INFO -      * has_encounter: 4
+2025-09-14 06:56:28,483 - INFO -      * contains_test: 2
+2025-09-14 06:56:28,483 - INFO -      * has_lab_test: 2
+2025-09-14 06:56:28,483 - INFO -      * contains_symptom: 3
+2025-09-14 06:56:28,483 - INFO - Processing Patient 3
+2025-09-14 06:56:28,483 - INFO - Starting knowledge graph creation for patient 3
+2025-09-14 06:56:28,483 - INFO - Initialized MCPDatabaseKnowledgeGraphBuilder
+2025-09-14 06:56:28,483 - INFO - Building knowledge graph for Patient ID: 3 using sample data
+2025-09-14 06:56:28,483 - INFO - Processing medical history
+2025-09-14 06:56:28,483 - INFO - Processing lab report from 2024-08-20
+2025-09-14 06:56:28,483 - INFO - Processing lab report from 2024-08-05
+2025-09-14 06:56:28,483 - INFO - Processing prescription from 2024-08-20
+2025-09-14 06:56:28,483 - INFO - Processing prescription from 2024-08-20
+2025-09-14 06:56:28,483 - INFO - Processing appointment on 2024-09-25
+2025-09-14 06:56:28,483 - INFO - Processing appointment on 2024-08-20
+2025-09-14 06:56:28,483 - INFO - Successfully built KG with 13 nodes and 18 relationships
+2025-09-14 06:56:28,483 - INFO - Saving knowledge graph to CSV files
+2025-09-14 06:56:28,483 - INFO - nodes.csv created successfully
+2025-09-14 06:56:28,483 - INFO - relationships.csv created successfully
+2025-09-14 06:56:28,483 - INFO - Knowledge Graph Summary:
+2025-09-14 06:56:28,483 - INFO -    - Total Nodes: 13
+2025-09-14 06:56:28,483 - INFO -    - Total Relationships: 18
+2025-09-14 06:56:28,483 - INFO -    - Patient nodes: 1
+2025-09-14 06:56:28,483 - INFO -    - Symptom nodes: 4
+2025-09-14 06:56:28,483 - INFO -    - Medication nodes: 2
+2025-09-14 06:56:28,483 - INFO -    - Encounter nodes: 4
+2025-09-14 06:56:28,483 - INFO -    - LabTest nodes: 2
+2025-09-14 06:56:28,483 - INFO -    - Relationship types:
+2025-09-14 06:56:28,483 - INFO -      * has_symptom: 4
+2025-09-14 06:56:28,483 - INFO -      * prescribed_medication: 4
+2025-09-14 06:56:28,483 - INFO -      * has_encounter: 4
+2025-09-14 06:56:28,483 - INFO -      * contains_test: 2
+2025-09-14 06:56:28,483 - INFO -      * has_lab_test: 2
+2025-09-14 06:56:28,483 - INFO -      * contains_symptom: 2
+2025-09-14 06:56:28,483 - INFO - Processing Patient 4
+2025-09-14 06:56:28,483 - INFO - Starting knowledge graph creation for patient 4
+2025-09-14 06:56:28,483 - INFO - Initialized MCPDatabaseKnowledgeGraphBuilder
+2025-09-14 06:56:28,483 - INFO - Building knowledge graph for Patient ID: 4 using sample data
+2025-09-14 06:56:28,483 - INFO - Processing medical history
+2025-09-14 06:56:28,483 - INFO - Processing lab report from 2024-08-25
+2025-09-14 06:56:28,483 - INFO - Processing lab report from 2024-08-15
+2025-09-14 06:56:28,483 - INFO - Processing prescription from 2024-08-25
+2025-09-14 06:56:28,483 - INFO - Processing prescription from 2024-08-20
+2025-09-14 06:56:28,483 - INFO - Processing appointment on 2024-09-30
+2025-09-14 06:56:28,483 - INFO - Processing appointment on 2024-08-25
+2025-09-14 06:56:28,483 - INFO - Successfully built KG with 13 nodes and 16 relationships
+2025-09-14 06:56:28,483 - INFO - Saving knowledge graph to CSV files
+2025-09-14 06:56:28,483 - INFO - nodes.csv created successfully
+2025-09-14 06:56:28,483 - INFO - relationships.csv created successfully
+2025-09-14 06:56:28,483 - INFO - Knowledge Graph Summary:
+2025-09-14 06:56:28,483 - INFO -    - Total Nodes: 13
+2025-09-14 06:56:28,483 - INFO -    - Total Relationships: 16
+2025-09-14 06:56:28,483 - INFO -    - Patient nodes: 1
+2025-09-14 06:56:28,483 - INFO -    - Symptom nodes: 3
+2025-09-14 06:56:28,483 - INFO -    - Medication nodes: 3
+2025-09-14 06:56:28,483 - INFO -    - Encounter nodes: 4
+2025-09-14 06:56:28,483 - INFO -    - LabTest nodes: 2
+2025-09-14 06:56:28,483 - INFO -    - Relationship types:
+2025-09-14 06:56:28,483 - INFO -      * has_symptom: 3
+2025-09-14 06:56:28,483 - INFO -      * prescribed_medication: 3
+2025-09-14 06:56:28,483 - INFO -      * has_encounter: 4
+2025-09-14 06:56:28,483 - INFO -      * contains_test: 2
+2025-09-14 06:56:28,483 - INFO -      * has_lab_test: 2
+2025-09-14 06:56:28,483 - INFO -      * contains_symptom: 2
+2025-09-14 06:56:28,483 - INFO - Processing Patient 5
+2025-09-14 06:56:28,483 - INFO - Starting knowledge graph creation for patient 5
+2025-09-14 06:56:28,483 - INFO - Initialized MCPDatabaseKnowledgeGraphBuilder
+2025-09-14 06:56:28,483 - INFO - Building knowledge graph for Patient ID: 5 using sample data
+2025-09-14 06:56:28,483 - INFO - Processing medical history
+2025-09-14 06:56:28,483 - INFO - Processing lab report from 2024-08-30
+2025-09-14 06:56:28,483 - INFO - Processing lab report from 2024-08-20
+2025-09-14 06:56:28,483 - INFO - Processing prescription from 2024-08-30
+2025-09-14 06:56:28,483 - INFO - Processing prescription from 2024-08-20
+2025-09-14 06:56:28,483 - INFO - Processing appointment on 2024-10-01
+2025-09-14 06:56:28,483 - INFO - Processing appointment on 2024-08-30
+2025-09-14 06:56:28,483 - INFO - Successfully built KG with 17 nodes and 22 relationships
+2025-09-14 06:56:28,483 - INFO - Saving knowledge graph to CSV files
+2025-09-14 06:56:28,483 - INFO - nodes.csv created successfully
+2025-09-14 06:56:28,483 - INFO - relationships.csv created successfully
+2025-09-14 06:56:28,483 - INFO - Knowledge Graph Summary:
+2025-09-14 06:56:28,483 - INFO -    - Total Nodes: 17
+2025-09-14 06:56:28,483 - INFO -    - Total Relationships: 22
+2025-09-14 06:56:28,483 - INFO -    - Patient nodes: 1
+2025-09-14 06:56:28,483 - INFO -    - Symptom nodes: 6
+2025-09-14 06:56:28,483 - INFO -    - Medication nodes: 4
+2025-09-14 06:56:28,483 - INFO -    - Encounter nodes: 4
+2025-09-14 06:56:28,483 - INFO -    - LabTest nodes: 2
+2025-09-14 06:56:28,483 - INFO -    - Relationship types:
+2025-09-14 06:56:28,483 - INFO -      * has_symptom: 6
+2025-09-14 06:56:28,483 - INFO -      * prescribed_medication: 4
+2025-09-14 06:56:28,483 - INFO -      * has_encounter: 4
+2025-09-14 06:56:28,483 - INFO -      * contains_test: 2
+2025-09-14 06:56:28,483 - INFO -      * has_lab_test: 2
+2025-09-14 06:56:28,483 - INFO -      * contains_symptom: 4
+2025-09-14 06:56:28,492 - INFO - Created unified CSV: medimax_unified_knowledge_graph.csv
+2025-09-14 06:56:28,492 - INFO - Total records: 70 nodes + 99 relationships = 169
+2025-09-14 06:56:28,492 - INFO - ✓ Created unified CSV: medimax_unified_knowledge_graph.csv
+2025-09-14 06:56:28,492 - INFO - Creating Neo4j optimized import files
+2025-09-14 06:56:28,492 - INFO - Processing Patient 1
+2025-09-14 06:56:28,492 - INFO - Starting knowledge graph creation for patient 1
+2025-09-14 06:56:28,492 - INFO - Initialized MCPDatabaseKnowledgeGraphBuilder
+2025-09-14 06:56:28,492 - INFO - Building knowledge graph for Patient ID: 1 using sample data
+2025-09-14 06:56:28,492 - INFO - Processing medical history
+2025-09-14 06:56:28,492 - INFO - Processing lab report from 2024-09-01
+2025-09-14 06:56:28,492 - INFO - Processing lab report from 2024-08-15
+2025-09-14 06:56:28,492 - INFO - Processing prescription from 2024-09-01
+2025-09-14 06:56:28,492 - INFO - Processing prescription from 2024-08-15
+2025-09-14 06:56:28,492 - INFO - Processing appointment on 2024-09-15
+2025-09-14 06:56:28,492 - INFO - Processing appointment on 2024-08-01
+2025-09-14 06:56:28,492 - INFO - Successfully built KG with 15 nodes and 24 relationships
+2025-09-14 06:56:28,492 - INFO - Saving knowledge graph to CSV files
+2025-09-14 06:56:28,492 - INFO - nodes.csv created successfully
+2025-09-14 06:56:28,492 - INFO - relationships.csv created successfully
+2025-09-14 06:56:28,492 - INFO - Knowledge Graph Summary:
+2025-09-14 06:56:28,492 - INFO -    - Total Nodes: 15
+2025-09-14 06:56:28,492 - INFO -    - Total Relationships: 24
+2025-09-14 06:56:28,492 - INFO -    - Patient nodes: 1
+2025-09-14 06:56:28,492 - INFO -    - Symptom nodes: 4
+2025-09-14 06:56:28,492 - INFO -    - Medication nodes: 2
+2025-09-14 06:56:28,492 - INFO -    - Encounter nodes: 4
+2025-09-14 06:56:28,492 - INFO -    - LabTest nodes: 4
+2025-09-14 06:56:28,492 - INFO -    - Relationship types:
+2025-09-14 06:56:28,492 - INFO -      * has_symptom: 4
+2025-09-14 06:56:28,492 - INFO -      * prescribed_medication: 3
+2025-09-14 06:56:28,492 - INFO -      * has_encounter: 4
+2025-09-14 06:56:28,492 - INFO -      * contains_test: 5
+2025-09-14 06:56:28,492 - INFO -      * has_lab_test: 5
+2025-09-14 06:56:28,492 - INFO -      * contains_symptom: 3
+2025-09-14 06:56:28,492 - INFO - Processing Patient 2
+2025-09-14 06:56:28,492 - INFO - Starting knowledge graph creation for patient 2
+2025-09-14 06:56:28,498 - INFO - Initialized MCPDatabaseKnowledgeGraphBuilder
+2025-09-14 06:56:28,498 - INFO - Building knowledge graph for Patient ID: 2 using sample data
+2025-09-14 06:56:28,498 - INFO - Processing medical history
+2025-09-14 06:56:28,498 - INFO - Processing lab report from 2024-08-15
+2025-09-14 06:56:28,498 - INFO - Processing lab report from 2024-08-10
+2025-09-14 06:56:28,498 - INFO - Processing prescription from 2024-08-15
+2025-09-14 06:56:28,498 - INFO - Processing prescription from 2024-08-10
+2025-09-14 06:56:28,498 - INFO - Processing appointment on 2024-09-20
+2025-09-14 06:56:28,498 - INFO - Processing appointment on 2024-08-15
+2025-09-14 06:56:28,498 - INFO - Successfully built KG with 12 nodes and 19 relationships
+2025-09-14 06:56:28,498 - INFO - Saving knowledge graph to CSV files
+2025-09-14 06:56:28,498 - INFO - nodes.csv created successfully
+2025-09-14 06:56:28,498 - INFO - relationships.csv created successfully
+2025-09-14 06:56:28,498 - INFO - Knowledge Graph Summary:
+2025-09-14 06:56:28,498 - INFO -    - Total Nodes: 12
+2025-09-14 06:56:28,498 - INFO -    - Total Relationships: 19
+2025-09-14 06:56:28,498 - INFO -    - Patient nodes: 1
+2025-09-14 06:56:28,498 - INFO -    - Symptom nodes: 3
+2025-09-14 06:56:28,498 - INFO -    - Medication nodes: 2
+2025-09-14 06:56:28,498 - INFO -    - Encounter nodes: 4
+2025-09-14 06:56:28,498 - INFO -    - LabTest nodes: 2
+2025-09-14 06:56:28,498 - INFO -    - Relationship types:
+2025-09-14 06:56:28,498 - INFO -      * has_symptom: 4
+2025-09-14 06:56:28,498 - INFO -      * prescribed_medication: 4
+2025-09-14 06:56:28,498 - INFO -      * has_encounter: 4
+2025-09-14 06:56:28,498 - INFO -      * contains_test: 2
+2025-09-14 06:56:28,498 - INFO -      * has_lab_test: 2
+2025-09-14 06:56:28,498 - INFO -      * contains_symptom: 3
+2025-09-14 06:56:28,498 - INFO - Processing Patient 3
+2025-09-14 06:56:28,498 - INFO - Starting knowledge graph creation for patient 3
+2025-09-14 06:56:28,498 - INFO - Initialized MCPDatabaseKnowledgeGraphBuilder
+2025-09-14 06:56:28,502 - INFO - Building knowledge graph for Patient ID: 3 using sample data
+2025-09-14 06:56:28,502 - INFO - Processing medical history
+2025-09-14 06:56:28,502 - INFO - Processing lab report from 2024-08-20
+2025-09-14 06:56:28,502 - INFO - Processing lab report from 2024-08-05
+2025-09-14 06:56:28,502 - INFO - Processing prescription from 2024-08-20
+2025-09-14 06:56:28,502 - INFO - Processing prescription from 2024-08-20
+2025-09-14 06:56:28,502 - INFO - Processing appointment on 2024-09-25
+2025-09-14 06:56:28,502 - INFO - Processing appointment on 2024-08-20
+2025-09-14 06:56:28,502 - INFO - Successfully built KG with 13 nodes and 18 relationships
+2025-09-14 06:56:28,502 - INFO - Saving knowledge graph to CSV files
+2025-09-14 06:56:28,502 - INFO - nodes.csv created successfully
+2025-09-14 06:56:28,502 - INFO - relationships.csv created successfully
+2025-09-14 06:56:28,502 - INFO - Knowledge Graph Summary:
+2025-09-14 06:56:28,502 - INFO -    - Total Nodes: 13
+2025-09-14 06:56:28,502 - INFO -    - Total Relationships: 18
+2025-09-14 06:56:28,502 - INFO -    - Patient nodes: 1
+2025-09-14 06:56:28,502 - INFO -    - Symptom nodes: 4
+2025-09-14 06:56:28,502 - INFO -    - Medication nodes: 2
+2025-09-14 06:56:28,502 - INFO -    - Encounter nodes: 4
+2025-09-14 06:56:28,502 - INFO -    - LabTest nodes: 2
+2025-09-14 06:56:28,502 - INFO -    - Relationship types:
+2025-09-14 06:56:28,502 - INFO -      * has_symptom: 4
+2025-09-14 06:56:28,502 - INFO -      * prescribed_medication: 4
+2025-09-14 06:56:28,502 - INFO -      * has_encounter: 4
+2025-09-14 06:56:28,502 - INFO -      * contains_test: 2
+2025-09-14 06:56:28,502 - INFO -      * has_lab_test: 2
+2025-09-14 06:56:28,502 - INFO -      * contains_symptom: 2
+2025-09-14 06:56:28,502 - INFO - Processing Patient 4
+2025-09-14 06:56:28,502 - INFO - Starting knowledge graph creation for patient 4
+2025-09-14 06:56:28,502 - INFO - Initialized MCPDatabaseKnowledgeGraphBuilder
+2025-09-14 06:56:28,502 - INFO - Building knowledge graph for Patient ID: 4 using sample data
+2025-09-14 06:56:28,502 - INFO - Processing medical history
+2025-09-14 06:56:28,502 - INFO - Processing lab report from 2024-08-25
+2025-09-14 06:56:28,502 - INFO - Processing lab report from 2024-08-15
+2025-09-14 06:56:28,502 - INFO - Processing prescription from 2024-08-25
+2025-09-14 06:56:28,502 - INFO - Processing prescription from 2024-08-20
+2025-09-14 06:56:28,502 - INFO - Processing appointment on 2024-09-30
+2025-09-14 06:56:28,502 - INFO - Processing appointment on 2024-08-25
+2025-09-14 06:56:28,502 - INFO - Successfully built KG with 13 nodes and 16 relationships
+2025-09-14 06:56:28,502 - INFO - Saving knowledge graph to CSV files
+2025-09-14 06:56:28,502 - INFO - nodes.csv created successfully
+2025-09-14 06:56:28,502 - INFO - relationships.csv created successfully
+2025-09-14 06:56:28,502 - INFO - Knowledge Graph Summary:
+2025-09-14 06:56:28,502 - INFO -    - Total Nodes: 13
+2025-09-14 06:56:28,502 - INFO -    - Total Relationships: 16
+2025-09-14 06:56:28,502 - INFO -    - Patient nodes: 1
+2025-09-14 06:56:28,502 - INFO -    - Symptom nodes: 3
+2025-09-14 06:56:28,502 - INFO -    - Medication nodes: 3
+2025-09-14 06:56:28,502 - INFO -    - Encounter nodes: 4
+2025-09-14 06:56:28,508 - INFO -    - LabTest nodes: 2
+2025-09-14 06:56:28,508 - INFO -    - Relationship types:
+2025-09-14 06:56:28,508 - INFO -      * has_symptom: 3
+2025-09-14 06:56:28,508 - INFO -      * prescribed_medication: 3
+2025-09-14 06:56:28,508 - INFO -      * has_encounter: 4
+2025-09-14 06:56:28,508 - INFO -      * contains_test: 2
+2025-09-14 06:56:28,508 - INFO -      * has_lab_test: 2
+2025-09-14 06:56:28,508 - INFO -      * contains_symptom: 2
+2025-09-14 06:56:28,508 - INFO - Processing Patient 5
+2025-09-14 06:56:28,508 - INFO - Starting knowledge graph creation for patient 5
+2025-09-14 06:56:28,508 - INFO - Initialized MCPDatabaseKnowledgeGraphBuilder
+2025-09-14 06:56:28,508 - INFO - Building knowledge graph for Patient ID: 5 using sample data
+2025-09-14 06:56:28,508 - INFO - Processing medical history
+2025-09-14 06:56:28,508 - INFO - Processing lab report from 2024-08-30
+2025-09-14 06:56:28,508 - INFO - Processing lab report from 2024-08-20
+2025-09-14 06:56:28,508 - INFO - Processing prescription from 2024-08-30
+2025-09-14 06:56:28,508 - INFO - Processing prescription from 2024-08-20
+2025-09-14 06:56:28,508 - INFO - Processing appointment on 2024-10-01
+2025-09-14 06:56:28,508 - INFO - Processing appointment on 2024-08-30
+2025-09-14 06:56:28,508 - INFO - Successfully built KG with 17 nodes and 22 relationships
+2025-09-14 06:56:28,508 - INFO - Saving knowledge graph to CSV files
+2025-09-14 06:56:28,508 - INFO - nodes.csv created successfully
+2025-09-14 06:56:28,508 - INFO - relationships.csv created successfully
+2025-09-14 06:56:28,508 - INFO - Knowledge Graph Summary:
+2025-09-14 06:56:28,508 - INFO -    - Total Nodes: 17
+2025-09-14 06:56:28,512 - INFO -    - Total Relationships: 22
+2025-09-14 06:56:28,512 - INFO -    - Patient nodes: 1
+2025-09-14 06:56:28,512 - INFO -    - Symptom nodes: 6
+2025-09-14 06:56:28,512 - INFO -    - Medication nodes: 4
+2025-09-14 06:56:28,512 - INFO -    - Encounter nodes: 4
+2025-09-14 06:56:28,512 - INFO -    - LabTest nodes: 2
+2025-09-14 06:56:28,513 - INFO -    - Relationship types:
+2025-09-14 06:56:28,513 - INFO -      * has_symptom: 6
+2025-09-14 06:56:28,513 - INFO -      * prescribed_medication: 4
+2025-09-14 06:56:28,513 - INFO -      * has_encounter: 4
+2025-09-14 06:56:28,513 - INFO -      * contains_test: 2
+2025-09-14 06:56:28,513 - INFO -      * has_lab_test: 2
+2025-09-14 06:56:28,513 - INFO -      * contains_symptom: 4
+2025-09-14 06:56:28,514 - INFO - Created Neo4j import files:
+2025-09-14 06:56:28,514 - INFO -   - neo4j_nodes.csv: 63 unique nodes
+2025-09-14 06:56:28,514 - INFO -   - neo4j_relationships.csv: 91 unique relationships
+2025-09-14 06:56:28,514 - INFO - ✓ Created Neo4j files: neo4j_nodes.csv, neo4j_relationships.csv
+2025-09-14 06:56:28,514 - INFO - Created neo4j_import.py script
+2025-09-14 06:56:28,514 - INFO - ✓ Created Neo4j import script
+2025-09-14 06:56:28,514 - INFO - Created knowledge_graph_queries.cypher file
+2025-09-14 06:56:28,514 - INFO - ✓ Created Cypher queries file
+2025-09-14 06:56:28,514 - INFO - 
+==================================================
+2025-09-14 06:56:28,514 - INFO - KNOWLEDGE GRAPH EXPORT COMPLETED
+2025-09-14 06:56:28,514 - INFO - ==================================================
+2025-09-14 06:56:28,514 - INFO - Files created:
+2025-09-14 06:56:28,514 - INFO -   1. medimax_unified_knowledge_graph.csv - Single unified CSV
+2025-09-14 06:56:28,514 - INFO -   2. neo4j_nodes.csv - Neo4j nodes
+2025-09-14 06:56:28,514 - INFO -   3. neo4j_relationships.csv - Neo4j relationships
+2025-09-14 06:56:28,514 - INFO -   4. neo4j_import.py - Python import script
+2025-09-14 06:56:28,514 - INFO -   5. knowledge_graph_queries.cypher - Query examples
+2025-09-14 06:56:28,514 - INFO - 
+To import into Neo4j:
+2025-09-14 06:56:28,514 - INFO -   1. Update neo4j_import.py with your Neo4j credentials
+2025-09-14 06:56:28,514 - INFO -   2. Install neo4j driver: pip install neo4j
+2025-09-14 06:56:28,514 - INFO -   3. Run: python neo4j_import.py
