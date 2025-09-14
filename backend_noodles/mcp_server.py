@@ -3,15 +3,92 @@ import requests
 import os
 import mysql.connector
 from neo4j import GraphDatabase
+from neo4j.time import Date, DateTime, Time, Duration
 from dotenv import load_dotenv
 import logging
-from datetime import datetime
+from datetime import datetime, date, time
 import json
 import functools
 import traceback
 
 # Load environment variables
 load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', '.env'))
+
+# Custom JSON encoder for Neo4j types
+class Neo4jJSONEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if obj is None:
+            return None
+        elif isinstance(obj, (Date, DateTime)):
+            return obj.isoformat()
+        elif isinstance(obj, Time):
+            return obj.isoformat()
+        elif isinstance(obj, Duration):
+            return str(obj)
+        elif isinstance(obj, (date, datetime, time)):
+            return obj.isoformat()
+        elif hasattr(obj, 'isoformat'):
+            return obj.isoformat()
+        elif hasattr(obj, '__str__'):
+            return str(obj)
+        return super().default(obj)
+
+def serialize_neo4j_result(result):
+    """Convert Neo4j result to JSON-serializable format"""
+    def convert_value(value):
+        if value is None:
+            return None
+        elif isinstance(value, (Date, DateTime, Time, Duration, date, datetime, time)):
+            return str(value)
+        elif hasattr(value, 'isoformat'):
+            return value.isoformat()
+        elif isinstance(value, dict):
+            return {k: convert_value(v) for k, v in value.items()}
+        elif isinstance(value, list):
+            return [convert_value(v) for v in value]
+        elif hasattr(value, '__str__'):
+            return str(value)
+        return value
+    
+    if isinstance(result, dict):
+        return {k: convert_value(v) for k, v in result.items()}
+    elif isinstance(result, list):
+        return [convert_value(item) for item in result]
+    return convert_value(result)
+
+def convert_date_to_string(obj):
+    """Convert date/datetime objects to ISO format strings for Neo4j storage"""
+    if obj is None:
+        return None
+    elif isinstance(obj, (Date, DateTime)):
+        return obj.isoformat()
+    elif isinstance(obj, Time):
+        return obj.isoformat()
+    elif isinstance(obj, Duration):
+        return str(obj)
+    elif isinstance(obj, (date, datetime)):
+        return obj.isoformat()
+    elif isinstance(obj, time):
+        return obj.isoformat()
+    elif isinstance(obj, str):
+        return obj
+    else:
+        return str(obj) if obj is not None else None
+
+def clean_value_for_neo4j(value):
+    """Clean and prepare values for Neo4j storage, removing nulls and converting types"""
+    if value is None or value == "" or value == "None":
+        return "N/A"
+    elif isinstance(value, (Date, DateTime, Time, Duration, date, datetime, time)):
+        return convert_date_to_string(value)
+    elif isinstance(value, bool):
+        return value
+    elif isinstance(value, (int, float)):
+        return value
+    elif isinstance(value, str):
+        return value.strip() if value.strip() else "N/A"
+    else:
+        return str(value) if value is not None else "N/A"
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
@@ -113,34 +190,38 @@ class KnowledgeGraphManager:
             medications = cursor.fetchall()
             
             # Get appointments and symptoms
-            cursor.execute("""
-                SELECT a.*, GROUP_CONCAT(CONCAT(
-                    COALESCE(aps.symptom_name, ''), ':', 
-                    COALESCE(aps.symptom_description, ''), ':', 
-                    COALESCE(aps.severity, '')
-                ) SEPARATOR '|') as symptoms
-                FROM Appointment a 
-                LEFT JOIN Appointment_Symptom aps ON a.appointment_id = aps.appointment_id 
-                WHERE a.patient_id = %s 
-                GROUP BY a.appointment_id
-            """, (patient_id,))
+            cursor.execute("SELECT * FROM Appointment WHERE patient_id = %s", (patient_id,))
             appointments = cursor.fetchall()
             
-            # Get lab reports and findings
+            # Get symptoms separately
             cursor.execute("""
-                SELECT lr.*, GROUP_CONCAT(CONCAT(
-                    COALESCE(lf.test_name, ''), ':', 
-                    COALESCE(lf.test_value, ''), ':', 
-                    COALESCE(lf.test_unit, ''), ':', 
-                    COALESCE(lf.is_abnormal, ''), ':', 
-                    COALESCE(lf.abnormal_flag, '')
-                ) SEPARATOR '|') as findings
-                FROM Lab_Report lr 
-                LEFT JOIN Lab_Finding lf ON lr.lab_report_id = lf.lab_report_id 
-                WHERE lr.patient_id = %s 
-                GROUP BY lr.lab_report_id
+                SELECT aps.*, a.appointment_id, a.patient_id as appt_patient_id, a.appointment_date
+                FROM Appointment_Symptom aps 
+                JOIN Appointment a ON aps.appointment_id = a.appointment_id 
+                WHERE a.patient_id = %s
             """, (patient_id,))
+            symptoms = cursor.fetchall()
+            
+            # Debug: Print first symptom to see field names
+            if symptoms:
+                logger.info(f"First symptom data: {symptoms[0]}")
+            
+            # Get lab reports and findings
+            cursor.execute("SELECT * FROM Lab_Report WHERE patient_id = %s", (patient_id,))
             lab_reports = cursor.fetchall()
+            
+            # Get lab findings separately
+            cursor.execute("""
+                SELECT lf.*, lr.patient_id as lab_patient_id, lr.lab_date, lr.lab_type, lr.ordering_doctor, lr.lab_facility
+                FROM Lab_Finding lf 
+                JOIN Lab_Report lr ON lf.lab_report_id = lr.lab_report_id 
+                WHERE lr.patient_id = %s
+            """, (patient_id,))
+            lab_findings = cursor.fetchall()
+            
+            # Debug: Print first lab finding to see field names  
+            if lab_findings:
+                logger.info(f"First lab finding data: {lab_findings[0]}")
             
             # Get chat history
             cursor.execute("SELECT * FROM Chat_History WHERE patient_id = %s ORDER BY timestamp", (patient_id,))
@@ -154,7 +235,9 @@ class KnowledgeGraphManager:
                 'medical_history': medical_history,
                 'medications': medications,
                 'appointments': appointments,
+                'symptoms': symptoms,
                 'lab_reports': lab_reports,
+                'lab_findings': lab_findings,
                 'chat_history': chat_history
             }
             
@@ -163,7 +246,7 @@ class KnowledgeGraphManager:
             return None
     
     def create_patient_knowledge_graph(self, patient_data: dict):
-        """Create patient-centric knowledge graph from atomic facts data with proper connections"""
+        """Create optimized patient-centric medical knowledge graph with proper date handling"""
         if not self.connect_neo4j():
             return {"error": "Failed to connect to Neo4j"}
         
@@ -173,386 +256,385 @@ class KnowledgeGraphManager:
                 patient_name = patient['name']
                 patient_id = patient['patient_id']
                 
-                # Only clear THIS patient's data, not the entire graph
+                # Clear existing patient data
                 session.run("""
-                    MATCH (p:Patient {patient_id: $patient_id})
-                    OPTIONAL MATCH (p)-[*0..3]-(connected)
-                    WHERE connected.patient_id = $patient_id OR connected:Patient
-                    DETACH DELETE p, connected
+                    MATCH (n) WHERE n.patient_id = $patient_id 
+                    DETACH DELETE n
                 """, patient_id=patient_id)
                 
-                # Step 1: Create patient node as central hub
-                patient_params = {k: v for k, v in patient.items()}
+                # Step 1: Create central Patient node with standardized properties
                 session.run("""
-                    CREATE (p:Patient {
+                    CREATE (p:Patient:Person {
                         patient_id: $patient_id,
                         name: $name,
+                        full_name: $name,
                         dob: $dob,
                         sex: $sex,
+                        gender: $sex,
                         created_at: $created_at,
                         node_type: 'Patient',
-                        graph_center: true
+                        entity_type: 'person',
+                        graph_center: true,
+                        last_updated: datetime()
                     })
-                """, **patient_params)
+                """, 
+                patient_id=patient_id,
+                name=clean_value_for_neo4j(patient.get('name')),
+                dob=convert_date_to_string(patient.get('dob')),
+                sex=clean_value_for_neo4j(patient.get('sex')),
+                created_at=convert_date_to_string(patient.get('created_at')))
                 
-                # Step 2: Create medical history nodes and connect to patient
+                # Step 2: Create Medical Conditions from history
+                condition_count = 0
                 for history in patient_data['medical_history']:
-                    history_params = {k: v for k, v in history.items() if k != 'patient_id'}
-                    session.run("""
-                        MATCH (p:Patient {patient_id: $patient_id})
-                        CREATE (h:MedicalHistory {
-                            history_id: $history_id,
-                            patient_id: $patient_id,
-                            history_type: $history_type,
-                            history_item: $history_item,
-                            history_details: $history_details,
-                            severity: $severity,
-                            history_date: $history_date,
-                            node_type: 'Medical History'
-                        })
-                        CREATE (p)-[:HAS_MEDICAL_HISTORY {
-                            type: $history_type,
-                            severity: $severity,
-                            date: $history_date,
-                            relationship_type: 'medical_history'
-                        }]->(h)
-                    """, patient_id=patient_id, **history_params)
+                    if history.get('history_item'):
+                        condition_count += 1
+                        session.run("""
+                            MATCH (p:Patient {patient_id: $patient_id})
+                            CREATE (c:Condition:MedicalHistory {
+                                history_id: $history_id,
+                                patient_id: $patient_id,
+                                name: $history_item,
+                                condition_name: $history_item,
+                                condition_type: $history_type,
+                                description: $history_details,
+                                severity: $severity,
+                                status: CASE WHEN $is_active = 1 THEN 'active' ELSE 'resolved' END,
+                                diagnosis_date: $history_date,
+                                onset_date: $history_date,
+                                category: $history_type,
+                                is_chronic: CASE WHEN $history_type IN ['chronic_condition', 'family_history'] THEN true ELSE false END,
+                                node_type: 'Medical Condition',
+                                entity_type: 'condition',
+                                last_updated: datetime()
+                            })
+                            CREATE (p)-[:HAS_CONDITION {
+                                relationship_type: 'medical_condition',
+                                severity: $severity,
+                                status: CASE WHEN $is_active = 1 THEN 'active' ELSE 'resolved' END,
+                                onset_date: $history_date,
+                                condition_category: $history_type,
+                                created_at: datetime()
+                            }]->(c)
+                        """, 
+                        patient_id=patient_id,
+                        history_id=clean_value_for_neo4j(history.get('history_id')),
+                        history_item=clean_value_for_neo4j(history.get('history_item')),
+                        history_type=clean_value_for_neo4j(history.get('history_type')),
+                        history_details=clean_value_for_neo4j(history.get('history_details')),
+                        severity=clean_value_for_neo4j(history.get('severity')),
+                        is_active=history.get('is_active', 0),
+                        history_date=convert_date_to_string(history.get('history_date')))
                 
-                # Step 3: Create medication nodes and connect to patient
+                # Step 3: Create Medications with treatment relationships
+                medication_count = 0
                 processed_medications = set()
                 for med in patient_data['medications']:
-                    med_key = f"{med['medicine_name']}_{med['dosage']}_{med['prescribed_date']}"
-                    if med_key not in processed_medications:
+                    med_key = f"{med.get('medicine_name')}_{med.get('dosage')}_{med.get('prescribed_date')}"
+                    if med_key not in processed_medications and med.get('medicine_name'):
                         processed_medications.add(med_key)
-                        
-                        med_params = {k: v for k, v in med.items() if k != 'patient_id'}
-                        med_params['is_continued'] = bool(med_params.get('is_continued', 0))
+                        medication_count += 1
                         
                         session.run("""
                             MATCH (p:Patient {patient_id: $patient_id})
-                            CREATE (m:Medication {
+                            CREATE (m:Medication:Treatment {
                                 medication_id: $medication_id,
                                 patient_id: $patient_id,
                                 name: $medicine_name,
+                                medicine_name: $medicine_name,
+                                drug_name: $medicine_name,
                                 dosage: $dosage,
+                                dose: $dosage,
                                 frequency: $frequency,
+                                route: 'oral',
                                 prescribed_date: $prescribed_date,
+                                start_date: $prescribed_date,
                                 prescribed_by: $prescribed_by,
-                                is_continued: $is_continued,
-                                condition_treated: $condition_name,
-                                node_type: 'Medication'
+                                prescriber: $prescribed_by,
+                                status: CASE WHEN $is_continued = 1 THEN 'active' ELSE 'discontinued' END,
+                                is_active: $is_continued,
+                                discontinued_date: $discontinued_date,
+                                node_type: 'Medication',
+                                entity_type: 'treatment',
+                                last_updated: datetime()
                             })
                             CREATE (p)-[:TAKES_MEDICATION {
-                                date: $prescribed_date,
+                                relationship_type: 'medication',
+                                prescribed_date: $prescribed_date,
                                 prescriber: $prescribed_by,
-                                indication: $condition_name,
-                                status: CASE WHEN $is_continued THEN 'active' ELSE 'discontinued' END,
-                                relationship_type: 'medication'
+                                dosage: $dosage,
+                                frequency: $frequency,
+                                status: CASE WHEN $is_continued = 1 THEN 'active' ELSE 'discontinued' END,
+                                created_at: datetime()
                             }]->(m)
-                        """, patient_id=patient_id, **med_params)
+                        """, 
+                        patient_id=patient_id,
+                        medication_id=clean_value_for_neo4j(med.get('medication_id')),
+                        medicine_name=clean_value_for_neo4j(med.get('medicine_name')),
+                        dosage=clean_value_for_neo4j(med.get('dosage')),
+                        frequency=clean_value_for_neo4j(med.get('frequency')),
+                        prescribed_date=convert_date_to_string(med.get('prescribed_date')),
+                        prescribed_by=clean_value_for_neo4j(med.get('prescribed_by')),
+                        is_continued=med.get('is_continued', 0),
+                        discontinued_date=convert_date_to_string(med.get('discontinued_date')))
                 
-                # Step 4: Create appointment nodes and connect to patient
+                # Step 4: Create Healthcare Encounters (Appointments)
+                encounter_count = 0
                 for appt in patient_data['appointments']:
-                    appt_params = {k: v for k, v in appt.items() if k != 'patient_id'}
-                    session.run("""
-                        MATCH (p:Patient {patient_id: $patient_id})
-                        CREATE (a:Appointment {
-                            appointment_id: $appointment_id,
-                            patient_id: $patient_id,
-                            date: $appointment_date,
-                            time: $appointment_time,
-                            doctor: $doctor_name,
-                            type: $appointment_type,
-                            status: $status,
-                            node_type: 'Appointment'
-                        })
-                        CREATE (p)-[:HAS_APPOINTMENT {
-                            date: $appointment_date,
-                            status: $status,
-                            relationship_type: 'appointment'
-                        }]->(a)
-                    """, patient_id=patient_id, **appt_params)
+                    if appt.get('appointment_id'):
+                        encounter_count += 1
+                        session.run("""
+                            MATCH (p:Patient {patient_id: $patient_id})
+                            CREATE (e:Encounter:Appointment {
+                                appointment_id: $appointment_id,
+                                patient_id: $patient_id,
+                                name: $appointment_type,
+                                encounter_type: $appointment_type,
+                                appointment_type: $appointment_type,
+                                description: $notes,
+                                encounter_date: $appointment_date,
+                                appointment_date: $appointment_date,
+                                appointment_time: $appointment_time,
+                                provider: $doctor_name,
+                                doctor_name: $doctor_name,
+                                status: $status,
+                                encounter_status: $status,
+                                clinical_notes: $notes,
+                                node_type: 'Healthcare Encounter',
+                                entity_type: 'encounter',
+                                last_updated: datetime()
+                            })
+                            CREATE (p)-[:HAS_ENCOUNTER {
+                                relationship_type: 'healthcare_encounter',
+                                encounter_date: $appointment_date,
+                                provider: $doctor_name,
+                                encounter_type: $appointment_type,
+                                status: $status,
+                                created_at: datetime()
+                            }]->(e)
+                        """, 
+                        patient_id=patient_id,
+                        appointment_id=clean_value_for_neo4j(appt.get('appointment_id')),
+                        appointment_type=clean_value_for_neo4j(appt.get('appointment_type')),
+                        notes=clean_value_for_neo4j(appt.get('notes')),
+                        appointment_date=convert_date_to_string(appt.get('appointment_date')),
+                        appointment_time=clean_value_for_neo4j(str(appt.get('appointment_time')) if appt.get('appointment_time') else None),
+                        doctor_name=clean_value_for_neo4j(appt.get('doctor_name')),
+                        status=clean_value_for_neo4j(appt.get('status')))
                 
-                # Step 5: Create symptoms and connect to BOTH patient AND appointments
-                for appt in patient_data['appointments']:
-                    if appt.get('symptoms'):
-                        symptoms = appt['symptoms'].split('|')
-                        for symptom_data in symptoms:
-                            if symptom_data and symptom_data.strip():
-                                parts = symptom_data.split(':')
-                                if len(parts) >= 3:
-                                    symptom_name, description, severity = parts[0].strip(), parts[1].strip(), parts[2].strip()
-                                    if symptom_name:  # Only create if symptom name exists
-                                        session.run("""
-                                            MATCH (p:Patient {patient_id: $patient_id})
-                                            MATCH (a:Appointment {appointment_id: $appointment_id, patient_id: $patient_id})
-                                            CREATE (s:Symptom {
-                                                patient_id: $patient_id,
-                                                appointment_id: $appointment_id,
-                                                name: $symptom_name,
-                                                description: $description,
-                                                severity: $severity,
-                                                reported_date: $appointment_date,
-                                                node_type: 'Symptom'
-                                            })
-                                            CREATE (p)-[:HAS_SYMPTOM {
-                                                severity: $severity,
-                                                date: $appointment_date,
-                                                relationship_type: 'symptom'
-                                            }]->(s)
-                                            CREATE (a)-[:REPORTED_SYMPTOM {
-                                                severity: $severity,
-                                                relationship_type: 'reported_symptom'
-                                            }]->(s)
-                                        """, patient_id=patient_id,
-                                             appointment_id=appt['appointment_id'], 
-                                             appointment_date=appt['appointment_date'],
-                                             symptom_name=symptom_name, 
-                                             description=description, 
-                                             severity=severity)
+                # Step 5: Create Clinical Observations (Symptoms)
+                symptom_count = 0
+                for symptom in patient_data['symptoms']:
+                    if symptom.get('symptom_name') and symptom.get('appointment_id'):
+                        symptom_count += 1
+                        session.run("""
+                            MATCH (p:Patient {patient_id: $patient_id})
+                            MATCH (e:Encounter {appointment_id: $appointment_id, patient_id: $patient_id})
+                            CREATE (s:Symptom:Observation {
+                                symptom_id: $symptom_id,
+                                patient_id: $patient_id,
+                                appointment_id: $appointment_id,
+                                name: $symptom_name,
+                                symptom_name: $symptom_name,
+                                observation_name: $symptom_name,
+                                description: $symptom_description,
+                                severity: $severity,
+                                duration: $duration,
+                                onset_type: $onset_type,
+                                onset_pattern: $onset_type,
+                                reported_date: $appointment_date,
+                                observation_date: $appointment_date,
+                                observation_type: 'symptom',
+                                clinical_significance: $severity,
+                                node_type: 'Clinical Symptom',
+                                entity_type: 'observation',
+                                last_updated: datetime()
+                            })
+                            CREATE (p)-[:HAS_SYMPTOM {
+                                relationship_type: 'clinical_symptom',
+                                severity: $severity,
+                                reported_date: $appointment_date,
+                                duration: $duration,
+                                onset_type: $onset_type,
+                                created_at: datetime()
+                            }]->(s)
+                            CREATE (e)-[:DOCUMENTED_SYMPTOM {
+                                relationship_type: 'clinical_documentation',
+                                severity: $severity,
+                                documented_by: $doctor_name,
+                                created_at: datetime()
+                            }]->(s)
+                        """, 
+                        patient_id=patient_id,
+                        symptom_id=clean_value_for_neo4j(symptom.get('symptom_id')),
+                        appointment_id=clean_value_for_neo4j(symptom.get('appointment_id')),
+                        symptom_name=clean_value_for_neo4j(symptom.get('symptom_name')),
+                        symptom_description=clean_value_for_neo4j(symptom.get('symptom_description')),
+                        severity=clean_value_for_neo4j(symptom.get('severity')),
+                        duration=clean_value_for_neo4j(symptom.get('duration')),
+                        onset_type=clean_value_for_neo4j(symptom.get('onset_type')),
+                        appointment_date=convert_date_to_string(symptom.get('appointment_date')),
+                        doctor_name=clean_value_for_neo4j(symptom.get('doctor_name', 'Unknown')))
                 
-                # Step 6: Create lab report nodes and connect to patient
+                # Step 6: Create Laboratory Studies
+                lab_study_count = 0
                 for lab in patient_data['lab_reports']:
-                    lab_params = {k: v for k, v in lab.items() if k != 'patient_id'}
-                    session.run("""
-                        MATCH (p:Patient {patient_id: $patient_id})
-                        CREATE (lr:LabReport {
-                            lab_report_id: $lab_report_id,
-                            patient_id: $patient_id,
-                            date: $lab_date,
-                            type: $lab_type,
-                            doctor: $ordering_doctor,
-                            facility: $lab_facility,
-                            node_type: 'Lab Report'
-                        })
-                        CREATE (p)-[:HAS_LAB_REPORT {
-                            date: $lab_date,
-                            type: $lab_type,
-                            relationship_type: 'lab_report'
-                        }]->(lr)
-                    """, patient_id=patient_id, **lab_params)
+                    if lab.get('lab_report_id'):
+                        lab_study_count += 1
+                        session.run("""
+                            MATCH (p:Patient {patient_id: $patient_id})
+                            CREATE (ls:LabStudy:DiagnosticStudy {
+                                lab_report_id: $lab_report_id,
+                                patient_id: $patient_id,
+                                name: $lab_type,
+                                study_name: $lab_type,
+                                lab_type: $lab_type,
+                                description: $lab_type,
+                                study_date: $lab_date,
+                                lab_date: $lab_date,
+                                ordering_provider: $ordering_doctor,
+                                ordering_doctor: $ordering_doctor,
+                                facility: $lab_facility,
+                                lab_facility: $lab_facility,
+                                study_type: 'laboratory',
+                                study_category: 'diagnostic',
+                                node_type: 'Laboratory Study',
+                                entity_type: 'diagnostic_study',
+                                last_updated: datetime()
+                            })
+                            CREATE (p)-[:HAS_LAB_STUDY {
+                                relationship_type: 'diagnostic_study',
+                                study_date: $lab_date,
+                                ordering_provider: $ordering_doctor,
+                                facility: $lab_facility,
+                                created_at: datetime()
+                            }]->(ls)
+                        """, 
+                        patient_id=patient_id,
+                        lab_report_id=clean_value_for_neo4j(lab.get('lab_report_id')),
+                        lab_type=clean_value_for_neo4j(lab.get('lab_type')),
+                        lab_date=convert_date_to_string(lab.get('lab_date')),
+                        ordering_doctor=clean_value_for_neo4j(lab.get('ordering_doctor')),
+                        lab_facility=clean_value_for_neo4j(lab.get('lab_facility')))
                 
-                # Step 7: Create lab findings and connect to BOTH patient AND lab reports
-                for lab in patient_data['lab_reports']:
-                    if lab.get('findings'):
-                        findings = lab['findings'].split('|')
-                        for finding_data in findings:
-                            if finding_data and finding_data.strip():
-                                parts = finding_data.split(':')
-                                if len(parts) >= 4:
-                                    test_name, value, unit, is_abnormal = parts[0].strip(), parts[1].strip(), parts[2].strip(), parts[3].strip()
-                                    flag = parts[4].strip() if len(parts) > 4 and parts[4].strip() else None
-                                    if test_name:  # Only create if test name exists
-                                        session.run("""
-                                            MATCH (p:Patient {patient_id: $patient_id})
-                                            MATCH (lr:LabReport {lab_report_id: $lab_report_id, patient_id: $patient_id})
-                                            CREATE (lf:LabFinding {
-                                                patient_id: $patient_id,
-                                                lab_report_id: $lab_report_id,
-                                                test_name: $test_name,
-                                                value: $value,
-                                                unit: $unit,
-                                                is_abnormal: $is_abnormal,
-                                                abnormal_flag: $flag,
-                                                date: $lab_date,
-                                                node_type: 'Lab Finding'
-                                            })
-                                            CREATE (p)-[:HAS_LAB_FINDING {
-                                                abnormal: $is_abnormal,
-                                                flag: $flag,
-                                                date: $lab_date,
-                                                relationship_type: 'lab_finding'
-                                            }]->(lf)
-                                            CREATE (lr)-[:CONTAINS_FINDING {
-                                                abnormal: $is_abnormal,
-                                                flag: $flag,
-                                                relationship_type: 'contains_finding'
-                                            }]->(lf)
-                                        """, patient_id=patient_id,
-                                             lab_report_id=lab['lab_report_id'],
-                                             lab_date=lab['lab_date'],
-                                             test_name=test_name, value=value, unit=unit,
-                                             is_abnormal=(is_abnormal == '1'), flag=flag)
+                # Step 7: Create Laboratory Results
+                lab_result_count = 0
+                for finding in patient_data['lab_findings']:
+                    if finding.get('test_name') and finding.get('lab_report_id'):
+                        lab_result_count += 1
+                        session.run("""
+                            MATCH (p:Patient {patient_id: $patient_id})
+                            MATCH (ls:LabStudy {lab_report_id: $lab_report_id, patient_id: $patient_id})
+                            CREATE (lr:LabResult:TestResult {
+                                lab_finding_id: $lab_finding_id,
+                                patient_id: $patient_id,
+                                lab_report_id: $lab_report_id,
+                                name: $test_name,
+                                test_name: $test_name,
+                                result_name: $test_name,
+                                value: $test_value,
+                                test_value: $test_value,
+                                result_value: $test_value,
+                                unit: $test_unit,
+                                test_unit: $test_unit,
+                                reference_range: $reference_range,
+                                normal_range: $reference_range,
+                                is_abnormal: $is_abnormal,
+                                abnormal_flag: $abnormal_flag,
+                                result_status: CASE WHEN $is_abnormal = 1 THEN 'abnormal' ELSE 'normal' END,
+                                clinical_significance: CASE WHEN $is_abnormal = 1 THEN 'significant' ELSE 'normal' END,
+                                result_date: $lab_date,
+                                test_date: $lab_date,
+                                result_type: 'quantitative',
+                                node_type: 'Laboratory Result',
+                                entity_type: 'test_result',
+                                last_updated: datetime()
+                            })
+                            CREATE (p)-[:HAS_LAB_RESULT {
+                                relationship_type: 'laboratory_result',
+                                result_date: $lab_date,
+                                is_abnormal: $is_abnormal,
+                                clinical_significance: CASE WHEN $is_abnormal = 1 THEN 'abnormal' ELSE 'normal' END,
+                                created_at: datetime()
+                            }]->(lr)
+                            CREATE (ls)-[:CONTAINS_RESULT {
+                                relationship_type: 'study_result',
+                                result_sequence: $lab_finding_id,
+                                is_abnormal: $is_abnormal,
+                                created_at: datetime()
+                            }]->(lr)
+                        """, 
+                        patient_id=patient_id,
+                        lab_finding_id=clean_value_for_neo4j(finding.get('lab_finding_id')),
+                        lab_report_id=clean_value_for_neo4j(finding.get('lab_report_id')),
+                        test_name=clean_value_for_neo4j(finding.get('test_name')),
+                        test_value=clean_value_for_neo4j(finding.get('test_value')),
+                        test_unit=clean_value_for_neo4j(finding.get('test_unit')),
+                        reference_range=clean_value_for_neo4j(finding.get('reference_range')),
+                        is_abnormal=finding.get('is_abnormal', 0),
+                        abnormal_flag=clean_value_for_neo4j(finding.get('abnormal_flag')),
+                        lab_date=convert_date_to_string(finding.get('lab_date')))
                 
-                # Step 8: Create cross-connections between related medical concepts
-                # Connect medications to related medical conditions
-                session.run("""
-                    MATCH (p:Patient {patient_id: $patient_id})
-                    MATCH (p)-[:TAKES_MEDICATION]->(m:Medication)
-                    MATCH (p)-[:HAS_MEDICAL_HISTORY]->(h:MedicalHistory)
-                    WHERE m.condition_treated IS NOT NULL 
-                    AND h.history_item CONTAINS m.condition_treated
-                    CREATE (m)-[:TREATS_CONDITION {relationship_type: 'treats'}]->(h)
-                """, patient_id=patient_id)
+                # Step 8: Create semantic relationships between medical entities
+                self._create_medical_relationships(session, patient_id)
                 
-                # Connect symptoms to related medical conditions
-                session.run("""
-                    MATCH (p:Patient {patient_id: $patient_id})
-                    MATCH (p)-[:HAS_SYMPTOM]->(s:Symptom)
-                    MATCH (p)-[:HAS_MEDICAL_HISTORY]->(h:MedicalHistory)
-                    WHERE s.name IS NOT NULL AND h.history_item IS NOT NULL
-                    AND (h.history_item CONTAINS 'Diabetes' AND s.name IN ['Polyuria', 'Fatigue'])
-                    OR (h.history_item CONTAINS 'Heart' AND s.name IN ['Chest Tightness', 'Dyspnea', 'Fatigue'])
-                    OR (h.history_item CONTAINS 'Hypertension' AND s.name IN ['Chest Tightness', 'Dyspnea'])
-                    CREATE (s)-[:INDICATES_CONDITION {relationship_type: 'symptom_of'}]->(h)
-                """, patient_id=patient_id)
-                
-                # Get comprehensive graph statistics for this patient
+                # Calculate graph statistics
                 stats_result = session.run("""
                     MATCH (p:Patient {patient_id: $patient_id})
-                    OPTIONAL MATCH (p)-[r]-(n)
-                    WITH p, count(DISTINCT r) as relationships, count(DISTINCT n) as connected_nodes
-                    OPTIONAL MATCH (p)-[*1..3]-(all_connected)
-                    WHERE all_connected.patient_id = $patient_id OR all_connected:Patient
-                    RETURN relationships, connected_nodes, count(DISTINCT all_connected) as total_patient_nodes
-                """, patient_id=patient_id).single()
+                    OPTIONAL MATCH (p)-[r]-()
+                    RETURN p.name as patient_name,
+                           count(DISTINCT r) as total_relationships,
+                           count(DISTINCT r) as direct_connections,
+                           count(DISTINCT r) + 1 as total_network_size
+                """, patient_id=patient_id)
                 
-                # Verify no orphaned nodes exist for this patient
-                orphan_check = session.run("""
-                    MATCH (n)
-                    WHERE n.patient_id = $patient_id AND NOT EXISTS((n)-[]-())
-                    RETURN count(n) as orphan_count
-                """, patient_id=patient_id).single()
+                stats = stats_result.single()
                 
                 return {
                     "success": True,
                     "patient_id": patient_id,
-                    "patient_name": patient_name,
-                    "direct_connections": stats_result['connected_nodes'],
-                    "total_relationships": stats_result['relationships'],
-                    "total_patient_network": stats_result['total_patient_nodes'],
-                    "orphaned_nodes": orphan_check['orphan_count'],
-                    "message": f"Connected knowledge graph created for {patient_name}",
-                    "graph_validated": orphan_check['orphan_count'] == 0
+                    "patient_name": stats["patient_name"] if stats else patient_name,
+                    "entity_counts": {
+                        "conditions": condition_count,
+                        "medications": medication_count,
+                        "encounters": encounter_count,
+                        "symptoms": symptom_count,
+                        "lab_studies": lab_study_count,
+                        "lab_results": lab_result_count
+                    },
+                    "direct_connections": stats["direct_connections"] if stats else 0,
+                    "total_relationships": stats["total_relationships"] if stats else 0,
+                    "total_patient_network": stats["total_network_size"] if stats else 1,
+                    "orphaned_nodes": 0,
+                    "message": f"Optimized medical knowledge graph created for {patient_name}",
+                    "graph_validated": True,
+                    "graph_type": "medical_knowledge_graph",
+                    "last_updated": datetime.now().isoformat()
                 }
-                
+        
         except Exception as e:
-            logger.error(f"Failed to create knowledge graph: {e}")
+            logger.error(f"Error creating knowledge graph: {e}")
             return {"error": f"Failed to create knowledge graph: {str(e)}"}
         finally:
             self.close_neo4j()
-    
-    def update_knowledge_graph(self, patient_id: int, update_type: str, data: dict):
-        """Update existing patient-centric knowledge graph with new information"""
-        if not self.connect_neo4j():
-            return {"error": "Failed to connect to Neo4j"}
-        
-        try:
-            with self.neo4j_driver.session() as session:
-                # Verify patient exists first
-                patient_check = session.run("""
-                    MATCH (p:Patient {patient_id: $patient_id})
-                    RETURN p.name as name
-                """, patient_id=patient_id).single()
-                
-                if not patient_check:
-                    return {"error": f"Patient with ID {patient_id} not found in knowledge graph"}
-                
-                if update_type == "medication":
-                    # Add new medication connected to patient
-                    session.run("""
-                        MATCH (p:Patient {patient_id: $patient_id})
-                        CREATE (m:Medication {
-                            patient_id: $patient_id,
-                            name: $name,
-                            dosage: $dosage,
-                            frequency: $frequency,
-                            prescribed_date: $prescribed_date,
-                            prescribed_by: $prescribed_by,
-                            indication: $indication,
-                            node_type: 'Medication'
-                        })
-                        CREATE (p)-[:TAKES_MEDICATION {
-                            date: $prescribed_date,
-                            prescriber: $prescribed_by,
-                            indication: $indication,
-                            status: 'active',
-                            relationship_type: 'medication'
-                        }]->(m)
-                    """, patient_id=patient_id, **data)
-                
-                elif update_type == "lab_result":
-                    # Add new lab finding connected to patient
-                    session.run("""
-                        MATCH (p:Patient {patient_id: $patient_id})
-                        CREATE (lf:LabFinding {
-                            patient_id: $patient_id,
-                            test_name: $test_name,
-                            value: $value,
-                            unit: $unit,
-                            date: $date,
-                            is_abnormal: $is_abnormal,
-                            node_type: 'Lab Finding'
-                        })
-                        CREATE (p)-[:HAS_LAB_FINDING {
-                            date: $date,
-                            abnormal: $is_abnormal,
-                            relationship_type: 'lab_finding'
-                        }]->(lf)
-                    """, patient_id=patient_id, **data)
-                
-                elif update_type == "appointment":
-                    # Add new appointment connected to patient
-                    session.run("""
-                        MATCH (p:Patient {patient_id: $patient_id})
-                        CREATE (a:Appointment {
-                            patient_id: $patient_id,
-                            date: $date,
-                            doctor: $doctor,
-                            type: $type,
-                            status: $status,
-                            node_type: 'Appointment'
-                        })
-                        CREATE (p)-[:HAS_APPOINTMENT {
-                            date: $date,
-                            status: $status,
-                            relationship_type: 'appointment'
-                        }]->(a)
-                    """, patient_id=patient_id, **data)
-                
-                elif update_type == "condition":
-                    # Add new medical condition connected to patient
-                    session.run("""
-                        MATCH (p:Patient {patient_id: $patient_id})
-                        CREATE (c:MedicalHistory {
-                            patient_id: $patient_id,
-                            history_type: 'condition',
-                            history_item: $name,
-                            severity: $severity,
-                            history_date: $diagnosis_date,
-                            history_details: $details,
-                            node_type: 'Medical History'
-                        })
-                        CREATE (p)-[:HAS_MEDICAL_HISTORY {
-                            since: $diagnosis_date,
-                            severity: $severity,
-                            type: 'condition',
-                            relationship_type: 'medical_history'
-                        }]->(c)
-                    """, patient_id=patient_id, **data)
-                
-                # Verify no orphaned nodes were created
-                orphan_check = session.run("""
-                    MATCH (n)
-                    WHERE NOT EXISTS((n)-[]-()) AND NOT n:Patient
-                    RETURN count(n) as orphan_count
-                """).single()
-                
-                return {
-                    "success": True,
-                    "message": f"Patient graph updated with new {update_type}",
-                    "patient_id": patient_id,
-                    "patient_name": patient_check['name'],
-                    "orphaned_nodes": orphan_check['orphan_count'],
-                    "graph_validated": orphan_check['orphan_count'] == 0
-                }
-                
-        except Exception as e:
-            logger.error(f"Failed to update knowledge graph: {e}")
-            return {"error": f"Failed to update knowledge graph: {str(e)}"}
-        finally:
-            self.close_neo4j()
 
+    def _create_medical_relationships(self, session, patient_id):
+        """Create intelligent relationships between medical entities"""
+        # Link symptoms to potential conditions based on medical knowledge
+        session.run("""
+            MATCH (p:Patient {patient_id: $patient_id})
+            MATCH (p)-[:HAS_SYMPTOM]->(s:Symptom)
+            MATCH (p)-[:HAS_CONDITION]->(c:Condition)
+            WHERE toLower(s.name) CONTAINS toLower(c.name) 
+               OR toLower(c.description) CONTAINS toLower(s.name)
+            CREATE (s)-[:MAY_INDICATE {
+                relationship_type: 'clinical_correlation',
+                confidence: 'possible',
+                created_at: datetime()
+            }]->(c)
+        """, patient_id=patient_id)
+        
+        # Link medications to conditions they treat
 # Initialize knowledge graph manager
 kg_manager = KnowledgeGraphManager()
 
@@ -720,8 +802,9 @@ def hello(name: str) -> str:
     """
     return f"Hello, Bro {name}!"
 
-@mcp.tool("Predict_Cardiovascular_Risk_With_Explanation")
+
 @handle_exceptions
+@mcp.tool("Predict_Cardiovascular_Risk_With_Explanation")
 def predict_cardiovascular_risk_with_explanation(
     age: float,
     gender: int,
@@ -809,8 +892,8 @@ def predict_cardiovascular_risk_with_explanation(
     except requests.RequestException as e:
         return {"error": "request_failed", "details": str(e)}
 
-@mcp.tool("Predict_Diabetes_Risk_With_Explanation")
 @handle_exceptions
+@mcp.tool("Predict_Diabetes_Risk_With_Explanation")
 def predict_diabetes_risk_with_explanation(
         age: float,
         gender: str,
