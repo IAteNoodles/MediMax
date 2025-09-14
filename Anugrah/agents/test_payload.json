@@ -1,0 +1,5 @@
+{
+    "patient_text": "Patient is a 45-year-old male who came in for a routine check-up. He weighs 185 pounds and is 5 foot 10 inches tall. His blood pressure was measured at 140/90 mmHg. He has been smoking for 20 years and drinks alcohol occasionally. He doesn't exercise regularly. His cholesterol level is 240 mg/dL and blood glucose is 110 mg/dL. He has a family history of heart disease. He's complaining of occasional chest pain and shortness of breath.",
+    "query": "Assess cardiovascular risk for this patient",
+    "additional_notes": "Patient seems concerned about family history"
+}
