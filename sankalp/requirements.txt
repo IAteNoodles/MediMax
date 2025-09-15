@@ -1,0 +1,31 @@
+# Minimal dependencies for cache-augmented generation
+transformers>=4.56.0
+accelerate>=0.29.0
+safetensors>=0.4.0
+huggingface_hub>=0.34.0
+python-dotenv>=1.0.0
+# Install torch appropriate for your platform (CPU/CUDA/MPS)
+# See https://pytorch.org/get-started/locally/
+# Example generic wheel (may not be optimal for all platforms):
+torch>=2.2.0
+
+# Gemini API and Cypher Query Generation dependencies
+google-generativeai>=0.8.0
+neo4j>=5.0.0
+
+# FastAPI server dependencies
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+pydantic>=2.0.0
+
+# Legacy Flask dependencies (optional, for reference)
+# flask>=2.3.0
+# flask-cors>=4.0.0
+
+# RAG and Chat dependencies
+langchain>=0.1.0
+langchain-community>=0.1.0
+langchain-google-genai>=1.0.0
+faiss-cpu>=1.7.4
+pypdf>=3.17.0
+sentence-transformers>=2.2.2

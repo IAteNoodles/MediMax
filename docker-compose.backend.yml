@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  mcp-server:
+    build:
+      context: ./backend_noodles
+      dockerfile: Dockerfile.mcp_server
+    container_name: medimax-mcp-server
+    ports:
+      - "8005:8005"
+    environment:
+      - PYTHONPATH=/app
+    env_file:
+      - .env
+    networks:
+      - medimax-network
+    restart: unless-stopped
+
+  chat-api:
+    build:
+      context: ./backend_noodles
+      dockerfile: Dockerfile.chat_api
+    container_name: medimax-chat-api
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONPATH=/app
+      - MCP_SERVER_URL=http://mcp-server:8005/mcp/
+    env_file:
+      - .env
+    depends_on:
+      - mcp-server
+    networks:
+      - medimax-network
+    restart: unless-stopped
+
+networks:
+  medimax-network:
+    driver: bridge

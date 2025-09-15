@@ -131,6 +131,15 @@ AUTH = (AURA_USER, AURA_PASSWORD)
 
 app = FastAPI(title="MediMax Backend API", description="Bridge between Frontend, Database, and Agentic system.")
 
+# --- Pydantic Models ---
+class CypherQueryRequest(BaseModel):
+    cypher_query: str
+
+class NewPatientRequest(BaseModel):
+    name: str
+    dob: str  # Format: YYYY-MM-DD
+    sex: str  # 'Male', 'Female', 'Other'
+
 # --- CORS Configuration ---
 # Allow requests from the Streamlit frontend
 from fastapi.middleware.cors import CORSMiddleware
@@ -259,18 +268,19 @@ def verify_neo4j_connection(driver, max_retries=3, retry_delay=2):
     
     return False
 
-@app.get("/run_cypher_query")
-async def run_cypher_query(cypher_query: str):
+@app.post("/run_cypher_query")
+async def run_cypher_query(request: CypherQueryRequest):
     """
     Execute a Cypher query on the Neo4j database with improved error handling.
     
     Args:
-        cypher_query (str): The Cypher query to execute.
+        request (CypherQueryRequest): JSON request containing:
+            - cypher_query (str): The Cypher query to execute.
         
     Returns:
         dict: The result of the query or an error message.
     """
-    logger.info(f"Executing Cypher query: {cypher_query}")
+    logger.info(f"Executing Cypher query: {request.cypher_query}")
     
     # Log connection details (without password)
     logger.info(f"Neo4j URI: {URI}")
@@ -288,7 +298,7 @@ async def run_cypher_query(cypher_query: str):
         # Execute the query with session management
         with driver.session() as session:
             logger.info("Executing Cypher query in session")
-            result = session.run(cypher_query)
+            result = session.run(request.cypher_query)
             records = [record.data() for record in result]
             
             logger.info(f"Query executed successfully. Retrieved {len(records)} records")
@@ -315,12 +325,69 @@ async def run_cypher_query(cypher_query: str):
                 logger.info("Neo4j driver closed")
             except Exception as e:
                 logger.warning(f"Error closing Neo4j driver: {str(e)}")
-    
+
 # --- Database Functions ---
-class NewPatientRequest(BaseModel):
-    name: str
-    dob: str  # Format: YYYY-MM-DD
-    sex: str  # 'Male', 'Female', 'Other'
+@app.post("/db/new_patient")
+def new_patient(req: NewPatientRequest, db=Depends(get_db_connection)):
+    """
+    Create a new patient record in the database.
+    
+    Args:
+        req (NewPatientRequest): Patient data containing:
+            - name (str): Full name of the patient
+            - dob (str): Date of birth in YYYY-MM-DD format
+            - sex (str): Gender ('Male', 'Female', or 'Other')
+        db (pymysql.Connection): Database connection dependency.
+        
+    Returns:
+        dict: Response containing:
+            - success (bool): Whether operation succeeded
+            - message (str): Success message
+            - patient_id (int): ID of created patient
+            - data (dict): Original request data
+            
+    Raises:
+        HTTPException: If patient creation fails or validation error (status 400/500).
+    """
+    """Add a new patient to the database."""
+    try:
+        cursor = db.cursor()
+        
+        # Validate sex field
+        valid_sex_values = ['Male', 'Female', 'Other']
+        if req.sex not in valid_sex_values:
+            raise HTTPException(status_code=400, detail=f"Sex must be one of: {valid_sex_values}")
+        
+        # Insert new patient
+        query = """
+        INSERT INTO Patient (name, dob, sex, created_at, updated_at)
+        VALUES (%s, %s, %s, NOW(), NOW())
+        """
+        cursor.execute(query, (req.name, req.dob, req.sex))
+        
+        # Get the inserted patient ID
+        patient_id = cursor.lastrowid
+        db.commit()
+        cursor.close()
+        
+        return {
+            "success": True,
+            "message": "Patient created successfully",
+            "patient_id": patient_id,
+            "patient_data": {
+                "name": req.name,
+                "dob": req.dob,
+                "sex": req.sex
+            }
+        }
+        
+    except Exception as e:
+        if db:
+            db.rollback()
+        raise HTTPException(status_code=500, detail=f"Error creating patient: {str(e)}")
+    finally:
+        if db:
+            db.close()
 
 
 # --- Additional Patient Management Endpoints ---
@@ -1670,6 +1737,7 @@ def get_patient_details(patient_id: int, db=Depends(get_db_connection)):
             - sex (str): Gender
             - created_at (str): Record creation timestamp
             - updated_at (str): Last update timestamp
+            - summary (str): Brief summary of patient info
             
     Raises:
         HTTPException: If patient not found (status 404) or database error (status 500).
@@ -1679,7 +1747,7 @@ def get_patient_details(patient_id: int, db=Depends(get_db_connection)):
         with db:
             with db.cursor() as cursor:
                 sql = (
-                    "SELECT patient_id, name, dob, sex, created_at, updated_at "
+                    "SELECT patient_id, name, dob, sex, created_at, updated_at, Summary "
                     "FROM Patient "
                     "WHERE patient_id = %s"
                 )
@@ -1696,7 +1764,9 @@ def get_patient_details(patient_id: int, db=Depends(get_db_connection)):
                     "dob": str(result.get("dob")) if result.get("dob") else None,
                     "sex": result.get("sex"),
                     "created_at": str(result.get("created_at")) if result.get("created_at") else None,
-                    "updated_at": str(result.get("updated_at")) if result.get("updated_at") else None
+                    "updated_at": str(result.get("updated_at")) if result.get("updated_at") else None,
+                    "summary": str(result.get("Summary")) if result.get("Summary") else None
+                
                 }
     except Exception as e:
         logger.error(f"Error fetching details for patient {patient_id}: {e}")
