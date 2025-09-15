@@ -1,6 +1,11 @@
 # --- Database Configuration & Connection Dependency ---
 import pymysql
 from fastapi import status, Depends, HTTPException
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
 def get_db_connection():
     """
@@ -12,6 +17,7 @@ def get_db_connection():
     Raises:
         HTTPException: If database connection fails (status 500).
     """
+    logger.info("Attempting to establish database connection.")
     try:
         connection = pymysql.connect(
             host=DB_HOST,
@@ -21,8 +27,10 @@ def get_db_connection():
             database=DB_NAME,
             cursorclass=pymysql.cursors.DictCursor
         )
+        logger.info("Database connection established successfully.")
         return connection
     except Exception as e:
+        logger.error(f"Database connection failed: {e}")
         raise HTTPException(status_code=500, detail=f"Database connection failed: {e}")
 
 """
@@ -66,6 +74,7 @@ import mariadb
 import os
 from dotenv import load_dotenv
 from neo4j import GraphDatabase
+from neo4j.exceptions import ServiceUnavailable, AuthError, ConfigurationError
 from neo4j.time import Date, DateTime, Time, Duration
 from datetime import datetime, date, time
 import json
@@ -119,10 +128,6 @@ def serialize_neo4j_result(result):
 URI = "neo4j+s://98d1982d.databases.neo4j.io"
 AUTH = (AURA_USER, AURA_PASSWORD)
 
-with GraphDatabase.driver(URI, auth=AUTH) as driver:
-    driver.verify_connectivity()
-
-
 
 app = FastAPI(title="MediMax Backend API", description="Bridge between Frontend, Database, and Agentic system.")
 
@@ -158,20 +163,26 @@ async def health_check(db=Depends(get_db_connection)):
         HTTPException: If health check fails (status 500).
     """
     """Backend health and connectivity check."""
+    logger.info("Performing health check.")
     # --- Agentic System Check ---
     agentic_status = "not checked"
+    logger.info("Checking agentic system status.")
     try:
         async with httpx.AsyncClient() as client:
             response = await client.get(f"{AGENTIC_ADDRESS}/health")
             if response.status_code == 200:
                 agentic_status = "ok"
+                logger.info("Agentic system is OK.")
             else:
                 agentic_status = f"error: status code {response.status_code}"
+                logger.warning(f"Agentic system returned status code {response.status_code}.")
     except Exception as e:
         agentic_status = f"error: {str(e)}"
+        logger.error(f"Error checking agentic system: {e}")
 
     # --- Database Check ---
     db_status = "not checked"
+    logger.info("Checking database status.")
     try:
         if db:
             cursor = db.cursor()
@@ -179,24 +190,79 @@ async def health_check(db=Depends(get_db_connection)):
             cursor.fetchone()
             cursor.close()
             db_status = "ok"
+            logger.info("Database connection is OK.")
         else:
             db_status = "error: not connected"
+            logger.warning("Database not connected for health check.")
     except Exception as e:
         db_status = f"error: {str(e)}"
+        logger.error(f"Error checking database connection: {e}")
     finally:
         if db:
             db.close()
-
+    
+    logger.info("Health check completed.")
     return {
         "status": "ok",
         "database": db_status,
         "agentic_system": agentic_status
     }
 
+def get_neo4j_driver():
+    """Create and return a Neo4j driver with proper configuration for Aura"""
+    uri = URI
+    user = AURA_USER
+    password = AURA_PASSWORD
+    
+    if not all([uri, user, password]):
+        raise HTTPException(status_code=500, detail="Missing Neo4j credentials")
+    
+    # Configuration optimized for Neo4j Aura
+    driver_config = {
+        "max_connection_lifetime": 30 * 60,  # 30 minutes
+        "max_connection_pool_size": 50,
+        "connection_acquisition_timeout": 60,  # 60 seconds
+        "connection_timeout": 30,  # 30 seconds
+        "max_retry_time": 30,
+        "encrypted": True,  # Required for Aura
+        "trust": "TRUST_SYSTEM_CA_SIGNED_CERTIFICATES"
+    }
+    
+    try:
+        driver = GraphDatabase.driver(uri, auth=(user, password), **driver_config)
+        logger.info(f"Neo4j driver created for URI: {uri}")
+        return driver
+    except Exception as e:
+        logger.error(f"Failed to create Neo4j driver: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to create Neo4j driver: {str(e)}")
+
+def verify_neo4j_connection(driver, max_retries=3, retry_delay=2):
+    """Verify Neo4j connection with retry logic"""
+    import time
+    for attempt in range(max_retries):
+        try:
+            logger.info(f"Verifying Neo4j connectivity (attempt {attempt + 1}/{max_retries})")
+            
+            # Use a session to verify connectivity instead of driver.verify_connectivity()
+            with driver.session() as session:
+                session.run("RETURN 1 AS test").consume()
+            
+            logger.info("Neo4j connectivity verified successfully")
+            return True
+        except Exception as e:
+            logger.warning(f"Neo4j connectivity attempt {attempt + 1} failed: {str(e)}")
+            if attempt < max_retries - 1:
+                time.sleep(retry_delay * (attempt + 1))  # Exponential backoff
+            else:
+                logger.error("Max retries exceeded for Neo4j connectivity")
+                raise
+    
+    return False
+
 @app.get("/run_cypher_query")
 async def run_cypher_query(cypher_query: str):
     """
-    Execute a Cypher query on the Neo4j database.
+    Execute a Cypher query on the Neo4j database with improved error handling.
     
     Args:
         cypher_query (str): The Cypher query to execute.
@@ -204,84 +270,57 @@ async def run_cypher_query(cypher_query: str):
     Returns:
         dict: The result of the query or an error message.
     """
+    logger.info(f"Executing Cypher query: {cypher_query}")
+    
+    # Log connection details (without password)
+    logger.info(f"Neo4j URI: {URI}")
+    logger.info(f"Neo4j User: {AURA_USER}")
+    logger.info("Neo4j Password is set." if AURA_PASSWORD else "Neo4j Password is NOT set.")
+    
+    driver = None
     try:
-        with GraphDatabase.driver(URI, auth=AUTH) as driver:
-            with driver.session() as session:
-                result = session.run(cypher_query)
-                records = [record.data() for record in result]
-                # Apply serialization to handle Neo4j temporal types
-                serialized_records = serialize_neo4j_result(records)
-                return {"results": serialized_records, "count": len(serialized_records)}
+        # Create driver with improved configuration
+        driver = get_neo4j_driver()
+        
+        # Verify connectivity with retry logic
+        verify_neo4j_connection(driver)
+        
+        # Execute the query with session management
+        with driver.session() as session:
+            logger.info("Executing Cypher query in session")
+            result = session.run(cypher_query)
+            records = [record.data() for record in result]
+            
+            logger.info(f"Query executed successfully. Retrieved {len(records)} records")
+            
+            # Apply serialization to handle Neo4j temporal types
+            serialized_records = serialize_neo4j_result(records)
+            
+            return {"status": "success", "results": serialized_records, "count": len(serialized_records)}
+            
+    except HTTPException:
+        # Re-raise HTTP exceptions as-is
+        raise
+    
     except Exception as e:
-        return {"error": f"Database error: {str(e)}"}
+        error_msg = f"Error executing Cypher query: {str(e)}"
+        logger.error(error_msg)
+        return {"status": "error", "error": error_msg}
+    
+    finally:
+        # Ensure driver is properly closed
+        if driver:
+            try:
+                driver.close()
+                logger.info("Neo4j driver closed")
+            except Exception as e:
+                logger.warning(f"Error closing Neo4j driver: {str(e)}")
     
 # --- Database Functions ---
 class NewPatientRequest(BaseModel):
     name: str
     dob: str  # Format: YYYY-MM-DD
     sex: str  # 'Male', 'Female', 'Other'
-
-@app.post("/db/new_patient")
-def new_patient(req: NewPatientRequest, db=Depends(get_db_connection)):
-    """
-    Create a new patient record in the database.
-    
-    Args:
-        req (NewPatientRequest): Patient data containing:
-            - name (str): Full name of the patient
-            - dob (str): Date of birth in YYYY-MM-DD format
-            - sex (str): Gender ('Male', 'Female', or 'Other')
-        db (pymysql.Connection): Database connection dependency.
-        
-    Returns:
-        dict: Response containing:
-            - success (bool): Whether operation succeeded
-            - message (str): Success message
-            - patient_id (int): ID of created patient
-            - data (dict): Original request data
-            
-    Raises:
-        HTTPException: If patient creation fails or validation error (status 400/500).
-    """
-    """Add a new patient to the database."""
-    try:
-        cursor = db.cursor()
-        
-        # Validate sex field
-        valid_sex_values = ['Male', 'Female', 'Other']
-        if req.sex not in valid_sex_values:
-            raise HTTPException(status_code=400, detail=f"Sex must be one of: {valid_sex_values}")
-        
-        # Insert new patient
-        query = """
-        INSERT INTO Patient (name, dob, sex, created_at, updated_at)
-        VALUES (%s, %s, %s, NOW(), NOW())
-        """
-        cursor.execute(query, (req.name, req.dob, req.sex))
-        
-        # Get the inserted patient ID
-        patient_id = cursor.lastrowid
-        db.commit()
-        cursor.close()
-        
-        return {
-            "success": True,
-            "message": "Patient created successfully",
-            "patient_id": patient_id,
-            "patient_data": {
-                "name": req.name,
-                "dob": req.dob,
-                "sex": req.sex
-            }
-        }
-        
-    except Exception as e:
-        if db:
-            db.rollback()
-        raise HTTPException(status_code=500, detail=f"Error creating patient: {str(e)}")
-    finally:
-        if db:
-            db.close()
 
 
 # --- Additional Patient Management Endpoints ---
@@ -306,6 +345,7 @@ def get_all_patients(limit: int = 50, offset: int = 0, db=Depends(get_db_connect
         HTTPException: If database query fails (status 500).
     """
     """Get all patients with pagination."""
+    logger.info(f"Fetching all patients with limit={limit}, offset={offset}.")
     try:
         cursor = db.cursor()
         
@@ -323,6 +363,7 @@ def get_all_patients(limit: int = 50, offset: int = 0, db=Depends(get_db_connect
         cursor.execute(query, (limit, offset))
         patients = cursor.fetchall()
         cursor.close()
+        logger.info(f"Found {len(patients)} patients.")
         
         # Format dates as strings
         for patient in patients:
@@ -333,6 +374,7 @@ def get_all_patients(limit: int = 50, offset: int = 0, db=Depends(get_db_connect
             if patient["updated_at"]:
                 patient["updated_at"] = str(patient["updated_at"])
         
+        logger.info("Successfully fetched and formatted patient list.")
         return {
             "total_count": total_count,
             "current_page_count": len(patients),
@@ -342,6 +384,7 @@ def get_all_patients(limit: int = 50, offset: int = 0, db=Depends(get_db_connect
         }
         
     except Exception as e:
+        logger.error(f"Error fetching patients: {e}")
         raise HTTPException(status_code=500, detail=f"Error fetching patients: {str(e)}")
     finally:
         if db:
@@ -372,17 +415,20 @@ def update_patient(patient_id: int, req: NewPatientRequest, db=Depends(get_db_co
         HTTPException: If patient not found (status 404) or update fails (status 500).
     """
     """Update an existing patient."""
+    logger.info(f"Updating patient with ID: {patient_id}")
     try:
         cursor = db.cursor()
         
         # Check if patient exists
         cursor.execute("SELECT patient_id FROM Patient WHERE patient_id = %s", (patient_id,))
         if not cursor.fetchone():
+            logger.warning(f"Patient with ID {patient_id} not found for update.")
             raise HTTPException(status_code=404, detail="Patient not found")
         
         # Validate sex field
         valid_sex_values = ['Male', 'Female', 'Other']
         if req.sex not in valid_sex_values:
+            logger.warning(f"Invalid sex value '{req.sex}' provided for patient {patient_id}.")
             raise HTTPException(status_code=400, detail=f"Sex must be one of: {valid_sex_values}")
         
         # Update patient
@@ -395,6 +441,7 @@ def update_patient(patient_id: int, req: NewPatientRequest, db=Depends(get_db_co
         db.commit()
         cursor.close()
         
+        logger.info(f"Patient {patient_id} updated successfully.")
         return {
             "success": True,
             "message": "Patient updated successfully",
@@ -409,6 +456,7 @@ def update_patient(patient_id: int, req: NewPatientRequest, db=Depends(get_db_co
     except HTTPException:
         raise
     except Exception as e:
+        logger.error(f"Error updating patient {patient_id}: {e}")
         if db:
             db.rollback()
         raise HTTPException(status_code=500, detail=f"Error updating patient: {str(e)}")
@@ -439,12 +487,14 @@ def delete_patient(patient_id: int, db=Depends(get_db_connection)):
     Warning:
         This operation is irreversible and removes all associated medical data.
     """
+    logger.info(f"Attempting to delete patient with ID: {patient_id} and all related records.")
     try:
         cursor = db.cursor()
         
         # Check if patient exists
         cursor.execute("SELECT patient_id FROM Patient WHERE patient_id = %s", (patient_id,))
         if not cursor.fetchone():
+            logger.warning(f"Patient with ID {patient_id} not found for deletion.")
             raise HTTPException(status_code=404, detail="Patient not found")
         
         # Delete related records first (due to foreign key constraints)
@@ -463,11 +513,13 @@ def delete_patient(patient_id: int, db=Depends(get_db_connection)):
         ]
         
         for query in delete_queries:
+            logger.info(f"Executing delete query for patient {patient_id}: {query.split('WHERE')[0]}")
             cursor.execute(query, (patient_id,))
         
         db.commit()
         cursor.close()
         
+        logger.info(f"Patient {patient_id} and all related records deleted successfully.")
         return {
             "success": True,
             "message": f"Patient {patient_id} and all related records deleted successfully",
@@ -477,6 +529,7 @@ def delete_patient(patient_id: int, db=Depends(get_db_connection)):
     except HTTPException:
         raise
     except Exception as e:
+        logger.error(f"Error deleting patient {patient_id}: {e}")
         if db:
             db.rollback()
         raise HTTPException(status_code=500, detail=f"Error deleting patient: {str(e)}")
@@ -526,12 +579,14 @@ def add_medical_history(patient_id: int, req: MedicalHistoryRequest, db=Depends(
     Note:
         API automatically maps 'chronic_condition' to 'condition' for database compatibility.
     """
+    logger.info(f"Adding medical history for patient ID: {patient_id}")
     try:
         cursor = db.cursor()
         
         # Check if patient exists
         cursor.execute("SELECT patient_id FROM Patient WHERE patient_id = %s", (patient_id,))
         if not cursor.fetchone():
+            logger.warning(f"Patient with ID {patient_id} not found when adding medical history.")
             raise HTTPException(status_code=404, detail="Patient not found")
         
         # Validate enums (match actual database enum values)
@@ -551,9 +606,11 @@ def add_medical_history(patient_id: int, req: MedicalHistoryRequest, db=Depends(
         
         mapped_history_type = history_type_mapping.get(req.history_type, req.history_type)
         if mapped_history_type not in valid_types:
+            logger.warning(f"Invalid history type '{req.history_type}' for patient {patient_id}.")
             raise HTTPException(status_code=400, detail=f"History type must be one of: {list(history_type_mapping.keys())}")
         
         if req.severity.lower() not in valid_severities:
+            logger.warning(f"Invalid severity '{req.severity}' for patient {patient_id}.")
             raise HTTPException(status_code=400, detail=f"Severity must be one of: {valid_severities}")
         
         # Insert medical history (use mapped value)
@@ -576,6 +633,7 @@ def add_medical_history(patient_id: int, req: MedicalHistoryRequest, db=Depends(
         db.commit()
         cursor.close()
         
+        logger.info(f"Medical history record {history_id} added for patient {patient_id}.")
         return {
             "success": True,
             "message": "Medical history added successfully",
@@ -587,6 +645,7 @@ def add_medical_history(patient_id: int, req: MedicalHistoryRequest, db=Depends(
     except HTTPException:
         raise
     except Exception as e:
+        logger.error(f"Error adding medical history for patient {patient_id}: {e}")
         if db:
             db.rollback()
         raise HTTPException(status_code=500, detail=f"Error adding medical history: {str(e)}")
@@ -635,12 +694,14 @@ def add_appointment(patient_id: int, req: AppointmentRequest, db=Depends(get_db_
         API automatically maps appointment types to database values:
         'Regular' -> 'routine_checkup', 'Emergency' -> 'emergency', etc.
     """
+    logger.info(f"Adding appointment for patient ID: {patient_id}")
     try:
         cursor = db.cursor()
         
         # Check if patient exists
         cursor.execute("SELECT patient_id FROM Patient WHERE patient_id = %s", (patient_id,))
         if not cursor.fetchone():
+            logger.warning(f"Patient with ID {patient_id} not found when adding appointment.")
             raise HTTPException(status_code=404, detail="Patient not found")
         
         # Validate enums (match actual database enum values)
@@ -665,6 +726,7 @@ def add_appointment(patient_id: int, req: AppointmentRequest, db=Depends(get_db_
         
         mapped_appointment_type = appointment_type_mapping.get(req.appointment_type, req.appointment_type.lower())
         if mapped_appointment_type not in valid_types_db:
+            logger.warning(f"Invalid appointment type '{req.appointment_type}' for patient {patient_id}.")
             raise HTTPException(status_code=400, detail=f"Appointment type must be one of: {list(appointment_type_mapping.keys())}")
         
         # Insert appointment (use mapped value)
@@ -687,6 +749,7 @@ def add_appointment(patient_id: int, req: AppointmentRequest, db=Depends(get_db_
         db.commit()
         cursor.close()
         
+        logger.info(f"Appointment {appointment_id} created for patient {patient_id}.")
         return {
             "success": True,
             "message": "Appointment created successfully",
@@ -698,6 +761,7 @@ def add_appointment(patient_id: int, req: AppointmentRequest, db=Depends(get_db_
     except HTTPException:
         raise
     except Exception as e:
+        logger.error(f"Error creating appointment for patient {patient_id}: {e}")
         if db:
             db.rollback()
         raise HTTPException(status_code=500, detail=f"Error creating appointment: {str(e)}")
@@ -743,12 +807,14 @@ def add_medication(patient_id: int, req: MedicationRequest, db=Depends(get_db_co
     Raises:
         HTTPException: If patient not found (status 404) or database error (status 500).
     """
+    logger.info(f"Adding medication for patient ID: {patient_id}")
     try:
         cursor = db.cursor()
         
         # Check if patient exists
         cursor.execute("SELECT patient_id FROM Patient WHERE patient_id = %s", (patient_id,))
         if not cursor.fetchone():
+            logger.warning(f"Patient with ID {patient_id} not found when adding medication.")
             raise HTTPException(status_code=404, detail="Patient not found")
         
         # Insert medication
@@ -772,6 +838,7 @@ def add_medication(patient_id: int, req: MedicationRequest, db=Depends(get_db_co
         db.commit()
         cursor.close()
         
+        logger.info(f"Medication record {medication_id} added for patient {patient_id}.")
         return {
             "success": True,
             "message": "Medication added successfully",
@@ -783,6 +850,7 @@ def add_medication(patient_id: int, req: MedicationRequest, db=Depends(get_db_co
     except HTTPException:
         raise
     except Exception as e:
+        logger.error(f"Error adding medication for patient {patient_id}: {e}")
         if db:
             db.rollback()
         raise HTTPException(status_code=500, detail=f"Error adding medication: {str(e)}")
@@ -826,12 +894,14 @@ def add_symptom(req: SymptomRequest, db=Depends(get_db_connection)):
         HTTPException: If appointment not found (status 404), validation error (status 400),
                       or database error (status 500).
     """
+    logger.info(f"Adding symptom to appointment ID: {req.appointment_id}")
     try:
         cursor = db.cursor()
         
         # Check if appointment exists
         cursor.execute("SELECT appointment_id FROM Appointment WHERE appointment_id = %s", (req.appointment_id,))
         if not cursor.fetchone():
+            logger.warning(f"Appointment with ID {req.appointment_id} not found when adding symptom.")
             raise HTTPException(status_code=404, detail="Appointment not found")
         
         # Validate enums
@@ -839,9 +909,11 @@ def add_symptom(req: SymptomRequest, db=Depends(get_db_connection)):
         valid_onset_types = ['sudden', 'gradual', 'chronic', 'intermittent']
         
         if req.severity.lower() not in valid_severities:
+            logger.warning(f"Invalid severity '{req.severity}' for appointment {req.appointment_id}.")
             raise HTTPException(status_code=400, detail=f"Severity must be one of: {valid_severities}")
         
         if req.onset_type.lower() not in valid_onset_types:
+            logger.warning(f"Invalid onset type '{req.onset_type}' for appointment {req.appointment_id}.")
             raise HTTPException(status_code=400, detail=f"Onset type must be one of: {valid_onset_types}")
         
         # Insert symptom
@@ -863,6 +935,7 @@ def add_symptom(req: SymptomRequest, db=Depends(get_db_connection)):
         db.commit()
         cursor.close()
         
+        logger.info(f"Symptom {symptom_id} added to appointment {req.appointment_id}.")
         return {
             "success": True,
             "message": "Symptom added successfully",
@@ -874,6 +947,7 @@ def add_symptom(req: SymptomRequest, db=Depends(get_db_connection)):
     except HTTPException:
         raise
     except Exception as e:
+        logger.error(f"Error adding symptom to appointment {req.appointment_id}: {e}")
         if db:
             db.rollback()
         raise HTTPException(status_code=500, detail=f"Error adding symptom: {str(e)}")
@@ -913,12 +987,14 @@ def add_lab_report(patient_id: int, req: LabReportRequest, db=Depends(get_db_con
     Raises:
         HTTPException: If patient not found (status 404) or database error (status 500).
     """
+    logger.info(f"Creating lab report for patient ID: {patient_id}")
     try:
         cursor = db.cursor()
         
         # Check if patient exists
         cursor.execute("SELECT patient_id FROM Patient WHERE patient_id = %s", (patient_id,))
         if not cursor.fetchone():
+            logger.warning(f"Patient with ID {patient_id} not found when creating lab report.")
             raise HTTPException(status_code=404, detail="Patient not found")
         
         # Insert lab report
@@ -938,6 +1014,7 @@ def add_lab_report(patient_id: int, req: LabReportRequest, db=Depends(get_db_con
         db.commit()
         cursor.close()
         
+        logger.info(f"Lab report {lab_report_id} created for patient {patient_id}.")
         return {
             "success": True,
             "message": "Lab report created successfully",
@@ -949,6 +1026,7 @@ def add_lab_report(patient_id: int, req: LabReportRequest, db=Depends(get_db_con
     except HTTPException:
         raise
     except Exception as e:
+        logger.error(f"Error creating lab report for patient {patient_id}: {e}")
         if db:
             db.rollback()
         raise HTTPException(status_code=500, detail=f"Error creating lab report: {str(e)}")
@@ -994,18 +1072,21 @@ def add_lab_finding(req: LabFindingRequest, db=Depends(get_db_connection)):
         HTTPException: If lab report not found (status 404), validation error (status 400),
                       or database error (status 500).
     """
+    logger.info(f"Adding lab finding to lab report ID: {req.lab_report_id}")
     try:
         cursor = db.cursor()
         
         # Check if lab report exists
         cursor.execute("SELECT lab_report_id FROM Lab_Report WHERE lab_report_id = %s", (req.lab_report_id,))
         if not cursor.fetchone():
+            logger.warning(f"Lab report with ID {req.lab_report_id} not found when adding finding.")
             raise HTTPException(status_code=404, detail="Lab report not found")
         
         # Validate abnormal flag
         if req.abnormal_flag:
             valid_flags = ['high', 'low', 'critical_high', 'critical_low']
             if req.abnormal_flag.lower() not in valid_flags:
+                logger.warning(f"Invalid abnormal flag '{req.abnormal_flag}' for lab report {req.lab_report_id}.")
                 raise HTTPException(status_code=400, detail=f"Abnormal flag must be one of: {valid_flags}")
         
         # Insert lab finding
@@ -1028,6 +1109,7 @@ def add_lab_finding(req: LabFindingRequest, db=Depends(get_db_connection)):
         db.commit()
         cursor.close()
         
+        logger.info(f"Lab finding {lab_finding_id} added to lab report {req.lab_report_id}.")
         return {
             "success": True,
             "message": "Lab finding added successfully",
@@ -1039,6 +1121,7 @@ def add_lab_finding(req: LabFindingRequest, db=Depends(get_db_connection)):
     except HTTPException:
         raise
     except Exception as e:
+        logger.error(f"Error adding lab finding to report {req.lab_report_id}: {e}")
         if db:
             db.rollback()
         raise HTTPException(status_code=500, detail=f"Error adding lab finding: {str(e)}")
@@ -1075,6 +1158,7 @@ def search_patients(name: str = None, patient_id: int = None, sex: str = None,
     Raises:
         HTTPException: If database query fails (status 500).
     """
+    logger.info(f"Searching for patients with criteria: name='{name}', patient_id={patient_id}, sex='{sex}'")
     try:
         cursor = db.cursor()
         
@@ -1100,6 +1184,7 @@ def search_patients(name: str = None, patient_id: int = None, sex: str = None,
         count_query = f"SELECT COUNT(*) as total FROM Patient{where_clause}"
         cursor.execute(count_query, params)
         total_count = cursor.fetchone()["total"]
+        logger.info(f"Found {total_count} total matching patients.")
         
         # Get matching patients
         query = f"""
@@ -1112,6 +1197,7 @@ def search_patients(name: str = None, patient_id: int = None, sex: str = None,
         cursor.execute(query, params)
         patients = cursor.fetchall()
         cursor.close()
+        logger.info(f"Returning {len(patients)} patients for current page.")
         
         # Format dates
         for patient in patients:
@@ -1136,6 +1222,7 @@ def search_patients(name: str = None, patient_id: int = None, sex: str = None,
         }
         
     except Exception as e:
+        logger.error(f"Error searching patients: {e}")
         raise HTTPException(status_code=500, detail=f"Error searching patients: {str(e)}")
     finally:
         if db:
@@ -1163,6 +1250,7 @@ def get_complete_patient_profile(patient_id: int, db=Depends(get_db_connection))
     Raises:
         HTTPException: If patient not found (status 404) or database error (status 500).
     """
+    logger.info(f"Fetching complete profile for patient ID: {patient_id}")
     try:
         cursor = db.cursor()
         
@@ -1174,8 +1262,10 @@ def get_complete_patient_profile(patient_id: int, db=Depends(get_db_connection))
         patient = cursor.fetchone()
         
         if not patient:
+            logger.warning(f"Patient with ID {patient_id} not found for profile retrieval.")
             raise HTTPException(status_code=404, detail="Patient not found")
         
+        logger.info(f"Found patient {patient['name']}.")
         # Format patient dates
         if patient["dob"]:
             patient["dob"] = str(patient["dob"])
@@ -1185,6 +1275,7 @@ def get_complete_patient_profile(patient_id: int, db=Depends(get_db_connection))
             patient["updated_at"] = str(patient["updated_at"])
         
         # Get medical history
+        logger.info(f"Fetching medical history for patient {patient_id}.")
         cursor.execute("""
             SELECT history_id, history_type, history_item, history_details,
                    history_date, severity, is_active, updated_at
@@ -1192,8 +1283,10 @@ def get_complete_patient_profile(patient_id: int, db=Depends(get_db_connection))
             ORDER BY history_date DESC, updated_at DESC
         """, (patient_id,))
         medical_history = cursor.fetchall()
+        logger.info(f"Found {len(medical_history)} medical history records.")
         
         # Get medications
+        logger.info(f"Fetching medications for patient {patient_id}.")
         cursor.execute("""
             SELECT medication_id, medicine_name, is_continued, prescribed_date,
                    discontinued_date, dosage, frequency, prescribed_by
@@ -1201,8 +1294,10 @@ def get_complete_patient_profile(patient_id: int, db=Depends(get_db_connection))
             ORDER BY prescribed_date DESC
         """, (patient_id,))
         medications = cursor.fetchall()
+        logger.info(f"Found {len(medications)} medication records.")
         
         # Get appointments with symptoms
+        logger.info(f"Fetching appointments and symptoms for patient {patient_id}.")
         cursor.execute("""
             SELECT a.appointment_id, a.appointment_date, a.appointment_time,
                    a.status, a.appointment_type, a.doctor_name, a.notes,
@@ -1214,6 +1309,7 @@ def get_complete_patient_profile(patient_id: int, db=Depends(get_db_connection))
             ORDER BY a.appointment_date DESC, a.appointment_time DESC
         """, (patient_id,))
         appointment_results = cursor.fetchall()
+        logger.info(f"Found {len(appointment_results)} appointment/symptom rows.")
         
         # Group appointments with their symptoms
         appointments = {}
@@ -1242,6 +1338,7 @@ def get_complete_patient_profile(patient_id: int, db=Depends(get_db_connection))
                 })
         
         # Get lab reports with findings
+        logger.info(f"Fetching lab reports and findings for patient {patient_id}.")
         cursor.execute("""
             SELECT lr.lab_report_id, lr.lab_date, lr.lab_type, lr.ordering_doctor, lr.lab_facility,
                    lf.lab_finding_id, lf.test_name, lf.test_value, lf.test_unit,
@@ -1252,6 +1349,7 @@ def get_complete_patient_profile(patient_id: int, db=Depends(get_db_connection))
             ORDER BY lr.lab_date DESC
         """, (patient_id,))
         lab_results = cursor.fetchall()
+        logger.info(f"Found {len(lab_results)} lab report/finding rows.")
         
         # Group lab reports with their findings
         lab_reports = {}
@@ -1280,6 +1378,7 @@ def get_complete_patient_profile(patient_id: int, db=Depends(get_db_connection))
         
         cursor.close()
         
+        logger.info(f"Successfully compiled complete profile for patient {patient_id}.")
         return {
             "patient": patient,
             "medical_history": medical_history,
@@ -1297,6 +1396,7 @@ def get_complete_patient_profile(patient_id: int, db=Depends(get_db_connection))
     except HTTPException:
         raise
     except Exception as e:
+        logger.error(f"Error fetching complete profile for patient {patient_id}: {e}")
         raise HTTPException(status_code=500, detail=f"Error fetching complete patient profile: {str(e)}")
     finally:
         if db:
@@ -1440,16 +1540,21 @@ async def get_models():
     Raises:
         HTTPException: If agentic server unavailable (status 503) or request fails (status 500).
     """
+    logger.info("Requesting models from agentic server.")
     try:
         async with httpx.AsyncClient() as client:
             response = await client.get(f"{AGENTIC_ADDRESS}/models")
             response.raise_for_status()
+            logger.info("Successfully retrieved models from agentic server.")
             return response.json()
     except httpx.RequestError as e:
+        logger.error(f"Error connecting to agentic server for models: {e}")
         raise HTTPException(status_code=503, detail=f"Error connecting to agentic server: {e}")
     except httpx.HTTPStatusError as e:
+        logger.error(f"Agentic server returned an error for models request: {e.response.status_code} - {e.response.text}")
         raise HTTPException(status_code=e.response.status_code, detail=f"Error from agentic server: {e.response.text}")
     except Exception as e:
+        logger.error(f"An unexpected error occurred while getting models: {e}")
         raise HTTPException(status_code=500, detail=f"An unexpected error occurred: {str(e)}")
 
 
@@ -1470,6 +1575,7 @@ async def assess_patient(request: AssessmentRequest):
     Raises:
         HTTPException: If agentic server unavailable (status 503) or request fails (status 500).
     """
+    logger.info("Forwarding patient assessment request to agentic server.")
     try:
         async with httpx.AsyncClient(timeout=60.0) as client:
             response = await client.post(
@@ -1477,12 +1583,16 @@ async def assess_patient(request: AssessmentRequest):
                 json=request.dict()
             )
             response.raise_for_status()  # Raise an exception for bad status codes
+            logger.info("Successfully received assessment from agentic server.")
             return response.json()
     except httpx.RequestError as e:
+        logger.error(f"Error connecting to agentic server for assessment: {e}")
         raise HTTPException(status_code=503, detail=f"Error connecting to agentic server: {e}")
     except httpx.HTTPStatusError as e:
+        logger.error(f"Agentic server returned an error for assessment: {e.response.status_code} - {e.response.text}")
         raise HTTPException(status_code=e.response.status_code, detail=f"Error from agentic server: {e.response.text}")
     except Exception as e:
+        logger.error(f"An unexpected error occurred during assessment: {e}")
         raise HTTPException(status_code=500, detail=f"An unexpected error occurred: {str(e)}")
 
 
@@ -1501,32 +1611,44 @@ async def assess_patient_mock(patient_index: int = 0):
         HTTPException: If invalid patient index (status 400), mock data file not found (status 500),
                       or agentic server unavailable (status 503).
     """
+    logger.info(f"Performing mock assessment for patient index: {patient_index}")
     try:
         # Load mock data from the JSON file
-        with open(os.path.join(os.path.dirname(__file__), 'mock_data.json'), 'r') as f:
+        mock_file_path = os.path.join(os.path.dirname(__file__), 'mock_data.json')
+        logger.info(f"Loading mock data from {mock_file_path}")
+        with open(mock_file_path, 'r') as f:
             mock_data_list = json.load(f)
 
         if not isinstance(mock_data_list, list) or not (0 <= patient_index < len(mock_data_list)):
+            logger.warning(f"Invalid patient index {patient_index} requested for mock assessment.")
             raise HTTPException(status_code=400, detail="Invalid patient index.")
 
         mock_data = mock_data_list[patient_index]
+        logger.info("Successfully loaded mock data.")
 
         async with httpx.AsyncClient(timeout=60.0) as client:
+            logger.info("Sending mock data to agentic server for assessment.")
             response = await client.post(
                 f"{AGENTIC_ADDRESS}/assess",
                 json=mock_data
             )
             response.raise_for_status()
+            logger.info("Successfully received mock assessment from agentic server.")
             return response.json()
     except FileNotFoundError:
+        logger.error("mock_data.json not found.")
         raise HTTPException(status_code=500, detail="mock_data.json not found.")
     except json.JSONDecodeError:
+        logger.error("Error decoding mock_data.json.")
         raise HTTPException(status_code=500, detail="Error decoding mock_data.json.")
     except httpx.RequestError as e:
+        logger.error(f"Error connecting to agentic server for mock assessment: {e}")
         raise HTTPException(status_code=503, detail=f"Error connecting to agentic server: {e}")
     except httpx.HTTPStatusError as e:
+        logger.error(f"Agentic server returned an error for mock assessment: {e.response.status_code} - {e.response.text}")
         raise HTTPException(status_code=e.response.status_code, detail=f"Error from agentic server: {e.response.text}")
     except Exception as e:
+        logger.error(f"An unexpected error occurred during mock assessment: {e}")
         raise HTTPException(status_code=500, detail=f"An unexpected error occurred: {str(e)}")
 
 
@@ -1552,6 +1674,7 @@ def get_patient_details(patient_id: int, db=Depends(get_db_connection)):
     Raises:
         HTTPException: If patient not found (status 404) or database error (status 500).
     """
+    logger.info(f"Fetching details for patient ID: {patient_id}")
     try:
         with db:
             with db.cursor() as cursor:
@@ -1563,7 +1686,10 @@ def get_patient_details(patient_id: int, db=Depends(get_db_connection)):
                 cursor.execute(sql, (patient_id,))
                 result = cursor.fetchone()
                 if not result:
+                    logger.warning(f"Patient with ID {patient_id} not found.")
                     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Patient not found.")
+                
+                logger.info(f"Successfully fetched details for patient {patient_id}.")
                 return {
                     "patient_id": result.get("patient_id"),
                     "name": result.get("name"),
@@ -1573,6 +1699,7 @@ def get_patient_details(patient_id: int, db=Depends(get_db_connection)):
                     "updated_at": str(result.get("updated_at")) if result.get("updated_at") else None
                 }
     except Exception as e:
+        logger.error(f"Error fetching details for patient {patient_id}: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 # --- Symptoms Function ---
@@ -1600,6 +1727,7 @@ def get_symptoms(patient_id: int, db=Depends(get_db_connection)):
     Raises:
         HTTPException: If no symptoms found (status 404) or database error (status 500).
     """
+    logger.info(f"Fetching symptoms for patient ID: {patient_id}")
     try:
         with db:
             with db.cursor() as cursor:
@@ -1613,6 +1741,7 @@ def get_symptoms(patient_id: int, db=Depends(get_db_connection)):
                 cursor.execute(sql, (patient_id,))
                 results = cursor.fetchall()
                 if not results:
+                    logger.info(f"No symptoms found for patient {patient_id}.")
                     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No symptoms found for this patient.")
                 
                 symptoms_list = []
@@ -1627,11 +1756,13 @@ def get_symptoms(patient_id: int, db=Depends(get_db_connection)):
                         "appointment_type": row.get("appointment_type")
                     })
                 
+                logger.info(f"Found {len(symptoms_list)} symptoms for patient {patient_id}.")
                 return {
                     "patient_id": patient_id,
                     "symptoms": symptoms_list
                 }
     except Exception as e:
+        logger.error(f"Error fetching symptoms for patient {patient_id}: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 # --- Medical Reports Function ---
@@ -1653,10 +1784,12 @@ def get_medical_reports(patient_id: int, db=Depends(get_db_connection)):
     Raises:
         HTTPException: If database error occurs (status 500).
     """
+    logger.info(f"Fetching all medical reports for patient ID: {patient_id}")
     try:
         with db:
             with db.cursor() as cursor:
                 # Get Lab Reports with findings
+                logger.info(f"Fetching lab reports for patient {patient_id}.")
                 lab_sql = (
                     "SELECT lr.lab_report_id, lr.lab_date, lr.lab_type, lr.ordering_doctor, lr.lab_facility, "
                     "lf.test_name, lf.test_value, lf.test_unit, lf.reference_range, lf.is_abnormal "
@@ -1667,8 +1800,10 @@ def get_medical_reports(patient_id: int, db=Depends(get_db_connection)):
                 )
                 cursor.execute(lab_sql, (patient_id,))
                 lab_results = cursor.fetchall()
+                logger.info(f"Found {len(lab_results)} lab report rows for patient {patient_id}.")
                 
                 # Get Medical Reports
+                logger.info(f"Fetching general medical reports for patient {patient_id}.")
                 report_sql = (
                     "SELECT report_id, report_type, report_date, complete_report, report_summary, doctor_name "
                     "FROM Report "
@@ -1677,6 +1812,7 @@ def get_medical_reports(patient_id: int, db=Depends(get_db_connection)):
                 )
                 cursor.execute(report_sql, (patient_id,))
                 medical_results = cursor.fetchall()
+                logger.info(f"Found {len(medical_results)} general medical reports for patient {patient_id}.")
                 
                 # Process lab reports
                 lab_reports = {}
@@ -1685,7 +1821,7 @@ def get_medical_reports(patient_id: int, db=Depends(get_db_connection)):
                     if report_id not in lab_reports:
                         lab_reports[report_id] = {
                             "lab_report_id": report_id,
-                            "lab_date": str(row["lab_date"]) if row["lab_date"] else None,
+                            "lab_date": str(row["lab_date"]),
                             "lab_type": row["lab_type"],
                             "ordering_doctor": row["ordering_doctor"],
                             "lab_facility": row["lab_facility"],
@@ -1713,12 +1849,14 @@ def get_medical_reports(patient_id: int, db=Depends(get_db_connection)):
                         "doctor_name": row["doctor_name"]
                     })
                 
+                logger.info(f"Successfully processed all reports for patient {patient_id}.")
                 return {
                     "patient_id": patient_id,
                     "lab_reports": list(lab_reports.values()),
                     "medical_reports": medical_reports
                 }
     except Exception as e:
+        logger.error(f"Error fetching medical reports for patient {patient_id}: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 # --- Medical History Function ---
@@ -1739,6 +1877,7 @@ def get_medical_history(patient_id: int, db=Depends(get_db_connection)):
     Raises:
         HTTPException: If database error occurs (status 500).
     """
+    logger.info(f"Fetching medical history for patient ID: {patient_id}")
     try:
         cursor = db.cursor()
         sql = (
@@ -1766,12 +1905,14 @@ def get_medical_history(patient_id: int, db=Depends(get_db_connection)):
         
         cursor.close()
         
+        logger.info(f"Found {len(history_list)} medical history records for patient {patient_id}.")
         return {
             "patient_id": patient_id,
             "medical_history": history_list
         }
         
     except Exception as e:
+        logger.error(f"Error fetching medical history for patient {patient_id}: {e}")
         raise HTTPException(status_code=500, detail=str(e))
     finally:
         if db:
@@ -1795,6 +1936,7 @@ def get_medications(patient_id: int, db=Depends(get_db_connection)):
     Raises:
         HTTPException: If database error occurs (status 500).
     """
+    logger.info(f"Fetching medications for patient ID: {patient_id}")
     try:
         cursor = db.cursor()
         sql = (
@@ -1833,12 +1975,14 @@ def get_medications(patient_id: int, db=Depends(get_db_connection)):
         
         cursor.close()
         
+        logger.info(f"Found {len(medications)} unique medications for patient {patient_id}.")
         return {
             "patient_id": patient_id,
             "medications": list(medications.values())
         }
         
     except Exception as e:
+        logger.error(f"Error fetching medications for patient {patient_id}: {e}")
         raise HTTPException(status_code=500, detail=str(e))
     finally:
         if db:
@@ -1860,32 +2004,38 @@ def get_query(patient_id: int):
             - additional_notes (str): Auto-generation metadata
             
     Raises:
-        HTTPException: If patient not found (status 404) or database error (status 500).
+        HTTPException: If patient not found (status 404) or database/AI error (status 500).
         
     Note:
         Automatically aggregates patient demographics, medical history, medications,
         symptoms, and lab reports into a cohesive summary for AI analysis.
     """
+    logger.info(f"Auto-generating query for patient ID: {patient_id}")
     patient_text_parts = []
     
     # 1. Get Patient Details
+    logger.info(f"Step 1: Fetching patient details for patient {patient_id}.")
     try:
         db = get_db_connection()
         details = get_patient_details(patient_id, db)
         patient_text_parts.append(
             f"Patient is named {details.get('name')}, with date of birth {details.get('dob')} and sex {details.get('sex')}."
         )
+        logger.info("Patient details fetched.")
         # Note: No REMARKS field in the new schema
     except HTTPException as e:
         if e.status_code == 404:
+            logger.warning(f"Patient {patient_id} not found during query generation.")
             raise HTTPException(status_code=404, detail="Patient not found.")
         # Re-raise other exceptions
+        logger.error(f"Error fetching patient details for query generation: {e.detail}")
         raise
     finally:
         if 'db' in locals():
             db.close()
 
     # 2. Get Medical History
+    logger.info(f"Step 2: Fetching medical history for patient {patient_id}.")
     try:
         db = get_db_connection()
         history_data = get_medical_history(patient_id, db)
@@ -1894,14 +2044,19 @@ def get_query(patient_id: int):
             if active_conditions:
                 conditions_str = ", ".join([h.get('history_item') for h in active_conditions])
                 patient_text_parts.append(f"Active medical conditions include: {conditions_str}.")
+                logger.info("Added active medical conditions to query text.")
     except HTTPException as e:
         if e.status_code != 404:
+            logger.error(f"Error fetching medical history for query generation: {e.detail}")
             raise
+        else:
+            logger.info("No medical history found, skipping.")
     finally:
         if 'db' in locals():
             db.close()
 
     # 3. Get Current Medications
+    logger.info(f"Step 3: Fetching current medications for patient {patient_id}.")
     try:
         db = get_db_connection()
         meds_data = get_medications(patient_id, db)
@@ -1910,14 +2065,19 @@ def get_query(patient_id: int):
             if current_meds:
                 meds_str = ", ".join([m.get('medicine_name') for m in current_meds])
                 patient_text_parts.append(f"Current medications include: {meds_str}.")
+                logger.info("Added current medications to query text.")
     except HTTPException as e:
         if e.status_code != 404:
+            logger.error(f"Error fetching medications for query generation: {e.detail}")
             raise
+        else:
+            logger.info("No current medications found, skipping.")
     finally:
         if 'db' in locals():
             db.close()
 
     # 4. Get Recent Symptoms (simplified)
+    logger.info(f"Step 4: Fetching recent symptoms for patient {patient_id}.")
     try:
         db = get_db_connection()
         cursor = db.cursor()
@@ -1933,15 +2093,18 @@ def get_query(patient_id: int):
         if symptoms:
             symptoms_str = ", ".join([s['symptom_name'] for s in symptoms])
             patient_text_parts.append(f"Recent symptoms include: {symptoms_str}.")
+            logger.info("Added recent symptoms to query text.")
         cursor.close()
     except Exception as e:
         # It's okay if no symptoms are found
+        logger.info(f"No symptoms found or error during fetch, skipping. Error: {e}")
         pass
     finally:
         if 'db' in locals():
             db.close()
 
     # 5. Get Recent Lab Reports (simplified)
+    logger.info(f"Step 5: Fetching recent lab reports for patient {patient_id}.")
     try:
         db = get_db_connection()
         cursor = db.cursor()
@@ -1956,9 +2119,11 @@ def get_query(patient_id: int):
         if lab_reports:
             reports_str = ", ".join([f"{r['lab_type']} ({r['lab_date']})" for r in lab_reports])
             patient_text_parts.append(f"Recent lab reports: {reports_str}.")
+            logger.info("Added recent lab reports to query text.")
         cursor.close()
     except Exception as e:
         # It's okay if no reports are found
+        logger.info(f"No lab reports found or error during fetch, skipping. Error: {e}")
         pass
     finally:
         if 'db' in locals():
@@ -1966,6 +2131,7 @@ def get_query(patient_id: int):
 
     # Combine into a single text
     patient_text = " ".join(patient_text_parts)
+    logger.info(f"Final generated query text for patient {patient_id}: '{patient_text}'")
     
     return {
         "patient_text": patient_text,
@@ -1993,6 +2159,7 @@ def test_database_connection(db=Depends(get_db_connection)):
     Raises:
         HTTPException: If database test fails (status 500).
     """
+    logger.info("Performing database connection test.")
     try:
         cursor = db.cursor()
         
@@ -2001,17 +2168,21 @@ def test_database_connection(db=Depends(get_db_connection)):
         test_result = cursor.fetchone()
         
         # Get table list
+        logger.info("Fetching list of tables.")
         cursor.execute("SHOW TABLES")
         tables = [row[list(row.keys())[0]] for row in cursor.fetchall()]
+        logger.info(f"Found tables: {tables}")
         
         # Get Patient table structure if it exists
         patient_structure = []
         if 'Patient' in tables:
+            logger.info("Describing 'Patient' table structure.")
             cursor.execute("DESCRIBE Patient")
             patient_structure = cursor.fetchall()
         
         cursor.close()
         
+        logger.info("Database test completed successfully.")
         return {
             "connection_test": test_result,
             "available_tables": tables,
@@ -2019,6 +2190,7 @@ def test_database_connection(db=Depends(get_db_connection)):
         }
         
     except Exception as e:
+        logger.error(f"Database test failed: {e}")
         raise HTTPException(status_code=500, detail=f"Database test failed: {str(e)}")
     finally:
         if db:
@@ -2044,6 +2216,7 @@ def get_n_appointments(n: int = None, db=Depends(get_db_connection)):
     Note:
         Returns appointments ordered by date (most recent first) with grouped symptoms.
     """
+    logger.info(f"Fetching {'all' if n is None else n} appointments.")
     try:
         cursor = db.cursor()
         
@@ -2065,10 +2238,14 @@ def get_n_appointments(n: int = None, db=Depends(get_db_connection)):
                 s.severity,
                 s.duration,
                 s.onset_type
-            FROM Appointment a
-            LEFT JOIN Patient p ON a.patient_id = p.patient_id
-            LEFT JOIN Appointment_Symptom s ON a.appointment_id = s.appointment_id
-            ORDER BY a.appointment_date DESC, a.appointment_time DESC
+            FROM 
+                Appointment a
+            JOIN 
+                Patient p ON a.patient_id = p.patient_id
+            LEFT JOIN 
+                Appointment_Symptom s ON a.appointment_id = s.appointment_id
+            ORDER BY 
+                a.appointment_date DESC, a.appointment_time DESC
             LIMIT %s
             """
             cursor.execute(query, (n,))
@@ -2090,23 +2267,27 @@ def get_n_appointments(n: int = None, db=Depends(get_db_connection)):
                 s.severity,
                 s.duration,
                 s.onset_type
-            FROM Appointment a
-            LEFT JOIN Patient p ON a.patient_id = p.patient_id
-            LEFT JOIN Appointment_Symptom s ON a.appointment_id = s.appointment_id
-            ORDER BY a.appointment_date DESC, a.appointment_time DESC
+            FROM 
+                Appointment a
+            JOIN 
+                Patient p ON a.patient_id = p.patient_id
+            LEFT JOIN 
+                Appointment_Symptom s ON a.appointment_id = s.appointment_id
+            ORDER BY 
+                a.appointment_date DESC, a.appointment_time DESC
             """
             cursor.execute(query)
         
         results = cursor.fetchall()
-        cursor.close()
+        logger.info(f"Found {len(results)} appointment rows from database.")
         
         # Group symptoms by appointment
-        appointments_dict = {}
+        appointments = {}
         for row in results:
             appointment_id = row["appointment_id"]
             
-            if appointment_id not in appointments_dict:
-                appointments_dict[appointment_id] = {
+            if appointment_id not in appointments:
+                appointments[appointment_id] = {
                     "appointment_id": appointment_id,
                     "patient_name": row["patient_name"],
                     "patient_id": row["patient_id"],
@@ -2128,10 +2309,10 @@ def get_n_appointments(n: int = None, db=Depends(get_db_connection)):
                     "duration": row["duration"],
                     "onset_type": row["onset_type"]
                 }
-                appointments_dict[appointment_id]["symptoms"].append(symptom)
+                appointments[appointment_id]["symptoms"].append(symptom)
         
         # Convert to list and sort by date
-        formatted_appointments = list(appointments_dict.values())
+        formatted_appointments = list(appointments.values())
         formatted_appointments.sort(key=lambda x: x["appointment_date"], reverse=True)
         
         # Apply limit after grouping if specified
@@ -2144,6 +2325,7 @@ def get_n_appointments(n: int = None, db=Depends(get_db_connection)):
         }
         
     except Exception as e:
+        logger.error(f"Error fetching appointments: {e}")
         raise HTTPException(status_code=500, detail=f"Error fetching appointments: {str(e)}")
     finally:
         if db:
@@ -2173,6 +2355,7 @@ async def get_medical_history_summary(patient_id: int, db=Depends(get_db_connect
     Note:
         Uses Ollama MedGemma model to generate medically relevant summaries.
     """
+    logger.info(f"Fetching medical history with summary for patient ID: {patient_id}")
     try:
         cursor = db.cursor()
         
@@ -2282,6 +2465,7 @@ def get_n_lab_reports(patient_id: int, n: int = None, db=Depends(get_db_connecti
     Note:
         Returns lab reports ordered by date (most recent first) with grouped findings.
     """
+    logger.info(f"Fetching {'all' if n is None else n} lab reports for patient ID: {patient_id}.")
     try:
         cursor = db.cursor()
         
@@ -2309,10 +2493,14 @@ def get_n_lab_reports(patient_id: int, n: int = None, db=Depends(get_db_connecti
                 lf.reference_range,
                 lf.is_abnormal,
                 lf.abnormal_flag
-            FROM Lab_Report lr
-            LEFT JOIN Lab_Finding lf ON lr.lab_report_id = lf.lab_report_id
-            WHERE lr.patient_id = %s
-            ORDER BY lr.lab_date DESC
+            FROM 
+                Lab_Report lr
+            LEFT JOIN 
+                Lab_Finding lf ON lr.lab_report_id = lf.lab_report_id
+            WHERE 
+                lr.patient_id = %s
+            ORDER BY 
+                lr.lab_date DESC
             LIMIT %s
             """
             cursor.execute(query, (patient_id, n))
@@ -2331,23 +2519,27 @@ def get_n_lab_reports(patient_id: int, n: int = None, db=Depends(get_db_connecti
                 lf.reference_range,
                 lf.is_abnormal,
                 lf.abnormal_flag
-            FROM Lab_Report lr
-            LEFT JOIN Lab_Finding lf ON lr.lab_report_id = lf.lab_report_id
-            WHERE lr.patient_id = %s
-            ORDER BY lr.lab_date DESC
+            FROM 
+                Lab_Report lr
+            LEFT JOIN 
+                Lab_Finding lf ON lr.lab_report_id = lf.lab_report_id
+            WHERE 
+                lr.patient_id = %s
+            ORDER BY 
+                lr.lab_date DESC
             """
             cursor.execute(query, (patient_id,))
         
         results = cursor.fetchall()
-        cursor.close()
+        logger.info(f"Found {len(results)} lab report rows from database.")
         
-        # Group findings by report
-        reports_dict = {}
+        # Group findings by lab report
+        lab_reports = {}
         for row in results:
             report_id = row["lab_report_id"]
             
-            if report_id not in reports_dict:
-                reports_dict[report_id] = {
+            if report_id not in lab_reports:
+                lab_reports[report_id] = {
                     "lab_report_id": report_id,
                     "lab_date": str(row["lab_date"]),
                     "lab_type": row["lab_type"],
@@ -2367,22 +2559,25 @@ def get_n_lab_reports(patient_id: int, n: int = None, db=Depends(get_db_connecti
                     "is_abnormal": bool(row["is_abnormal"]),
                     "abnormal_flag": row["abnormal_flag"]
                 }
-                reports_dict[report_id]["findings"].append(finding)
+                lab_reports[report_id]["findings"].append(finding)
         
-        # Convert to list and sort by date
-        lab_reports = list(reports_dict.values())
-        lab_reports.sort(key=lambda x: x["lab_date"], reverse=True)
+        # Limit to n reports if specified
+        report_list = list(lab_reports.values())
+        if n is not None:
+            report_list = report_list[:n]
+            
+        cursor.close()
         
+        logger.info(f"Processed into {len(report_list)} unique lab reports.")
         return {
-            "patient_id": patient_id,
-            "patient_name": patient_info["name"],
-            "lab_reports_count": len(lab_reports),
-            "lab_reports": lab_reports
+            "count": len(report_list),
+            "lab_reports": report_list
         }
         
     except HTTPException:
         raise
     except Exception as e:
+        logger.error(f"Error fetching lab reports for patient {patient_id}: {e}")
         raise HTTPException(status_code=500, detail=f"Error fetching lab reports: {str(e)}")
     finally:
         if db:
@@ -2398,5 +2593,5 @@ if __name__ == "__main__":
     hostname = socket.gethostname()
     ip_address = socket.gethostbyname(hostname)
 
-    print(f"Starting server at http://{ip_address}:8000")
-    uvicorn.run(app, host="0.0.0.0",port=8420)
+    print(f"Starting server at http://{ip_address}:8821")
+    uvicorn.run(app, host="0.0.0.0",port=8821)

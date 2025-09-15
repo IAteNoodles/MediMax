@@ -1,210 +1,125 @@
-# Backend Noodles
+# MediMax Noodles Backend
 
-This folder contains the backend components for the MediMax application, providing a conversational AI interface integrated with medical prediction tools via the Model Context Protocol (MCP).
+This directory contains the core intelligent backend services for the MediMax application, codenamed "Noodles". It consists of two main components that work in tandem: a conversational AI agent (`chat_api.py`) and a powerful tool server (`mcp_server.py`) that provides the agent with its capabilities.
+
+The system is designed to interact with a user, understand complex medical queries, access and process data from multiple databases (SQL and Graph), and even call specialized machine learning models for risk prediction.
+
+## Tech Stack
+
+- **Web Framework**: `FastAPI` (for both the chat API and the MCP server)
+- **Conversational AI**: `LangChain`
+- **Language Model (LLM)**: Google `Gemini 1.5 Flash` via `langchain-google-genai`
+- **Tooling Protocol**: `MCP (Model-Context-Protocol)` via `fastmcp` and `langchain-mcp-adapters`
+- **Databases**:
+  - **Relational**: `MySQL` (for storing atomic patient facts)
+  - **Graph**: `Neo4j` (for storing a patient knowledge graph)
+- **Machine Learning**: The server is capable of calling external `scikit-learn` and `PyTorch` models served via local APIs.
+- **Configuration**: `python-dotenv` for environment variable management.
+
+---
+
+## Architecture Overview
+
+The architecture is composed of two microservices:
+
+1.  **Chat API (`chat_api.py`)**: This is the user-facing entry point. It exposes a `/chat` endpoint that receives natural language queries. It initializes a LangChain agent powered by Google's Gemini model. This agent's primary role is to understand the user's request and decide which tool to use to fulfill it.
+
+2.  **MCP Server (`mcp_server.py`)**: This server acts as the "toolbox" for the LangChain agent. It exposes a collection of functions as tools using the Model-Context-Protocol (MCP). These tools are the agent's "hands and eyes," allowing it to perform actions like querying databases, creating knowledge graphs, and calling ML models.
+
+The flow is as follows:
+- A user sends a message to the **Chat API**.
+- The LangChain agent in the Chat API receives the message.
+- The agent determines the user's intent and selects an appropriate tool from the **MCP Server**.
+- The agent calls the tool on the MCP Server with the necessary parameters.
+- The MCP Server executes the tool's logic (e.g., queries the Neo4j database).
+- The result is returned to the agent.
+- The agent uses the tool's output and the LLM to formulate a natural language response to the user.
+
+---
 
 ## Components
 
-### `chat_api.py`
-A FastAPI-based chat API that leverages LangChain and Google Generative AI (Gemini 1.5 Flash) to create an intelligent conversational agent. The agent can utilize tools provided by the MCP server to perform medical risk predictions.
+### 1. Chat API (`chat_api.py`)
 
-**Key Features:**
-- Asynchronous processing with FastAPI
-- Integration with MCP tools for cardiovascular and diabetes risk assessment
-- Conversation memory using LangChain's ConversationBufferMemory
-- CORS enabled for cross-origin requests
-- Runs on port 8000 by default
+This FastAPI application serves as the brain of the operation.
 
-### `mcp_server.py`
-An MCP server built with FastMCP that exposes tools for medical predictions. It acts as a bridge between the chat API and the local AI model services for cardiovascular and diabetes risk prediction.
+- **Agent Initialization**: On startup, it initializes a `STRUCTURED_CHAT_ZERO_SHOT_REACT_DESCRIPTION` agent. This agent type is specifically chosen for its ability to work with tools that require structured (JSON) inputs, which is essential for the complex medical tools provided by the MCP server.
+- **Tool Fetching**: It dynamically fetches its available tools from the MCP server running at `http://127.0.0.1:8005`. This decouples the agent's logic from the tool's implementation.
+- **LLM Integration**: It uses the `gemini-1.5-flash` model from Google for its reasoning capabilities.
+- **Endpoint**:
+  - `POST /chat`: Accepts a JSON with a `message` key. It invokes the agent with the message and returns the agent's final response.
+- **Execution**: Runs on `http://0.0.0.0:8000`.
 
-**Exposed Tools:**
-- `Hello`: A simple greeting function
-- `Predict_Cardiovascular_Risk_With_Explanation`: Predicts cardiovascular risk based on patient data
-- `Predict_Diabetes_Risk_With_Explanation`: Predicts diabetes risk based on patient data
+### 2. MCP Server (`mcp_server.py`)
 
-The server runs on port 8005 using streamable HTTP transport.
+This `FastMCP` server is the workhorse, providing all the capabilities for the agent. It connects to both a MySQL database for raw data and a Neo4j database for the knowledge graph.
 
-## Dependencies
+#### Key Feature: Knowledge Graph Creation
 
-Install the required Python packages:
+The most significant feature of this server is its ability to dynamically create a patient-centric knowledge graph.
 
-```
-pip install langchain langchain_mcp_adapters langchain_google_genai google-generativeai python-dotenv fastapi uvicorn requests fastmcp
-```
+- **`Create_Knowledge_Graph(patient_id: int)`**: This tool triggers a multi-step process:
+  1.  It fetches all data related to a `patient_id` from the `MySQL` database (demographics, medical history, medications, appointments, symptoms, lab reports).
+  2.  It processes this relational data and transforms it into a graph structure.
+  3.  It connects to the `Neo4j` database, clears any old data for that patient, and creates a new, rich knowledge graph.
+  4.  The graph consists of nodes like `Patient`, `Condition`, `Medication`, `Symptom`, `Encounter`, and `LabResult`, with meaningful relationships (`HAS_CONDITION`, `TAKES_MEDICATION`, `MAY_INDICATE`) connecting them.
 
-## Setup
+#### Exposed Tools
 
-1. Ensure you have Python 3.8+ installed.
+The server exposes the following functions as tools for the LangChain agent:
 
-2. Set up environment variables:
-   - Create a `.env` file in the project root with:
-     ```
-     GOOGLE_API_KEY=your_google_api_key_here
-     ```
+- **Knowledge Graph Tools**:
+  - `Create_Knowledge_Graph(patient_id: int)`: Builds the graph for a patient.
+  - `Run_Cypher_Query(cypher: str)`: Executes a raw Cypher query on the Neo4j database.
+  - `Validate_Graph_Connectivity()`: Checks the integrity of the graph.
 
-3. Ensure the AI model services are running:
-   - Cardiovascular prediction service on `http://localhost:5002`
-   - Diabetes prediction service on `http://localhost:5003`
+- **Machine Learning Model Tools**:
+  - `Predict_Cardiovascular_Risk_With_Explanation(...)`: Calls a local API (at `http://localhost:5002`) to predict cardiovascular risk based on patient metrics.
+  - `Predict_Diabetes_Risk_With_Explanation(...)`: Calls a local API (at `http://localhost:5003`) to predict diabetes risk.
 
-## Running
+- **Database & Backend Tools**:
+  - `Get_Patient_Details(patient_id: str)`: Fetches basic patient info.
+  - `Get_Patient_Symptoms(patient_id: int)`: Retrieves a patient's symptoms.
+  - `Get_Patient_Medical_Reports(patient_id: int)`: Fetches lab and medical reports.
+  - `New_Patient(name: str, age: int)`: Adds a new patient.
+  - `Health_Check()`: Checks the health of the dependent `backend_abhishek` service.
 
-1. Start the MCP server:
-   ```
-   python mcp_server.py
-   ```
+- **Execution**: Runs on `http://0.0.0.0:8005`.
 
-2. In a separate terminal, start the chat API:
-   ```
-   python chat_api.py
-   ```
+---
 
-The chat API will be available at `http://127.0.0.1:8000` and `http://0.0.0.0:8000`.
+## Setup and How to Run
 
-## API Endpoints
+1.  **Environment Variables**: Ensure a `.env` file exists in the parent directory (`MediMax/`) with the following keys:
+    - `GOOGLE_API_KEY`
+    - `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME` (for MySQL)
+    - `NEO4J_URI`, `AURA_USER`, `AURA_PASSWORD` (for Neo4j)
+    - `BACKEND_ABHISHEK_URL`
 
-### Chat API (`chat_api.py`)
+2.  **Install Dependencies**:
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-#### POST `/chat`
-Processes a user message through the LangChain agent and returns a conversational response.
+3.  **Run the Services**: You need to run both services in separate terminals.
 
-**Request:**
-- Method: `POST`
-- Content-Type: `application/json`
-- Body:
-  ```json
-  {
-    "message": "string"  // The user's message to process
-  }
-  ```
+    - **Terminal 1: Start the MCP Tool Server**
+      ```bash
+      python mcp_server.py
+      ```
+      *This will start the server on port 8005.*
 
-**Response:**
-- Status: `200 OK` on success, `500 Internal Server Error` on failure
-- Content-Type: `application/json`
-- Body:
-  ```json
-  {
-    "response": "string"  // The agent's response, which may include tool outputs
-  }
-  ```
+    - **Terminal 2: Start the Chat API**
+      ```bash
+      python chat_api.py
+      ```
+      *This will start the server on port 8000. On startup, it will connect to the MCP server and fetch the tools.*
 
-**Example:**
-```bash
-curl -X POST "http://localhost:8000/chat" \
-     -H "Content-Type: application/json" \
-     -d '{"message": "Hello, can you predict cardiovascular risk for a 45-year-old male?"}'
-```
+4.  **Interact with the API**: You can now send `POST` requests to `http://127.0.0.1:8000/chat` with a JSON payload to interact with the agent.
 
-**Error Response:**
-```json
-{
-  "detail": "string"  // Error message if agent is not initialized or processing fails
-}
-```
-
-## MCP Tools (`mcp_server.py`)
-
-The MCP server exposes the following tools that can be invoked by the LangChain agent in the chat API.
-
-### Tool: `Hello`
-A simple greeting function for testing purposes.
-
-**Input Parameters:**
-- `name` (str): The name to greet
-
-**Output:**
-- `str`: A greeting message in the format "Hello, Bro {name}!"
-
-**Example Usage:**
-- Input: `name="Alice"`
-- Output: `"Hello, Bro Alice!"`
-
-### Tool: `Predict_Cardiovascular_Risk_With_Explanation`
-Predicts cardiovascular risk based on patient health data and returns the prediction with explanation.
-
-**Input Parameters:**
-- `age` (float): Age in years
-- `gender` (int): 1 = Female, 2 = Male
-- `height` (float): Height in centimeters
-- `weight` (float): Weight in kilograms
-- `ap_hi` (int): Systolic blood pressure
-- `ap_lo` (int): Diastolic blood pressure
-- `cholesterol` (int): 1 = Normal, 2 = Above normal, 3 = Well above normal
-- `gluc` (int): Glucose level (1 = Normal, 2 = Above normal, 3 = Well above normal)
-- `smoke` (int): 0 = No, 1 = Yes
-- `alco` (int): Alcohol consumption (0 = No, 1 = Yes)
-- `active` (int): Physical activity (0 = No, 1 = Yes)
-
-**Output:**
-- `dict`: JSON response from the cardiovascular prediction service, typically containing:
-  - `prediction`: The risk prediction (e.g., 0 or 1 for low/high risk)
-  - `probability`: Probability score
-  - `explanation`: Text explanation of the prediction
-  - Additional fields depending on the service implementation
-
-**Example Output:**
-```json
-{
-  "prediction": 1,
-  "probability": 0.85,
-  "explanation": "High risk due to elevated cholesterol and blood pressure."
-}
-```
-
-**Error Output:**
-```json
-{
-  "error": "request_failed",
-  "details": "Connection timeout or service unavailable"
-}
-```
-
-### Tool: `Predict_Diabetes_Risk_With_Explanation`
-Predicts diabetes risk based on patient health data and returns the prediction with explanation.
-
-**Input Parameters:**
-- `age` (float): Age in years
-- `gender` (str): "Female", "Male", or "Other"
-- `hypertension` (int): 0 = No, 1 = Yes
-- `heart_disease` (int): 0 = No, 1 = Yes
-- `smoking_history` (str): "never", "No Info", "current", "former", "ever", "not current"
-- `bmi` (float): Body Mass Index
-- `HbA1c_level` (float): Hemoglobin A1c level
-- `blood_glucose_level` (float): Blood glucose level in mg/dL
-
-**Output:**
-- `dict`: JSON response from the diabetes prediction service, typically containing:
-  - `prediction`: The risk prediction (e.g., 0 or 1 for low/high risk)
-  - `probability`: Probability score
-  - `explanation`: Text explanation of the prediction
-  - Additional fields depending on the service implementation
-
-**Example Output:**
-```json
-{
-  "prediction": 1,
-  "probability": 0.72,
-  "explanation": "High risk due to elevated HbA1c and BMI."
-}
-```
-
-**Error Output:**
-```json
-{
-  "error": "request_failed",
-  "details": "Connection timeout or service unavailable"
-}
-```
-
-## Architecture
-
-- The chat API initializes an MCP client to fetch tools from the MCP server.
-- LangChain agent uses these tools to enhance its conversational capabilities.
-- Medical predictions are delegated to specialized AI models running in separate services.
-- All components communicate via HTTP APIs for modularity.
-
-## Troubleshooting
-
-- Ensure all required services are running and accessible on their respective ports.
-- Verify the `.env` file contains the correct Google API key.
-- Check network connectivity if services are running in containers or remote machines.
-- Review console logs for detailed error messages.
+    **Example Request:**
+    ```json
+    {
+      "message": "Create a knowledge graph for patient 123 and then tell me what medications they are on."
+    }
+    ```
