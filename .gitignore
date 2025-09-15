@@ -48,6 +48,15 @@ share/python-wheels/
 .installed.cfg
 *.egg
 
+# Data directories and files
+data/
+test_data/
+datasets/
+
+# Frontend projects
+front/
+frontend/
+
 # Machine Learning models and data
 *.pkl
 *.model
