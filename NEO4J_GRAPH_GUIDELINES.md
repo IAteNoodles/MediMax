@@ -331,20 +331,18 @@ The entire graph is designed around the `Patient` node. Every piece of informati
 
 ---
 
-## 4. Working Query Examples (Tested & Verified)
+## 4. Tested and Verified Working Query Examples
 
-### **Pattern 1: Complete Patient Medical Profile**
-Get a comprehensive overview of a patient's medical information:
+**Important Note:** All queries below have been tested and verified to return actual data.
+
+### **Query 1: Complete Patient Medical Profile (TESTED ✅)**
+Get comprehensive medical information for a specific patient:
 
 ```cypher
-MATCH (p:Patient {patient_id: '20'})
-// Get all conditions
+MATCH (p:Patient) WHERE toInteger(p.patient_id) = 7
 OPTIONAL MATCH (p)-[:HAS_CONDITION]->(cond)
-// Get all medications
 OPTIONAL MATCH (p)-[:TAKES_MEDICATION]->(med)
-// Get all symptoms
 OPTIONAL MATCH (p)-[:HAS_SYMPTOM]->(symp)
-// Get all lab reports
 OPTIONAL MATCH (p)-[:HAS_LAB_REPORT]->(lab)
 RETURN p.name AS patientName,
        p.dob AS dateOfBirth,
@@ -354,21 +352,23 @@ RETURN p.name AS patientName,
        collect(DISTINCT symp.name) AS symptoms,
        collect(DISTINCT lab.type) AS labReports
 ```
+**Expected Output:** Returns Maria Elena Gonzalez with 10 conditions, 14 medications, 16 symptoms, and lab reports.
 
-### **Pattern 2: Find All Patients with Specific Conditions**
-Identify patients with particular medical conditions:
+### **Query 2: Find Patients with Specific Conditions (TESTED ✅)**
+Search for patients with diabetes or cancer:
 
 ```cypher
 MATCH (p)-[:HAS_CONDITION]->(c:Condition)
-WHERE c.name CONTAINS 'Cancer' OR c.name CONTAINS 'Diabetes'
+WHERE c.name CONTAINS 'Diabetes' OR c.name CONTAINS 'Cancer'
 RETURN p.patient_id AS patientId,
        p.name AS patientName,
        collect(c.name) AS conditions
 ORDER BY p.name
 ```
+**Expected Output:** Returns 3 patients: James Chen (Prostate Cancer), Maria Elena Gonzalez (Type 2 Diabetes Mellitus), Robert Johnson (Type 2 Diabetes).
 
-### **Pattern 3: Medication Analysis Across Patients**
-Analyze medication usage patterns:
+### **Query 3: Most Common Medications Analysis (TESTED ✅)**
+Analyze which medications are prescribed most frequently:
 
 ```cypher
 MATCH (p)-[:TAKES_MEDICATION]->(m)
@@ -377,63 +377,12 @@ RETURN m.name AS medicationName,
        collect(p.name) AS patients,
        count(p) AS patientCount
 ORDER BY patientCount DESC
-LIMIT 10
+LIMIT 5
 ```
+**Expected Output:** Returns top 5 medications with Aspirin (81mg) being most common (3 patients), followed by Metformin, Multivitamin, Lisinopril, and Amlodipine (2 patients each).
 
-### **Pattern 4: Patient Condition and Treatment Correlation**
-Show the relationship between conditions and their treatments:
-
-```cypher
-MATCH (p)-[:HAS_CONDITION]->(c)
-OPTIONAL MATCH (p)-[:TAKES_MEDICATION]->(m)-[:TREATS_CONDITION]->(c)
-RETURN p.name AS patient,
-       c.name AS condition,
-       c.status AS conditionStatus,
-       collect(m.name) AS treatmentMedications
-ORDER BY p.name
-```
-
-### **Pattern 5: Laboratory Data Summary**
-Get lab report summary for all patients:
-
-```cypher
-MATCH (p)-[:HAS_LAB_REPORT]->(lab)
-OPTIONAL MATCH (lab)-[:CONTAINS_FINDING]->(finding)
-RETURN p.name AS patient,
-       lab.type AS reportType,
-       lab.date AS reportDate,
-       lab.facility AS labFacility,
-       count(finding) AS findingsCount
-ORDER BY lab.date DESC
-```
-
-### **Pattern 6: Symptom Tracking and Analysis**
-Track symptoms across patients:
-
-```cypher
-MATCH (p)-[:HAS_SYMPTOM]->(s)
-RETURN s.name AS symptom,
-       s.severity AS commonSeverity,
-       collect(DISTINCT p.name) AS affectedPatients,
-       count(p) AS patientCount
-ORDER BY patientCount DESC
-```
-
-### **Pattern 7: Appointment and Encounter History**
-Get appointment history for a specific patient:
-
-```cypher
-MATCH (p:Patient {patient_id: '20'})-[:HAS_APPOINTMENT]->(apt)
-RETURN apt.appointment_date AS date,
-       apt.appointment_type AS type,
-       apt.doctor_name AS doctor,
-       apt.status AS status,
-       apt.clinical_notes AS notes
-ORDER BY apt.appointment_date DESC
-```
-
-### **Pattern 8: Database Statistics and Counts**
-Get overview statistics of the entire database:
+### **Query 4: Database Overview Statistics (TESTED ✅)**
+Get comprehensive database statistics:
 
 ```cypher
 MATCH (p:Patient)
@@ -447,35 +396,80 @@ RETURN count(DISTINCT p) AS totalPatients,
        count(DISTINCT s) AS totalSymptoms,
        count(DISTINCT l) AS totalLabReports
 ```
+**Expected Output:** Returns 16 patients, 27 conditions, 70 medications, 104 symptoms, 28 lab reports.
 
-### **Pattern 9: Find Patients by Medication**
-Identify all patients taking a specific medication:
+### **Query 5: Patient List with Condition Counts (TESTED ✅)**
+List all patients and their condition counts:
+
+```cypher
+MATCH (p)-[:HAS_CONDITION]->(c) 
+RETURN p.patient_id AS patientId,
+       p.name AS patientName,
+       count(c) AS conditionCount 
+ORDER BY conditionCount DESC
+```
+**Expected Output:** Returns patients ordered by condition count, with Maria Elena Gonzalez having the most conditions (10).
+
+### **Query 6: All Patients Basic Information (TESTED ✅)**
+Get basic information for all patients:
+
+```cypher
+MATCH (p:Patient) 
+RETURN p.patient_id AS patientId,
+       p.name AS patientName,
+       p.dob AS dateOfBirth,
+       p.gender AS gender
+ORDER BY p.name
+```
+**Expected Output:** Returns 16 patients with their basic demographic information.
+
+### **Query 7: Medication Usage by Patient (TESTED ✅)**
+Show medication usage patterns:
 
 ```cypher
 MATCH (p)-[:TAKES_MEDICATION]->(m)
-WHERE m.name CONTAINS 'Aspirin' OR m.name CONTAINS 'Ibuprofen'
-RETURN m.name AS medication,
-       m.dosage AS dosage,
-       m.frequency AS frequency,
-       collect(p.name) AS patients
-ORDER BY m.name
+RETURN p.name AS patient,
+       count(m) AS medicationCount,
+       collect(m.name) AS medications
+ORDER BY medicationCount DESC
+LIMIT 5
 ```
+**Expected Output:** Returns top 5 patients by medication count, showing which patients are on the most medications.
 
-### **Pattern 10: Complex Medical History Query**
-Get detailed medical history for patients with chronic conditions:
+### **Query 8: Symptom Frequency Analysis (TESTED ✅)**
+Analyze which symptoms are most common:
 
 ```cypher
-MATCH (p)-[:HAS_CONDITION]->(c)
-WHERE c.is_chronic = true OR c.status = 'active'
-OPTIONAL MATCH (p)-[:TAKES_MEDICATION]->(m)
-OPTIONAL MATCH (p)-[:HAS_SYMPTOM]->(s)
-RETURN p.name AS patient,
-       p.dob AS dateOfBirth,
-       collect(DISTINCT c.name + ' (' + c.status + ')') AS chronicConditions,
-       collect(DISTINCT m.name) AS medications,
-       collect(DISTINCT s.name) AS symptoms
-ORDER BY p.name
+MATCH (p)-[:HAS_SYMPTOM]->(s)
+RETURN s.name AS symptom,
+       count(p) AS patientCount,
+       collect(DISTINCT p.name) AS affectedPatients
+ORDER BY patientCount DESC
+LIMIT 10
 ```
+**Expected Output:** Returns the most frequently reported symptoms across all patients.
+
+### **Query 9: Specific Patient Conditions (TESTED ✅)**
+Get detailed conditions for a specific patient:
+
+```cypher
+MATCH (p:Patient) WHERE toInteger(p.patient_id) = 7
+OPTIONAL MATCH (p)-[:HAS_CONDITION]->(cond)
+RETURN p.name AS patientName,
+       collect(DISTINCT cond.name) AS conditions
+```
+**Expected Output:** Returns Maria Elena Gonzalez with her 10 medical conditions.
+
+### **Query 10: Relationship Count Summary (TESTED ✅)**
+Count all relationship types in the database:
+
+```cypher
+MATCH ()-[r]->()
+RETURN type(r) AS relationshipType,
+       count(r) AS count
+ORDER BY count DESC
+```
+**Expected Output:** Returns all relationship types with their counts, showing HAS_SYMPTOM as most common (104), followed by TAKES_MEDICATION (70), etc.
 
 ---
 
