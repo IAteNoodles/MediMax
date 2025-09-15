@@ -1,0 +1,207 @@
+{
+  "patients": [
+    {
+      "id": 1,
+      "name": "John Doe",
+      "age": 45,
+      "sex": "Male",
+      "contact": "555-0101",
+      "address": "123 Maple St, Springfield, USA",
+      "medical_history": [
+        { "condition": "Hypertension", "diagnosed_date": "2015-06-20" },
+        { "condition": "Type 2 Diabetes", "diagnosed_date": "2018-11-10" }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Jane Smith",
+      "age": 38,
+      "sex": "Female",
+      "contact": "555-0102",
+      "address": "456 Oak Ave, Springfield, USA",
+      "medical_history": [
+        { "condition": "Asthma", "diagnosed_date": "2005-02-15" },
+        { "condition": "Migraines", "diagnosed_date": "2012-08-30" }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Robert Johnson",
+      "age": 56,
+      "sex": "Male",
+      "contact": "555-0103",
+      "address": "789 Pine Ln, Springfield, USA",
+      "medical_history": [
+        { "condition": "Coronary Artery Disease", "diagnosed_date": "2020-01-10" },
+        { "condition": "Gout", "diagnosed_date": "2017-05-25" }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Emily Davis",
+      "age": 32,
+      "sex": "Female",
+      "contact": "555-0104",
+      "address": "101 Birch Rd, Springfield, USA",
+      "medical_history": [
+        { "condition": "Polycystic Ovary Syndrome (PCOS)", "diagnosed_date": "2016-09-12" }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Michael Wilson",
+      "age": 62,
+      "sex": "Male",
+      "contact": "555-0105",
+      "address": "212 Cedar Blvd, Springfield, USA",
+      "medical_history": [
+        { "condition": "Chronic Obstructive Pulmonary Disease (COPD)", "diagnosed_date": "2019-03-22" }
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Dr. Sarah Mitchell",
+      "age": 41,
+      "sex": "Female",
+      "contact": "555-0106",
+      "address": "333 Elm Ct, Springfield, USA",
+      "medical_history": [
+        { "condition": "Hypothyroidism", "diagnosed_date": "2014-07-18" }
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Maria Elena Gonzalez",
+      "age": 58,
+      "sex": "Female",
+      "contact": "555-0107",
+      "address": "444 Spruce Way, Springfield, USA",
+      "medical_history": [
+        { "condition": "Congestive Heart Failure", "diagnosed_date": "2022-11-01" },
+        { "condition": "Type 2 Diabetes", "diagnosed_date": "2023-03-20" },
+        { "condition": "Myocardial Infarction", "diagnosed_date": "2023-07-25" },
+        { "condition": "Major Depressive Disorder", "diagnosed_date": "2023-09-15" }
+      ]
+    },
+    {
+      "id": 15,
+      "name": "Lisa Anderson",
+      "age": 42,
+      "sex": "Female",
+      "contact": "555-0115",
+      "address": "555 Willow Dr, Springfield, USA",
+      "medical_history": [
+        { "condition": "Asthma", "diagnosed_date": "2010-05-10" },
+        { "condition": "Allergies", "diagnosed_date": "2008-09-01" }
+      ]
+    },
+    {
+      "id": 16,
+      "name": "John Martinez",
+      "age": 51,
+      "sex": "Male",
+      "contact": "555-0116",
+      "address": "666 Redwood Pkwy, Springfield, USA",
+      "medical_history": [
+        { "condition": "Hypertension", "diagnosed_date": "2018-02-20" },
+        { "condition": "GERD", "diagnosed_date": "2021-07-18" }
+      ]
+    },
+    {
+      "id": 17,
+      "name": "Jennifer Taylor",
+      "age": 35,
+      "sex": "Female",
+      "contact": "555-0117",
+      "address": "777 Sequoia Ave, Springfield, USA",
+      "medical_history": [
+        { "condition": "Migraine", "diagnosed_date": "2015-11-11" },
+        { "condition": "Anxiety", "diagnosed_date": "2019-04-05" }
+      ]
+    },
+    {
+      "id": 18,
+      "name": "Robert Johnson",
+      "age": 68,
+      "sex": "Male",
+      "contact": "555-0118",
+      "address": "888 Cypress Ct, Springfield, USA",
+      "medical_history": [
+        { "condition": "Type 2 Diabetes", "diagnosed_date": "2012-03-01" },
+        { "condition": "Sleep Apnea", "diagnosed_date": "2020-05-08" }
+      ]
+    },
+    {
+      "id": 19,
+      "name": "Maria Rodriguez",
+      "age": 47,
+      "sex": "Female",
+      "contact": "555-0119",
+      "address": "999 Aspen Rd, Springfield, USA",
+      "medical_history": [
+        { "condition": "Hypothyroidism", "diagnosed_date": "2016-02-14" },
+        { "condition": "Postpartum Depression", "diagnosed_date": "2021-04-18" }
+      ]
+    },
+    {
+      "id": 20,
+      "name": "James Chen",
+      "age": 53,
+      "sex": "Male",
+      "contact": "555-0120",
+      "address": "111 Juniper Ln, Springfield, USA",
+      "medical_history": [
+        { "condition": "Chronic Back Pain", "diagnosed_date": "2017-01-22" },
+        { "condition": "Seasonal Allergies", "diagnosed_date": "2005-08-30" }
+      ]
+    },
+    {
+      "id": 21,
+      "name": "Sarah Williams",
+      "age": 49,
+      "sex": "Female",
+      "contact": "555-0121",
+      "address": "222 Magnolia Blvd, Springfield, USA",
+      "medical_history": [
+        { "condition": "Fibromyalgia", "diagnosed_date": "2019-02-28" },
+        { "condition": "IBS", "diagnosed_date": "2022-10-08" }
+      ]
+    },
+    {
+      "id": 22,
+      "name": "Michael Brown",
+      "age": 30,
+      "sex": "Male",
+      "contact": "555-0122",
+      "address": "333 Dogwood Dr, Springfield, USA",
+      "medical_history": [
+        { "condition": "ADHD", "diagnosed_date": "2008-03-15" },
+        { "condition": "Eczema", "diagnosed_date": "2015-10-15" }
+      ]
+    },
+    {
+      "id": 23,
+      "name": "Emily Davis",
+      "age": 28,
+      "sex": "Female",
+      "contact": "555-0123",
+      "address": "444 Hawthorn Way, Springfield, USA",
+      "medical_history": [
+        { "condition": "Endometriosis", "diagnosed_date": "2020-01-10" },
+        { "condition": "PCOS", "diagnosed_date": "2021-09-19" }
+      ]
+    },
+    {
+      "id": 24,
+      "name": "David Wilson",
+      "age": 65,
+      "sex": "Male",
+      "contact": "555-0124",
+      "address": "555 Holly Ct, Springfield, USA",
+      "medical_history": [
+        { "condition": "COPD", "diagnosed_date": "2018-02-08" },
+        { "condition": "Shoulder Impingement", "diagnosed_date": "2022-04-30" }
+      ]
+    }
+  ]
+}
