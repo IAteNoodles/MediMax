@@ -46,7 +46,7 @@ class CardioInput(BaseModel):
     active: int
 
 
-def load_cardio_model(model_path: str = "xgboost_model.pkl"):
+def load_cardio_model(model_path: str = fr"C:\Users\Noodl\Projects\Big_O\Hackathon\Chanakya\MediMax\AI_Models\cardio\xgboost_model.pkl"):
     global cardio_model, cardio_explainer
     try:
         cardio_model = joblib.load(model_path)
@@ -251,4 +251,8 @@ def predict_cardio(payload: CardioInput):
 if __name__ == "__main__":
     # Run with: python cardiovascular_api_fastapi.py
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=5002, log_level="info")
+    import socket
+
+    # Get the local network IP address
+    host = socket.gethostbyname(socket.gethostname())
+    uvicorn.run(app, host=host, port=5002, log_level="info")

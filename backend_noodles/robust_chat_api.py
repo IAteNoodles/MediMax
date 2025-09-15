@@ -19,7 +19,7 @@ from fastapi import FastAPI, Depends, HTTPException, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain.agents import create_react_agent, AgentExecutor
+from langchain.agents import AgentExecutor, create_react_agent
 from langchain.memory import ConversationBufferMemory
 from langchain_core.tools import BaseTool
 from langchain_core.prompts import PromptTemplate
@@ -174,41 +174,38 @@ class RobustAgentManager:
                 output_key="output"
             )
             
-            # Create custom prompt template for better tool usage
+            # Create custom prompt template for React agent
             prompt_template = """
 You are a helpful medical AI assistant with access to specialized tools for patient data and medical predictions.
 
 AVAILABLE TOOLS:
-{tool_names}
-
-TOOL DESCRIPTIONS:
 {tools}
 
-CRITICAL TOOL USAGE GUIDELINES:
-1. ALWAYS use the exact tool name as provided
-2. Provide parameters in the correct format
-3. For Cypher queries, use proper Neo4j syntax
-4. Handle missing parameters gracefully
-5. Explain your reasoning clearly
+Use the following format:
 
-COMMON QUERIES AND CORRECT TOOL USAGE:
-- Patient medications: Use "Run_Cypher_Query" with: MATCH (p:Patient {{patient_id: 20}})-[:TAKES_MEDICATION]->(m:Medication) RETURN m.name AS medication_name
-- Patient details: Use "Get_Patient_Details" with patient_id parameter
-- Risk predictions: Use "Predict_Cardiovascular_Risk_With_Explanation" or "Predict_Diabetes_Risk_With_Explanation"
+Question: the input question you must answer
+Thought: you should always think about what to do
+Action: the action to take, should be one of [{tool_names}]
+Action Input: the input to the action
+Observation: the result of the action
+... (this Thought/Action/Action Input/Observation can repeat N times)
+Thought: I now know the final answer
+Final Answer: the final answer to the original input question
 
-CONVERSATION HISTORY:
+IMPORTANT: For Run_Cypher_Query tool, provide the Action Input as a JSON object:
+{{"cypher": "MATCH (p:Patient {{patient_id: 20}})-[:TAKES_MEDICATION]->(m:Medication) RETURN m.name AS medication_name"}}
+
+Begin!
+
+Previous conversation history:
 {chat_history}
 
-USER INPUT: {input}
-
-ASSISTANT: I'll help you with that. Let me use the appropriate tools to get the information you need.
-
-{agent_scratchpad}
-"""
+Question: {input}
+Thought:{agent_scratchpad}"""
             
             prompt = PromptTemplate.from_template(prompt_template)
             
-            # Create React agent with custom prompt
+            # Create React agent
             agent = create_react_agent(
                 llm=self.llm,
                 tools=tools,
@@ -222,7 +219,7 @@ ASSISTANT: I'll help you with that. Let me use the appropriate tools to get the 
                 memory=self.memory,
                 verbose=True,
                 max_iterations=5,
-                early_stopping_method="generate",
+                return_intermediate_steps=True,
                 handle_parsing_errors=True
             )
             
