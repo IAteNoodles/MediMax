@@ -57,6 +57,9 @@ datasets/
 front/
 frontend/
 
+# Exception: Allow sankalp/front directory
+!sankalp/front/
+
 # Machine Learning models and data
 *.pkl
 *.model
