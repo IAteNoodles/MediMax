@@ -645,21 +645,36 @@ def run_cypher_query(cypher: str) -> dict:
     
     Args:
         cypher (str): The Cypher query to execute
+
         
     Returns:
         dict: Query results or error message
     """
     try:
+        # Basic query validation
+        if not cypher or not cypher.strip():
+            return {"error": "Empty or invalid Cypher query"}
+            
+        # Check for basic syntax issues
+        cypher_clean = cypher.strip()
+        
+        # Warn about deprecated id() function usage
+        if 'id(' in cypher_clean:
+            logger.warning(f"Query uses deprecated id() function: {cypher_clean[:100]}...")
+            # Optionally fix the query
+            cypher_clean = fix_deprecated_cypher(cypher_clean)
+            
         if not kg_manager.connect_neo4j():
             return {"error": "Failed to connect to Neo4j"}
         
         with kg_manager.neo4j_driver.session() as session:
-            result = session.run(cypher)
+            result = session.run(cypher_clean)
             records = [record.data() for record in result]
             serialized_records = serialize_neo4j_result(records)
             return {
                 "success": True,
-                "query": cypher,
+                "query": cypher_clean,
+                "original_query": cypher if cypher != cypher_clean else None,
                 "results": serialized_records,
                 "result_count": len(serialized_records)
             }
@@ -669,7 +684,27 @@ def run_cypher_query(cypher: str) -> dict:
         return {"error": f"Failed to run Cypher query: {str(e)}"}
     finally:
         kg_manager.close_neo4j()
+
+def fix_deprecated_cypher(cypher: str) -> str:
+    """
+    Fix common deprecated Cypher patterns.
+    
+    Args:
+        cypher (str): Original Cypher query
         
+    Returns:
+        str: Fixed Cypher query with suggestions
+    """
+    fixed_cypher = cypher
+    
+    # Replace deprecated id() function with elementId()
+    if 'id(' in cypher:
+        import re
+        fixed_cypher = re.sub(r'\bid\(([^)]+)\)', r'elementId(\1)', fixed_cypher)
+        logger.info(f"Fixed deprecated id() function in query")
+    
+    return fixed_cypher
+
 @mcp.tool("Validate_Graph_Connectivity")
 def validate_graph_connectivity() -> dict:
     """

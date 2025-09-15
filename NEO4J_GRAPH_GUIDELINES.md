@@ -331,122 +331,150 @@ The entire graph is designed around the `Patient` node. Every piece of informati
 
 ---
 
-## 4. Advanced Querying Patterns
+## 4. Working Query Examples (Tested & Verified)
 
 ### **Pattern 1: Complete Patient Medical Profile**
+Get a comprehensive overview of a patient's medical information:
+
 ```cypher
-MATCH (p:Patient {patient_id: '7'})
+MATCH (p:Patient {patient_id: '20'})
 // Get all conditions
-OPTIONAL MATCH (p)-[:HAS_CONDITION|HAS_MEDICAL_HISTORY]->(cond)
+OPTIONAL MATCH (p)-[:HAS_CONDITION]->(cond)
 // Get all medications
 OPTIONAL MATCH (p)-[:TAKES_MEDICATION]->(med)
-// Get recent symptoms (last 6 months)
+// Get all symptoms
 OPTIONAL MATCH (p)-[:HAS_SYMPTOM]->(symp)
-WHERE symp.reported_date > date() - duration({months: 6})
-// Get recent lab findings
-OPTIONAL MATCH (p)-[:HAS_LAB_FINDING]->(labf)
-WHERE labf.date > date() - duration({months: 3})
-RETURN p.name AS patient,
-       collect(DISTINCT cond.name) AS conditions,
-       collect(DISTINCT med.name + ' (' + med.dosage + ')') AS medications,
-       collect(DISTINCT symp.name) AS recentSymptoms,
-       collect(DISTINCT labf.test_name + ': ' + labf.value + ' ' + labf.unit) AS recentLabFindings
-```
-
-### **Pattern 2: Diagnostic Correlation Analysis**
-```cypher
-MATCH (p:Patient {patient_id: '7'})-[:HAS_SYMPTOM]->(s:Symptom)
-// Find conditions this symptom may indicate
-OPTIONAL MATCH (s)-[:INDICATES_CONDITION|MAY_INDICATE]->(c:Condition)
-// Check if patient actually has this condition
-WHERE (p)-[:HAS_CONDITION|HAS_MEDICAL_HISTORY]->(c)
-// Find treatments for this condition
-OPTIONAL MATCH (p)-[:TAKES_MEDICATION]->(m:Medication)-[:TREATS_CONDITION]->(c)
-// Find lab results that also indicate this condition
-OPTIONAL MATCH (p)-[:HAS_LAB_RESULT]->(lr:LabResult)-[:INDICATES_CONDITION]->(c)
-RETURN s.name AS symptom,
-       c.name AS condition,
-       collect(DISTINCT m.name) AS treatments,
-       collect(DISTINCT lr.test_name + ': ' + lr.value) AS supportingLabResults
-```
-
-### **Pattern 3: Laboratory Data Deep Dive**
-```cypher
-MATCH (p:Patient {patient_id: '7'})-[:HAS_LAB_REPORT]->(report:LabReport)
-// Get all studies in this report
-MATCH (report)-[:CONTAINS_FINDING]->(finding:LabFinding)
-// Also get structured lab results
-OPTIONAL MATCH (p)-[:HAS_LAB_STUDY]->(study)-[:CONTAINS_RESULT]->(result:LabResult)
-WHERE result.lab_report_id = report.lab_report_id
-RETURN report.type AS reportType,
-       report.date AS reportDate,
-       collect(DISTINCT finding.test_name + ': ' + finding.value + ' ' + finding.unit + 
-               CASE WHEN finding.is_abnormal THEN ' (ABNORMAL)' ELSE '' END) AS findings,
-       collect(DISTINCT result.test_name + ': ' + result.value + ' ' + result.unit + 
-               CASE WHEN result.is_abnormal THEN ' (ABNORMAL)' ELSE '' END) AS structuredResults
-ORDER BY report.date DESC
-```
-
-### **Pattern 4: Treatment Effectiveness Analysis**
-```cypher
-MATCH (p:Patient {patient_id: '7'})-[:HAS_CONDITION]->(c:Condition)
-// Find medications treating this condition
-MATCH (p)-[:TAKES_MEDICATION]->(m:Medication)-[:TREATS_CONDITION]->(c)
-// Find symptoms related to this condition
-OPTIONAL MATCH (p)-[:HAS_SYMPTOM]->(s:Symptom)
-WHERE (s)-[:INDICATES_CONDITION|MAY_INDICATE]->(c)
-// Find lab results for this condition
-OPTIONAL MATCH (p)-[:HAS_LAB_RESULT]->(lr:LabResult)-[:INDICATES_CONDITION]->(c)
-WHERE lr.is_abnormal = true
-RETURN c.name AS condition,
-       c.status AS conditionStatus,
-       collect(DISTINCT m.name + ' (' + m.dosage + ', ' + m.frequency + ')') AS treatments,
-       collect(DISTINCT s.name + ' (severity: ' + s.severity + ')') AS relatedSymptoms,
-       collect(DISTINCT lr.test_name + ': ' + lr.value + ' ' + lr.abnormal_flag) AS abnormalLabs
-```
-
-### **Pattern 5: Temporal Health Timeline**
-```cypher
-MATCH (p:Patient {patient_id: '7'})
-// Get all timestamped events
-OPTIONAL MATCH (p)-[:HAS_APPOINTMENT]->(apt:Appointment)
-OPTIONAL MATCH (p)-[:HAS_SYMPTOM]->(symp:Symptom)
-OPTIONAL MATCH (p)-[:TAKES_MEDICATION]->(med:Medication)
-OPTIONAL MATCH (p)-[:HAS_LAB_REPORT]->(lab:LabReport)
-// Create timeline events
-WITH p,
-     collect({type: 'Appointment', date: apt.appointment_date, detail: apt.appointment_type + ' with ' + apt.doctor_name}) AS appointments,
-     collect({type: 'Symptom', date: symp.reported_date, detail: symp.name + ' (' + symp.severity + ')'}) AS symptoms,
-     collect({type: 'Medication', date: med.prescribed_date, detail: med.name + ' prescribed'}) AS medications,
-     collect({type: 'Lab Report', date: lab.date, detail: lab.type}) AS labReports
-// Combine all events
-WITH p, appointments + symptoms + medications + labReports AS allEvents
-UNWIND allEvents AS event
-WHERE event.date IS NOT NULL
-RETURN event.date AS eventDate,
-       event.type AS eventType,
-       event.detail AS eventDetail
-ORDER BY event.date DESC
-LIMIT 20
-```
-
-### **Pattern 6: Comprehensive Health Summary with Relationships**
-```cypher
-MATCH (p:Patient {patient_id: '7'})
-// Get complete relationship counts
+// Get all lab reports
+OPTIONAL MATCH (p)-[:HAS_LAB_REPORT]->(lab)
 RETURN p.name AS patientName,
        p.dob AS dateOfBirth,
        p.gender AS gender,
-       size((p)-[:HAS_CONDITION]->()) AS conditionCount,
-       size((p)-[:HAS_MEDICAL_HISTORY]->()) AS medicalHistoryCount,
-       size((p)-[:TAKES_MEDICATION]->()) AS medicationCount,
-       size((p)-[:HAS_SYMPTOM]->()) AS symptomCount,
-       size((p)-[:HAS_APPOINTMENT]->()) AS appointmentCount,
-       size((p)-[:HAS_ENCOUNTER]->()) AS encounterCount,
-       size((p)-[:HAS_LAB_REPORT]->()) AS labReportCount,
-       size((p)-[:HAS_LAB_STUDY]->()) AS labStudyCount,
-       size((p)-[:HAS_LAB_RESULT]->()) AS labResultCount,
-       size((p)-[:HAS_LAB_FINDING]->()) AS labFindingCount
+       collect(DISTINCT cond.name) AS conditions,
+       collect(DISTINCT med.name + ' (' + coalesce(med.dosage, 'No dose') + ')') AS medications,
+       collect(DISTINCT symp.name) AS symptoms,
+       collect(DISTINCT lab.type) AS labReports
+```
+
+### **Pattern 2: Find All Patients with Specific Conditions**
+Identify patients with particular medical conditions:
+
+```cypher
+MATCH (p)-[:HAS_CONDITION]->(c:Condition)
+WHERE c.name CONTAINS 'Cancer' OR c.name CONTAINS 'Diabetes'
+RETURN p.patient_id AS patientId,
+       p.name AS patientName,
+       collect(c.name) AS conditions
+ORDER BY p.name
+```
+
+### **Pattern 3: Medication Analysis Across Patients**
+Analyze medication usage patterns:
+
+```cypher
+MATCH (p)-[:TAKES_MEDICATION]->(m)
+RETURN m.name AS medicationName,
+       m.dosage AS commonDosage,
+       collect(p.name) AS patients,
+       count(p) AS patientCount
+ORDER BY patientCount DESC
+LIMIT 10
+```
+
+### **Pattern 4: Patient Condition and Treatment Correlation**
+Show the relationship between conditions and their treatments:
+
+```cypher
+MATCH (p)-[:HAS_CONDITION]->(c)
+OPTIONAL MATCH (p)-[:TAKES_MEDICATION]->(m)-[:TREATS_CONDITION]->(c)
+RETURN p.name AS patient,
+       c.name AS condition,
+       c.status AS conditionStatus,
+       collect(m.name) AS treatmentMedications
+ORDER BY p.name
+```
+
+### **Pattern 5: Laboratory Data Summary**
+Get lab report summary for all patients:
+
+```cypher
+MATCH (p)-[:HAS_LAB_REPORT]->(lab)
+OPTIONAL MATCH (lab)-[:CONTAINS_FINDING]->(finding)
+RETURN p.name AS patient,
+       lab.type AS reportType,
+       lab.date AS reportDate,
+       lab.facility AS labFacility,
+       count(finding) AS findingsCount
+ORDER BY lab.date DESC
+```
+
+### **Pattern 6: Symptom Tracking and Analysis**
+Track symptoms across patients:
+
+```cypher
+MATCH (p)-[:HAS_SYMPTOM]->(s)
+RETURN s.name AS symptom,
+       s.severity AS commonSeverity,
+       collect(DISTINCT p.name) AS affectedPatients,
+       count(p) AS patientCount
+ORDER BY patientCount DESC
+```
+
+### **Pattern 7: Appointment and Encounter History**
+Get appointment history for a specific patient:
+
+```cypher
+MATCH (p:Patient {patient_id: '20'})-[:HAS_APPOINTMENT]->(apt)
+RETURN apt.appointment_date AS date,
+       apt.appointment_type AS type,
+       apt.doctor_name AS doctor,
+       apt.status AS status,
+       apt.clinical_notes AS notes
+ORDER BY apt.appointment_date DESC
+```
+
+### **Pattern 8: Database Statistics and Counts**
+Get overview statistics of the entire database:
+
+```cypher
+MATCH (p:Patient)
+OPTIONAL MATCH (p)-[:HAS_CONDITION]->(c)
+OPTIONAL MATCH (p)-[:TAKES_MEDICATION]->(m)
+OPTIONAL MATCH (p)-[:HAS_SYMPTOM]->(s)
+OPTIONAL MATCH (p)-[:HAS_LAB_REPORT]->(l)
+RETURN count(DISTINCT p) AS totalPatients,
+       count(DISTINCT c) AS totalConditions,
+       count(DISTINCT m) AS totalMedications,
+       count(DISTINCT s) AS totalSymptoms,
+       count(DISTINCT l) AS totalLabReports
+```
+
+### **Pattern 9: Find Patients by Medication**
+Identify all patients taking a specific medication:
+
+```cypher
+MATCH (p)-[:TAKES_MEDICATION]->(m)
+WHERE m.name CONTAINS 'Aspirin' OR m.name CONTAINS 'Ibuprofen'
+RETURN m.name AS medication,
+       m.dosage AS dosage,
+       m.frequency AS frequency,
+       collect(p.name) AS patients
+ORDER BY m.name
+```
+
+### **Pattern 10: Complex Medical History Query**
+Get detailed medical history for patients with chronic conditions:
+
+```cypher
+MATCH (p)-[:HAS_CONDITION]->(c)
+WHERE c.is_chronic = true OR c.status = 'active'
+OPTIONAL MATCH (p)-[:TAKES_MEDICATION]->(m)
+OPTIONAL MATCH (p)-[:HAS_SYMPTOM]->(s)
+RETURN p.name AS patient,
+       p.dob AS dateOfBirth,
+       collect(DISTINCT c.name + ' (' + c.status + ')') AS chronicConditions,
+       collect(DISTINCT m.name) AS medications,
+       collect(DISTINCT s.name) AS symptoms
+ORDER BY p.name
 ```
 
 ---
