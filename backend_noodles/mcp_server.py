@@ -831,7 +831,11 @@ def create_knowledge_graph(patient_id: int) -> dict:
         logger.error(f"Error creating knowledge graph: {e}")
         return {"error": f"Failed to create knowledge graph: {str(e)}"}
 
+<<<<<<< HEAD
 @mcp.tool("update_knowledge_graph")
+=======
+@mcp.tool("Update_Knowledge_Graph")
+>>>>>>> 66c408930077dcde7f6655ff57244aafa2ff1785
 def update_knowledge_graph(patient_id: int, update_type: str, data: dict) -> dict:
     """
     Update an existing knowledge graph with new information.
@@ -873,6 +877,7 @@ def hello(name: str) -> str:
 @handle_exceptions
 @mcp.tool("Predict_Cardiovascular_Risk_With_Explanation")
 def predict_cardiovascular_risk_with_explanation(
+<<<<<<< HEAD
     age: float = 50,
     gender: int = 2,
     height: float = 175,
@@ -884,11 +889,25 @@ def predict_cardiovascular_risk_with_explanation(
     smoke: int = 1,
     alco: int = 0,
     active: int = 1
+=======
+    age: float,
+    gender: int,
+    height: float,
+    weight: float,
+    ap_hi: int,
+    ap_lo: int,
+    cholesterol: int,
+    gluc: int,
+    smoke: int,
+    alco: int,
+    active: int
+>>>>>>> 66c408930077dcde7f6655ff57244aafa2ff1785
 ) -> dict:
     """
     Send patient data to local prediction service and return the JSON response.
 
     Expected input fields:
+<<<<<<< HEAD
       - age: Age in years (numeric, defaults to 50)
       - gender: 1 = Female, 2 = Male (defaults to 2)
       - height: Height in centimeters (defaults to 175)
@@ -907,6 +926,21 @@ def predict_cardiovascular_risk_with_explanation(
                 f"ap_hi={ap_hi}, ap_lo={ap_lo}, cholesterol={cholesterol}, gluc={gluc}, "
                 f"smoke={smoke}, alco={alco}, active={active}")
     
+=======
+      - age: Age in years (numeric)
+      - gender: 1 = Female, 2 = Male
+      - height: Height in centimeters
+      - weight: Weight in kilograms
+      - ap_hi: Systolic blood pressure
+      - ap_lo: Diastolic blood pressure
+      - cholesterol: 1 = Normal, 2 = Above normal, 3 = Well above normal
+      - gluc: Glucose level (1 = Normal, 2 = Above normal, 3 = Well above normal)
+      - smoke: 0 = No, 1 = Yes
+      - alco: Alcohol consumption (0 = No, 1 = Yes)
+      - active: Physical activity (0 = No, 1 = Yes)
+    """
+    
+>>>>>>> 66c408930077dcde7f6655ff57244aafa2ff1785
     # Validate required parameters
     required_params = {
         'age': age, 'gender': gender, 'height': height, 'weight': weight,
@@ -920,7 +954,10 @@ def predict_cardiovascular_risk_with_explanation(
             missing_params.append(param_name)
     
     if missing_params:
+<<<<<<< HEAD
         logger.warning(f"Missing required parameters for cardiovascular prediction: {missing_params}")
+=======
+>>>>>>> 66c408930077dcde7f6655ff57244aafa2ff1785
         return {
             "error": "missing_parameters",
             "message": f"Missing required parameters: {', '.join(missing_params)}",
@@ -953,9 +990,12 @@ def predict_cardiovascular_risk_with_explanation(
         "active": active
     }
 
+<<<<<<< HEAD
     logger.info(f"Sending cardiovascular prediction request to http://localhost:5002/predict")
     logger.debug(f"Payload: {payload}")
 
+=======
+>>>>>>> 66c408930077dcde7f6655ff57244aafa2ff1785
     try:
         resp = requests.post(
             "http://localhost:5002/predict",
@@ -964,6 +1004,7 @@ def predict_cardiovascular_risk_with_explanation(
             timeout=10
         )
         resp.raise_for_status()
+<<<<<<< HEAD
         result = resp.json()
         
         logger.info(f"Cardiovascular prediction successful. Response status: {resp.status_code}")
@@ -974,11 +1015,16 @@ def predict_cardiovascular_risk_with_explanation(
         logger.error(f"Cardiovascular prediction request failed: {str(e)}")
         logger.error(f"Request URL: http://localhost:5002/predict")
         logger.error(f"Request payload: {payload}")
+=======
+        return resp.json()
+    except requests.RequestException as e:
+>>>>>>> 66c408930077dcde7f6655ff57244aafa2ff1785
         return {"error": "request_failed", "details": str(e)}
 
 @handle_exceptions
 @mcp.tool("Predict_Diabetes_Risk_With_Explanation")
 def predict_diabetes_risk_with_explanation(
+<<<<<<< HEAD
     age: float = 45,
     gender: str = "Male",
     hypertension: int = 1,
@@ -1052,10 +1098,77 @@ def predict_diabetes_risk_with_explanation(
 
     try:
         resp = requests.post(
+=======
+        age: float,
+        gender: str,
+        hypertension: int,
+        heart_disease: int,
+        smoking_history: str,
+        bmi: float,
+        HbA1c_level: float,
+        blood_glucose_level: float
+        ) -> dict:
+        """
+        Send diabetes-related patient data to local prediction service and return the JSON response.
+
+        Expected input fields:
+          - age: Age in years (numeric)
+          - gender: "Female", "Male", or "Other"
+          - hypertension: 0 = No, 1 = Yes
+          - heart_disease: 0 = No, 1 = Yes
+          - smoking_history: "never", "No Info", "current", "former", "ever", "not current"
+          - bmi: Body Mass Index (numeric)
+          - HbA1c_level: Hemoglobin A1c level (numeric)
+          - blood_glucose_level: Blood glucose level in mg/dL (numeric)
+        """
+        
+        # Validate required parameters
+        required_params = {
+            'age': age, 'gender': gender, 'hypertension': hypertension,
+            'heart_disease': heart_disease, 'smoking_history': smoking_history,
+            'bmi': bmi, 'HbA1c_level': HbA1c_level, 'blood_glucose_level': blood_glucose_level
+        }
+        
+        missing_params = []
+        for param_name, param_value in required_params.items():
+            if param_value is None:
+                missing_params.append(param_name)
+        
+        if missing_params:
+            return {
+                "error": "missing_parameters",
+                "message": f"Missing required parameters: {', '.join(missing_params)}",
+                "required_parameters": {
+                    "age": "Age in years (numeric)",
+                    "gender": "Female, Male, or Other",
+                    "hypertension": "0 = No, 1 = Yes",
+                    "heart_disease": "0 = No, 1 = Yes",
+                    "smoking_history": "never, No Info, current, former, ever, not current",
+                    "bmi": "Body Mass Index (numeric)",
+                    "HbA1c_level": "Hemoglobin A1c level (numeric)",
+                    "blood_glucose_level": "Blood glucose level in mg/dL (numeric)"
+                }
+            }
+        
+        payload = {
+            "age": age,
+            "gender": gender,
+            "hypertension": hypertension,
+            "heart_disease": heart_disease,
+            "smoking_history": smoking_history,
+            "bmi": bmi,
+            "HbA1c_level": HbA1c_level,
+            "blood_glucose_level": blood_glucose_level
+        }
+
+        try:
+            resp = requests.post(
+>>>>>>> 66c408930077dcde7f6655ff57244aafa2ff1785
             "http://localhost:5003/predict",
             json=payload,
             headers={"Content-Type": "application/json"},
             timeout=10
+<<<<<<< HEAD
         )
         resp.raise_for_status()
         result = resp.json()
@@ -1069,6 +1182,13 @@ def predict_diabetes_risk_with_explanation(
         logger.error(f"Request URL: http://localhost:5003/predict")
         logger.error(f"Request payload: {payload}")
         return {"error": "request_failed", "details": str(e)}
+=======
+            )
+            resp.raise_for_status()
+            return resp.json()
+        except requests.RequestException as e:
+            return {"error": "request_failed", "details": str(e)}
+>>>>>>> 66c408930077dcde7f6655ff57244aafa2ff1785
 
 @mcp.tool("Health_Check")
 def health_check() -> dict:

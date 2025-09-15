@@ -126,6 +126,15 @@ with GraphDatabase.driver(URI, auth=AUTH) as driver:
 
 app = FastAPI(title="MediMax Backend API", description="Bridge between Frontend, Database, and Agentic system.")
 
+# --- Pydantic Models ---
+class CypherQueryRequest(BaseModel):
+    cypher_query: str
+
+class NewPatientRequest(BaseModel):
+    name: str
+    dob: str  # Format: YYYY-MM-DD
+    sex: str  # 'Male', 'Female', 'Other'
+
 # --- CORS Configuration ---
 # Allow requests from the Streamlit frontend
 from fastapi.middleware.cors import CORSMiddleware
@@ -193,13 +202,14 @@ async def health_check(db=Depends(get_db_connection)):
         "agentic_system": agentic_status
     }
 
-@app.get("/run_cypher_query")
-async def run_cypher_query(cypher_query: str):
+@app.post("/run_cypher_query")
+async def run_cypher_query(request: CypherQueryRequest):
     """
     Execute a Cypher query on the Neo4j database.
     
     Args:
-        cypher_query (str): The Cypher query to execute.
+        request (CypherQueryRequest): JSON request containing:
+            - cypher_query (str): The Cypher query to execute.
         
     Returns:
         dict: The result of the query or an error message.
@@ -207,7 +217,7 @@ async def run_cypher_query(cypher_query: str):
     try:
         with GraphDatabase.driver(URI, auth=AUTH) as driver:
             with driver.session() as session:
-                result = session.run(cypher_query)
+                result = session.run(request.cypher_query)
                 records = [record.data() for record in result]
                 # Apply serialization to handle Neo4j temporal types
                 serialized_records = serialize_neo4j_result(records)
@@ -216,11 +226,6 @@ async def run_cypher_query(cypher_query: str):
         return {"error": f"Database error: {str(e)}"}
     
 # --- Database Functions ---
-class NewPatientRequest(BaseModel):
-    name: str
-    dob: str  # Format: YYYY-MM-DD
-    sex: str  # 'Male', 'Female', 'Other'
-
 @app.post("/db/new_patient")
 def new_patient(req: NewPatientRequest, db=Depends(get_db_connection)):
     """
@@ -1548,6 +1553,7 @@ def get_patient_details(patient_id: int, db=Depends(get_db_connection)):
             - sex (str): Gender
             - created_at (str): Record creation timestamp
             - updated_at (str): Last update timestamp
+            - summary (str): Brief summary of patient info
             
     Raises:
         HTTPException: If patient not found (status 404) or database error (status 500).
@@ -1556,7 +1562,7 @@ def get_patient_details(patient_id: int, db=Depends(get_db_connection)):
         with db:
             with db.cursor() as cursor:
                 sql = (
-                    "SELECT patient_id, name, dob, sex, created_at, updated_at "
+                    "SELECT patient_id, name, dob, sex, created_at, updated_at, Summary "
                     "FROM Patient "
                     "WHERE patient_id = %s"
                 )
@@ -1570,7 +1576,9 @@ def get_patient_details(patient_id: int, db=Depends(get_db_connection)):
                     "dob": str(result.get("dob")) if result.get("dob") else None,
                     "sex": result.get("sex"),
                     "created_at": str(result.get("created_at")) if result.get("created_at") else None,
-                    "updated_at": str(result.get("updated_at")) if result.get("updated_at") else None
+                    "updated_at": str(result.get("updated_at")) if result.get("updated_at") else None,
+                    "summary": str(result.get("Summary")) if result.get("Summary") else None
+                
                 }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -2398,5 +2406,5 @@ if __name__ == "__main__":
     hostname = socket.gethostname()
     ip_address = socket.gethostbyname(hostname)
 
-    print(f"Starting server at http://{ip_address}:8000")
+    print(f"Starting server at http://{ip_address}:8420")
     uvicorn.run(app, host="0.0.0.0",port=8420)

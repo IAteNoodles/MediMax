@@ -278,6 +278,7 @@ def model_info():
 
 if __name__ == "__main__":
     import uvicorn
+<<<<<<< HEAD
     import socket
     
     def get_local_ip():
@@ -291,12 +292,17 @@ if __name__ == "__main__":
             s.close()
         return ip+":5003"
     
+=======
+>>>>>>> 66c408930077dcde7f6655ff57244aafa2ff1785
     # ensure model loads when run directly
     try:
         load_diabetes_model()
     except Exception as e:
         logger.error("Failed to load model on direct run: %s", e)
+<<<<<<< HEAD
     
     local_ip = get_local_ip()
     print(f"Server running on network IP: {local_ip}")
+=======
+>>>>>>> 66c408930077dcde7f6655ff57244aafa2ff1785
     uvicorn.run("diabetes_api:app", host="0.0.0.0", port=5003, reload=True)
